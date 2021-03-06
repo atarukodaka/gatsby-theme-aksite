@@ -29,9 +29,10 @@ module.exports = {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `posts`,
-        path: `${__dirname}/content/posts`,
+        path: `content/posts`,
       }
     },
+    /*
     {
       resolve: `gatsby-source-filesystem`,
       options: {
@@ -39,11 +40,12 @@ module.exports = {
         path: `${__dirname}/content/images`,
       },
     },
+    */
     {
       resolve: `gatsby-source-filesystem`,
       options: {
         name: `pages`,
-        path: `${__dirname}/src/pages`,
+        path: `src/pages`,
       },
     },
     
@@ -132,12 +134,14 @@ module.exports = {
         respectDNT: true,
       },
     },    
+    
     {
       resolve: `gatsby-plugin-typography`,
       options: {
-        pathToConfigModule: `src/utils/typography`,
+        pathToConfigModule: require.resolve(`./src/utils/typography.js`),
       },
     },
+    
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-sitemap`,
     `gatsby-plugin-material-ui`,
