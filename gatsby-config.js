@@ -100,7 +100,16 @@ module.exports = (options) => {
               resolve: `gatsby-remark-images`,
               options: {
                 maxWidth: 700,
+                disableBgImage: true,
+                linkImagesToOriginal: false
               },
+            },
+            {
+              resolve: `gatsby-remark-image-attributes`,
+              options: {
+                styleAttributes: true,
+                dataAttributes: false
+              }
             },
             `gatsby-remark-responsive-iframe`,
           ]
