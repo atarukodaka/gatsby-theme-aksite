@@ -57,7 +57,7 @@ const DirectoryTree = () => {
         node.totalCount = data.mdxPages.nodes.filter(v => re.test(v.fields.directory)).length
     })
     const allNodeIds = list.map(v=> v.name)
-    const tree = new ListToTree(list).GetTree()
+    const tree = new ListToTree(list).GetTree() || []
     //console.log("directory tree", tree)
 
     //return (<Tree items={tree} />)
