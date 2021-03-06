@@ -1,5 +1,5 @@
 
-const path = require(`path`)
+//const path = require(`path`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
 const { paginate } = require('gatsby-awesome-pagination');
 
@@ -62,7 +62,7 @@ const createMdxPages = ({ nodes, actions }) => {
     nodes.forEach(node => {
         createPage({
             path: node.fields.slug,
-            component: path.resolve(template),
+            component: require.resolve(template),
             context: {
                 slug: node.fields.slug,
             },
@@ -75,14 +75,14 @@ const createIndexPagination = ({ nodes, actions }) => {
     console.log("** index paginate")
     const { createPage } = actions
     const template = `${templateDir}/index-template.js`
-    console.log("resolve", path.resolve(template), require.resolve(template))
+    console.log("resolve", require.resolve(template), require.resolve(template))
     paginate({
         createPage,
         items: nodes,
         itemsPerPage: itemsPerPage,
         //pathPrefix: ({ pageNumber }) => (pageNumber === 0 ? "/" : "/page"),
         pathPrefix: '/',
-        component: path.resolve(template),
+        component: require.resolve(template),
     })
 }
 
@@ -102,7 +102,7 @@ const createDirectoryArchives = ({ nodes, actions }) => {
             itemsPerPage: itemsPerPage,
             //pathPrefix: `/${directory}`,
             pathPrefix: directoryArchivePath(directory),
-            component: path.resolve(template),
+            component: require.resolve(template),
             context: {
                 archive: 'directory',
                 directory: directory,
@@ -133,7 +133,7 @@ const createMonthlyArchives = ({ nodes, actions }) => {
             items: items,
             itemsPerPage: itemsPerPage,
             pathPrefix: monthlyArchivePath(year, month),
-            component: path.resolve(`${templateDir}/monthly_archive-template.js`),
+            component: require.resolve(`${templateDir}/monthly_archive-template.js`),
             context: {
                 archive: 'monthly',
                 year: year,
