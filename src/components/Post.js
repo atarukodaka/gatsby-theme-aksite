@@ -19,13 +19,21 @@ import directoryLabel from '../utils/directory_label'
 import PostCard from './PostCard'
 //import postTitle from './postTitle'
 
+import theme from '../styles/theme'
+
+const light = theme.palette.primary.light
+const dark = theme.palette.primary.dark
+
 const Title = styled.h1`
     margin-bottom: 0.5rem;
     padding: 0.5em;
     font-weight: bold;
 
-    background: linear-gradient(to bottom,  #4848aa 0%, #222277 100%);  
-    color: white;
+    /*background: ${theme.palette.primary.dark}; */
+    color: ${theme.palette.primary.contrastText};
+    background: linear-gradient(to bottom,  ${light} 0%, ${dark} 100%)
+    /* background: linear-gradient(to bottom,  #4848aa 0%, #222277 100%);   */
+     /* color: white;  */
 `
 const Description = styled.div`
     padding: 1rem;  

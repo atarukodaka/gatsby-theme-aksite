@@ -8,7 +8,7 @@ const HoverBox = styled.div`
 }
 a {
     text-decoration: none;
-    color: black;
+    /* color: black; */
 }
 `
 

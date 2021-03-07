@@ -7,3 +7,14 @@ import 'prismjs/themes/prism-okaidia.css'
 
 import "./src/styles/syntax_hilight.css"
 import './src/styles/global.css'
+
+import React from 'react'
+import TopLayout from './src/components/TopLayout'
+
+export const wrapRootElement = ({ element }) => {
+    return (<TopLayout>{element}</TopLayout>);
+  };
+  
+
+//  export const wrapRootElement = TopLayout
+  
