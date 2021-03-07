@@ -13,7 +13,7 @@ import Divider from '@material-ui/core/Divider'
 import DirectoryBox from './DirectoryBox'
 import MdxComponents from './MdxComponents'
 import ShareSNS from './ShareSNS'
-import styles from "./post.module.css"
+import * as styles from "./post.module.css"
 import CoverImage from './CoverImage'
 import directoryLabel from '../utils/directory_label'
 import PostCard from './PostCard'

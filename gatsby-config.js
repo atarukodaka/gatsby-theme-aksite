@@ -25,6 +25,7 @@ module.exports = (options) => {
     siteMetadata: config.siteMetadata,
     plugins: [
       `gatsby-transformer-sharp`,
+      `gatsby-plugin-image`,
       `gatsby-plugin-sharp`,
       `gatsby-remark-images`,
       {
