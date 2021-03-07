@@ -14,9 +14,6 @@ const query = graphql`
     site {
         ...siteInformation               
     }
-    allMdx {
-        nodes { ...postFields }
-    }
 }
 `
 

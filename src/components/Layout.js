@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button'
 import MenuIcon from '@material-ui/icons/Menu'
 import Hidden from '@material-ui/core/Hidden'
 import { Drawer, IconButton, Divider } from '@material-ui/core'
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
+//import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
 import { css } from '@emotion/react'
 
 import MonthlyArchives from './MonthlyArchives'
@@ -18,26 +18,14 @@ import SEO from './SEO'
 import GoogleSearch from './GoogleSearch'
 import Sidebar from './Sidebar'
 //import useSiteInformation from '../hooks/use_site_information'
-
 //import styles from './layout.module.css'
 
-const theme = createMuiTheme({  // #1
-    palette: {
-        /* type: 'dark', */
-        
-        primary: {
-            light: '#ffff8b',
-            main: '#222277',
-            dark: '#c9bc1f',
-            contrastText: '#ffffff',
-
-        }
-        
-    },
-})
 
 ////////////////////////////////////////////////////////////////
 // Top
+
+import theme from '../theme'
+
 const cssSiteTitle = css`
     padding-top: 40px;
     padding-bottom: 40px;
@@ -46,7 +34,7 @@ const cssSiteTitle = css`
     h1 { font-size: 4rem; }
     a { 
         text-decoration: none;
-        color: black;
+        /* color: ${theme.palette.primary.main}; */
     }
 `
 const TopPane = ({ siteTitle, siteDescription }) => {
@@ -84,7 +72,7 @@ const TopPane = ({ siteTitle, siteDescription }) => {
                     <Divider />
 
                     <nav>
-                        <GoogleSearch cx={gcse_cx}/>
+                        <GoogleSearch cx={gcse_cx} />
                         <h3>Directories</h3>
                         <DirectoryTree />
                         <Divider />
@@ -96,10 +84,10 @@ const TopPane = ({ siteTitle, siteDescription }) => {
 
             <div css={cssSiteTitle}>
                 <Container>
-                    <Link to="/">
+                    
                         <h1>{siteTitle}</h1>
                         <h3>{siteDescription}</h3>
-                    </Link>
+                    
                 </Container>
             </div>
         </header>
@@ -163,7 +151,7 @@ const MiddlePane = ({ children, tableOfContents }) => (
 
                 <Hidden smDown>
                     <Grid item md={3} xs={12}>
-                        <GoogleSearch cx={process.env.GCSE_CX}/>
+                        <GoogleSearch cx={process.env.GCSE_CX} />
                         {tableOfContents && (<TableOfContents items={tableOfContents.items} />)}
                     </Grid>
                 </Hidden>
@@ -204,22 +192,22 @@ const Layout = ({ children, title, description, image, tableOfContents }) => {
         }
     }
     `
-    
+
     /*
     const { site }  = useStaticQuery(query)
     const { siteTitle, siteDescription, author, social } = site.siteMetadata
     */
-    const { site: { siteMetadata: { siteTitle, siteDescription, author, social, coverImage }}} = 
+    const { site: { siteMetadata: { siteTitle, siteDescription, author, social, coverImage } } } =
         useStaticQuery(query)
 
     return (
-        <MuiThemeProvider theme={theme}>
+        <>
             <SEO title={`${title} | ${siteTitle}`} 
               description={description || siteDescription} image={coverImage} lang="ja" />
             <TopPane siteTitle={siteTitle} siteDescription={siteDescription} />
             <MiddlePane tableOfContents={tableOfContents}>{children}</MiddlePane>
             <BottomPane author={author} social={social} />
-        </MuiThemeProvider>
+        </>
     )
 }
 export default Layout

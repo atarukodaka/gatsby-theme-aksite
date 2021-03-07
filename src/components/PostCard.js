@@ -8,10 +8,11 @@ import Card from './Card'
 import HoverBox from './HoverBox'
 //import postTitle from './postTitle'
 
+
 const Title = styled.div`
     font-size: 1.1rem;
     font-weight: bold;
-    color: black;
+    /* color: black; */
     margin: 0em;
 `
 
@@ -23,7 +24,7 @@ const Title = styled.h4`
 
 const Excerpt = styled.div`
     font-size: small;
-    color: #444;
+    /* color: #444; */
     padding-left: 0.5rem;
     padding-right: 0.5rem;
 `
