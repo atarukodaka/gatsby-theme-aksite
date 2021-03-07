@@ -19,12 +19,12 @@ import GoogleSearch from './GoogleSearch'
 import Sidebar from './Sidebar'
 //import useSiteInformation from '../hooks/use_site_information'
 //import styles from './layout.module.css'
-
+import theme from '../styles/theme'
 
 ////////////////////////////////////////////////////////////////
 // Top
 
-import theme from '../theme'
+
 
 const cssSiteTitle = css`
     padding-top: 40px;

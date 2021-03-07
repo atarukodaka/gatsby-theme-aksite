@@ -46,12 +46,12 @@ const Sidebar = () => {
                 <h3>Directories</h3>
                 <DirectoryTree />
             </Card>
-
+            
             <Card>
                 <h3>Recent Posts</h3>
                 <RecentPosts />
             </Card>
-
+            
             <Card>
                 <h3>Monthly Archives</h3>
                 <MonthlyArchives />
