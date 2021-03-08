@@ -1,6 +1,6 @@
 import React from "react"
 import { graphql } from 'gatsby'
-import { Breadcrumb } from 'gatsby-plugin-breadcrumb'
+import Breadcrumb from '../components/Breadcrumb'
 import GitHubIcon from '@material-ui/icons/GitHub';
 import TwitterIcon from '@material-ui/icons/Twitter';
 

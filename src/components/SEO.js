@@ -11,15 +11,14 @@ const query = graphql`
     }
 }
 `
-const SEO = ( { title, description, image, lang } ) => {
+const SEO = ( { title, description, cover, lang } ) => {
     const { site }  = useStaticQuery(query)
     const { pathname } = useLocation()
     const siteUrl = site.siteMetadata.siteUrl
     const twitterUsername = site.siteMetadata.social.twitter
-    const coverImage = site.siteMetadata.coverImage
+    const coverImage = cover || site.siteMetadata.coverImage
     const url = [siteUrl, pathname].join('/')
     
-    //const imageUrl = (image) ? [siteUrl, "images", image].join('/') : [siteUrl, "images/top.png"].join('/')
     const imageUrl = siteUrl + coverImage
   
     return (
@@ -45,14 +44,14 @@ const SEO = ( { title, description, image, lang } ) => {
 SEO.propTypes = {
     title: PropTypes.string.isRequired,  
     description: PropTypes.string,
-    image: PropTypes.string,
+    cover: PropTypes.string,
     lang: PropTypes.string,
   }
   
   SEO.defaultProps = {
     title: null,
     description: null,
-    image: null,
+    cover: null,
     lang: null,
   }
 export default SEO

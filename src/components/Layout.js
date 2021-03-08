@@ -20,6 +20,7 @@ import Sidebar from './Sidebar'
 //import useSiteInformation from '../hooks/use_site_information'
 //import styles from './layout.module.css'
 import theme from '../styles/theme'
+import useSiteMetadata from '../hooks/useSiteMetadata'
 
 ////////////////////////////////////////////////////////////////
 // Top
@@ -37,7 +38,7 @@ const cssSiteTitle = css`
         /* color: ${theme.palette.primary.main}; */
     }
 `
-const TopPane = ({ siteTitle, siteDescription }) => {
+const TopPane = ({ title, description }) => {
     //const data = useStaticQuery(query)
     const [open, setOpen] = React.useState(false);
     const handleDrawerOpen = () => {
@@ -59,7 +60,7 @@ const TopPane = ({ siteTitle, siteDescription }) => {
                         </IconButton>
                     </Hidden>
 
-                    <Button color="inherit" component={Link} to="/">{siteTitle}</Button>
+                    <Button color="inherit" component={Link} to="/">{title}</Button>
                     <Button color="inherit" component={Link} to="/about">About</Button>
                 </Toolbar>
             </AppBar>
@@ -85,8 +86,8 @@ const TopPane = ({ siteTitle, siteDescription }) => {
             <div css={cssSiteTitle}>
                 <Container>
                     
-                        <h1>{siteTitle}</h1>
-                        <h3>{siteDescription}</h3>
+                        <h1>{title}</h1>
+                        <h3>{description}</h3>
                     
                 </Container>
             </div>
@@ -173,43 +174,22 @@ const cssBottomPane = css`
 const BottomPane = ({ author }) => (
     <footer css={cssBottomPane}>
         (C) Copyright {(new Date()).getFullYear()} {author} All Right Reserved.
-                Powered by <a href="https://www.gatsbyjs.com/">Gatsby</a>
-                and <a href="https://github.com/atarukodaka/gatsby-aksite-starter">AK site starter</a>.
+        Powered by <a href="https://www.gatsbyjs.com/">Gatsby</a> 
+        and <a href="https://github.com/atarukodaka/gatsby-aksite-starter">AK site starter</a>.
     </footer>
 )
 
 ////////////////////////////////////////////////////////////////
 // Layout
-const Layout = ({ children, title, description, image, tableOfContents }) => {
-    const query = graphql`
-    {
-        site {
-            siteMetadata {
-                siteTitle: title
-                siteDescription: description
-                author
-                coverImage
-                social { twitter, github }
-            }
-        }
-    }
-    `
+const Layout = ({ children, tableOfContents }) => {
 
-    /*
-    const { site }  = useStaticQuery(query)
-    const { siteTitle, siteDescription, author, social } = site.siteMetadata
-    */
-    const { site: { siteMetadata: { siteTitle, siteDescription, author, social, coverImage } } } =
-        useStaticQuery(query)
-
+    const { title, description, author, social }  = useSiteMetadata()
     return (
-        <>
-            <SEO title={`${title} | ${siteTitle}`} 
-              description={description || siteDescription} image={coverImage} lang="ja" />
-            <TopPane siteTitle={siteTitle} siteDescription={siteDescription} />
+        <React.Fragment>
+            <TopPane title={title} description={description} />
             <MiddlePane tableOfContents={tableOfContents}>{children}</MiddlePane>
             <BottomPane author={author} social={social} />
-        </>
+        </React.Fragment>
     )
 }
 export default Layout

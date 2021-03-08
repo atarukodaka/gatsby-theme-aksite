@@ -4,7 +4,9 @@ import { css } from '@emotion/react'
 import PropTypes from 'prop-types'
 
 import directoryLabel from '../utils/directory_label'
+import theme from '../styles/theme'
 
+/*
 const cssDirectoryBox = css`
     display: inline-block;
     background-color: #cdd;
@@ -15,6 +17,22 @@ const cssDirectoryBox = css`
     }
     &:hover {
         background-color: #eff;
+    }
+`
+*/
+
+const cssDirectoryBox = css`
+    display: inline-block;
+    background-color: ${theme.palette.action.hover};
+        
+    a {
+        margin-left: 0.5rem;
+        margin-right: 0.5rem;
+        text-decoration: none;
+        color: ${theme.palette.text.primary};
+    }
+    &:hover {
+        background-color: ${theme.palette.action.active};
     }
 `
 
