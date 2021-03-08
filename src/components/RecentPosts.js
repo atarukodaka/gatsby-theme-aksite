@@ -1,6 +1,10 @@
 import React from 'react'
 import { graphql, useStaticQuery, Link } from 'gatsby'
-import PostCard from './PostCard'
+import Typography from '@material-ui/core/Typography'
+import { css } from '@emotion/react'
+import theme from '../styles/theme'
+import { List, ListItem} from '@material-ui/core'
+import HoverBox from './HoverBox'
 
 const query = graphql`
 {
@@ -15,16 +19,31 @@ const query = graphql`
 }
 `
 
-const RecentPosts = (  ) => {
+const cssItem = css`
+    a {
+        color: ${theme.palette.text.primary};
+        text-decoration: none;
+    }
+`
+const RecentPosts = () => {
     const { recentPosts } = useStaticQuery(query)
 
-    return (<ul>
-        {recentPosts.nodes.map(node => (
-            <li>
-                <Link to={node.fields.slug}>{node.fields.postTitle}[{node.fields.directory}]</Link>
-            </li>
-        ))}
-        </ul>)
+    return (
+        <List>
+            {recentPosts.nodes.map(node => (
+                <ListItem key={node.id} css={cssItem}>
+                    <HoverBox>
+                    <Link to={node.fields.slug} >
+                        <Typography>
+                            {node.fields.postTitle}[{node.fields.directory}]
+                        </Typography>
+                    </Link>
+                    </HoverBox>
+                </ListItem>
+            ))}
+        </List>
+
+    )
     /*
     return (<nav>
         {recentPosts.nodes.map(node => (

@@ -1,43 +1,14 @@
 import React from "react"
-import { useStaticQuery, graphql } from "gatsby"
-//import { Box } from '@material-ui/core'
-import GitHubIcon from '@material-ui/icons/GitHub';
-import TwitterIcon from '@material-ui/icons/Twitter';
 
-import MonthlyArchives from './MonthlyArchives'
-import DirectoryTree from './DirectoryTree'
 import Card from './Card'
+import Profile from './Profile'
+import DirectoryTree from './DirectoryTree'
 import RecentPosts from './RecentPosts'
+import MonthlyArchives from './MonthlyArchives'
 
-const query = graphql`
-{
-    site {
-        ...siteInformation               
-    }
-   
-}
-`
-
-
-
-const Profile = () => {
-    const { site } = useStaticQuery(query)
-    const twitterUrl = `http://www.twitter.com/${site.siteMetadata.social.twitter}`
-    const gitHubUrl = `http://github.com/${site.siteMetadata.social.github}`
-
-    return (
-        <div>
-            <div>Author: {site.siteMetadata.author}</div>
-            <div>
-                <a href={twitterUrl}><TwitterIcon aria-label="button" /></a>
-                <a href={gitHubUrl}><GitHubIcon aria-label="button" /></a>
-            </div>
-        </div>
-    )
-}
 const Sidebar = () => {
     return (
-        <div className="sidebar">
+        <div>
             <Card>
                 <h3>Profile</h3>
                 <Profile/>

@@ -1,9 +1,10 @@
 
-## Custumized Gatsby Starter
+## Custumized Gatsby Theme
 
 ```shell
-# create a new Gatsby site using the aksite starter
-gatsby new my-site https://github.com/atarukodaka/gatsby-aksite-starter
+cd your-gatsby-site
+yarn add https://github.com/atarukodaka/gatsby-theme-aksite
+
 ```
 
 1.  **Start developing.**

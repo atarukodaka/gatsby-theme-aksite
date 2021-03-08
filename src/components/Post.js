@@ -13,28 +13,14 @@ import Divider from '@material-ui/core/Divider'
 import DirectoryBox from './DirectoryBox'
 import MdxComponents from './MdxComponents'
 import ShareSNS from './ShareSNS'
-import styles from "./post.module.css"
+import * as styles from "./post.module.css"
 import CoverImage from './CoverImage'
 import directoryLabel from '../utils/directory_label'
 import PostCard from './PostCard'
 //import postTitle from './postTitle'
+import PageTitle from './PageTitle'
+import useSiteMetadata from '../hooks/useSiteMetadata'
 
-import theme from '../styles/theme'
-
-const light = theme.palette.primary.light
-const dark = theme.palette.primary.dark
-
-const Title = styled.h1`
-    margin-bottom: 0.5rem;
-    padding: 0.5em;
-    font-weight: bold;
-
-    /*background: ${theme.palette.primary.dark}; */
-    color: ${theme.palette.primary.contrastText};
-    background: linear-gradient(to bottom,  ${light} 0%, ${dark} 100%)
-    /* background: linear-gradient(to bottom,  #4848aa 0%, #222277 100%);   */
-     /* color: white;  */
-`
 const Description = styled.div`
     padding: 1rem;  
 `
@@ -59,9 +45,6 @@ const cssPost = css`
     /* box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);  */
     box-shadow: 2px 2px 1px rgb(0 0 0 / 20%)
 //`
-const query = graphql`
-    { site { siteMetadata { siteUrl }} }
-`
 
 const RenderMDX = ({ children }) => {
     //const shortcodes = {Image, PostLink}
@@ -101,18 +84,17 @@ const PrevNextPost = ({ prevPost, nextPost }) => (
             </Grid>
         </Grid>
     </nav>
-
-
 )
+
 const Post = ({ node, siblings, prevPost, nextPost }) => {
-    const data = useStaticQuery(query)
     const { pathname } = useLocation()
+    const { siteUrl } = useSiteMetadata()
 
     return (
         <div css={cssPost} className={styles.post}>
             <Header>
                 <div>{node.frontmatter.date}</div>
-                <Title>{node.fields.postTitle}</Title>
+                <PageTitle>{node.fields.postTitle}</PageTitle>
                 <DirectoryBox directory={node.fields.directory} />
                 <CoverImage node={node} />
                 <Description>{node.frontmatter.description}</Description>
@@ -123,7 +105,7 @@ const Post = ({ node, siblings, prevPost, nextPost }) => {
                 </RenderMDX>
             </Main>
             <Footer>
-                <ShareSNS url={`${data.site.siteMetadata.siteUrl}${pathname}`}
+                <ShareSNS url={`${siteUrl}${pathname}`}
                     title={node.fields.postTitle}/>
                 <PrevNextPost prevPost={prevPost} nextPost={nextPost} />
                 <Divider />

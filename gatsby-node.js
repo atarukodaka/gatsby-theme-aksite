@@ -10,15 +10,15 @@ const templateDir = "./src/templates"
 
 exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
     createTypes(`
-        type Mdx implements Node {
-            frontmatter: MdxFrontmatter
+        type AksMdx implements Node {
+            frontmatter: AksMdxFrontmatter
         }
-        type MdxFrontmatter {
+        type AksMdxFrontmatter {
             description: String
             cover: File @fileByRelativePath
-            series: Series
+            series: AksSeries
         }
-        type Series {
+        type AksSeries {
             title: String
             number: Int
         }
@@ -31,7 +31,7 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
     if (node.internal.type === `Mdx`) {
         const slug = createFilePath({ node, getNode })
         const directory = slug.split("/").slice(1, -2).join("/")
-        console.log("create node: ", slug, "[", directory, "]")
+        //console.log("create node: ", slug, "[", directory, "]")
 
         createNodeField({
             node,
@@ -75,7 +75,7 @@ const createIndexPagination = ({ nodes, actions }) => {
     console.log("** index paginate")
     const { createPage } = actions
     const template = `${templateDir}/index-template.js`
-    console.log("resolve", require.resolve(template), require.resolve(template))
+    //console.log("resolve", require.resolve(template), require.resolve(template))
     paginate({
         createPage,
         items: nodes,
@@ -127,7 +127,7 @@ const createMonthlyArchives = ({ nodes, actions }) => {
         const items = nodes.filter(v => {
             const dt = new Date(v.frontmatter.date); return fromDate <= dt && dt < toDate
         })
-        console.log(`monthly archive: ${year}/${month} (${items.length}) [${monthlyArchivePath(year, month)}]`)
+        //console.log(`monthly archive: ${year}/${month} (${items.length}) [${monthlyArchivePath(year, month)}]`)
         paginate({
             createPage,
             items: items,

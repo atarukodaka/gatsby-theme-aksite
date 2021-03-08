@@ -6,7 +6,7 @@ const theme = createMuiTheme({
         //type: 'dark',
         primary: {
             main: '#222277'
-        }
+        },
         /*
         primary: {
             light: '#ffff8b',
@@ -14,6 +14,17 @@ const theme = createMuiTheme({
             dark: '#c9bc1f',
             contrastText: '#ffffff',
         }*/
+    },
+    typography: {
+        fontFamily: [
+            "Segoe UI", "Meiryo",
+            "Avenir Next",
+            "Helvetica Neue",
+            "Segoe UI",
+            "Helvetica",
+            "Arial",
+            "sans-serif",
+        ].join(',')
     }
 })
 export default theme
