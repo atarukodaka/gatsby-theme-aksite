@@ -20,6 +20,7 @@ const cssWrapperSmall = css`
 
 const cssWrapperWide = css`
     .gatsby-image-wrapper {
+        width: 100%;
         height: 150px;
 }
 `

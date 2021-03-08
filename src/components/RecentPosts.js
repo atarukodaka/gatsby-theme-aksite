@@ -1,6 +1,5 @@
 import React from 'react'
 import { graphql, useStaticQuery, Link } from 'gatsby'
-import PostCard from './PostCard'
 import Typography from '@material-ui/core/Typography'
 import { css } from '@emotion/react'
 import theme from '../styles/theme'

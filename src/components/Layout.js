@@ -1,5 +1,5 @@
 import React from "react"
-import { graphql, useStaticQuery, Link } from "gatsby"
+import { Link } from "gatsby"
 
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -8,24 +8,19 @@ import Container from '@material-ui/core/Container'
 import Button from '@material-ui/core/Button'
 import MenuIcon from '@material-ui/icons/Menu'
 import Hidden from '@material-ui/core/Hidden'
-import { Drawer, IconButton, Divider } from '@material-ui/core'
-//import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles'
+import { Drawer, IconButton, Divider, Typography } from '@material-ui/core'
 import { css } from '@emotion/react'
 
 import MonthlyArchives from './MonthlyArchives'
 import DirectoryTree from './DirectoryTree'
-import SEO from './SEO'
 import GoogleSearch from './GoogleSearch'
 import Sidebar from './Sidebar'
-//import useSiteInformation from '../hooks/use_site_information'
-//import styles from './layout.module.css'
 import theme from '../styles/theme'
 import useSiteMetadata from '../hooks/useSiteMetadata'
+import Profile from './Profile'
 
 ////////////////////////////////////////////////////////////////
 // Top
-
-
 
 const cssSiteTitle = css`
     padding-top: 40px;
@@ -39,7 +34,6 @@ const cssSiteTitle = css`
     }
 `
 const TopPane = ({ title, description }) => {
-    //const data = useStaticQuery(query)
     const [open, setOpen] = React.useState(false);
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -54,11 +48,10 @@ const TopPane = ({ title, description }) => {
         <header>
             <AppBar position="relative">
                 <Toolbar>
-                    <Hidden mdUp>
-                        <IconButton onClick={handleDrawerOpen} color="inherit">
-                            <MenuIcon />
-                        </IconButton>
-                    </Hidden>
+
+                    <IconButton onClick={handleDrawerOpen} color="inherit">
+                        <MenuIcon />
+                    </IconButton>
 
                     <Button color="inherit" component={Link} to="/">{title}</Button>
                     <Button color="inherit" component={Link} to="/about">About</Button>
@@ -66,7 +59,7 @@ const TopPane = ({ title, description }) => {
             </AppBar>
 
             <Drawer open={open}>
-                <div>
+                <div style={{ marginLeft: "1rem", marginRight: "1rem" }}>
                     <IconButton onClick={handleDrawerClose}>
                         <MenuIcon />
                     </IconButton>
@@ -74,6 +67,9 @@ const TopPane = ({ title, description }) => {
 
                     <nav>
                         <GoogleSearch cx={gcse_cx} />
+                        <h3>Profile</h3>
+                        <Profile/>
+                        <Divider/>
                         <h3>Directories</h3>
                         <DirectoryTree />
                         <Divider />
@@ -85,10 +81,8 @@ const TopPane = ({ title, description }) => {
 
             <div css={cssSiteTitle}>
                 <Container>
-                    
-                        <h1>{title}</h1>
-                        <h3>{description}</h3>
-                    
+                    <h1>{title}</h1>
+                    <h3>{description}</h3>
                 </Container>
             </div>
         </header>
@@ -121,7 +115,9 @@ const Tree = ({ items }) => (
         {
             items.map(v => (
                 <li key={v.url}>
-                    <Link to={v.url}>{v.title}</Link>
+                    <Typography>
+                        <Link to={v.url}>{v.title}</Link>
+                    </Typography>
                     {v.items && (<Tree items={v.items} />)}
                 </li>
             ))
@@ -154,10 +150,8 @@ const MiddlePane = ({ children, tableOfContents }) => (
 
                 <Hidden smDown>
                     <Grid item md={3} xs={12}>
-                        <div style={{backgroundColor: "red"}}>
-                            <GoogleSearch cx={process.env.GCSE_CX} />
-                        </div>
-                        {tableOfContents && (<TableOfContents items={tableOfContents.items} />)}
+                        {tableOfContents &&
+                          (<TableOfContents items={tableOfContents.items} />)}
                     </Grid>
                 </Hidden>
             </Grid>
@@ -176,7 +170,7 @@ const cssBottomPane = css`
 const BottomPane = ({ author }) => (
     <footer css={cssBottomPane}>
         (C) Copyright {(new Date()).getFullYear()} {author} All Right Reserved.
-        Powered by <a href="https://www.gatsbyjs.com/">Gatsby</a> 
+        Powered by <a href="https://www.gatsbyjs.com/">Gatsby</a>
         and <a href="https://github.com/atarukodaka/gatsby-aksite-starter">AK site starter</a>.
     </footer>
 )
@@ -185,7 +179,7 @@ const BottomPane = ({ author }) => (
 // Layout
 const Layout = ({ children, tableOfContents }) => {
 
-    const { title, description, author, social }  = useSiteMetadata()
+    const { title, description, author, social } = useSiteMetadata()
     return (
         <React.Fragment>
             <TopPane title={title} description={description} />
