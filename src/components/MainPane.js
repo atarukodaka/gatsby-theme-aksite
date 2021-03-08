@@ -50,6 +50,7 @@ const TableOfContents = ({ items }) => (
     </div>
 )
 
+////////////////////////////////////////////////////////////////
 const MainPane = ({ children, tableOfContents }) => (
     <div css={cssMainPane}>
         <Container>

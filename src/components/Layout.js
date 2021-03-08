@@ -4,21 +4,11 @@ import HeaderPane from './HeaderPane'
 import MainPane from './MainPane'
 import FooterPane from './FooterPane'
 
-////////////////////////////////////////////////////////////////
-// Top
-
-////////////////////////////////////////////////////////////////
-// Middle
-////////////////////////////////////////////////////////////////
-// Bottom
-
-////////////////////////////////////////////////////////////////
-// Layout
-const Layout = ({ children, tableOfContents }) => {
+const Layout = ( props ) => {
     return (
         <React.Fragment>
             <HeaderPane/>
-            <MainPane tableOfContents={tableOfContents}>{children}</MainPane>
+            <MainPane {...props} />
             <FooterPane/>
         </React.Fragment>
     )
