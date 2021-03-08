@@ -4,6 +4,8 @@ import { Breadcrumb } from 'gatsby-plugin-breadcrumb'
 
 import Layout from "../components/Layout"
 import Post from "../components/Post"
+import { css } from '@emotion/react'
+import theme from '../styles/theme'
 
 export const query = graphql`
     query ($slug: String!) {
@@ -22,6 +24,13 @@ export const query = graphql`
 
 `
 
+const cssBreadcrumb = css`
+    a {
+      text-decoration: none;
+      color: ${theme.palette.text.primary};
+    }
+`
+
 export default function PostTemplate({ data, pageContext }) {
   console.log(`create/template: ${data.mdx.fields.slug}`)
   const node = data.mdx
@@ -38,7 +47,9 @@ export default function PostTemplate({ data, pageContext }) {
     <Layout title={node.frontmatter.title} 
       description={node.frontmatter.description || node.excerpt} 
       image={image_url} tableOfContents={node.tableOfContents} >
-      <Breadcrumb crumbs={crumbs} crumbLabel={node.frontmatter.title} />
+      <div css={cssBreadcrumb}>
+        <Breadcrumb crumbs={crumbs} crumbLabel={node.frontmatter.title}/>
+      </div>
 
       <Post node={node} siblings={siblings}
         prevPost={prevPost} nextPost={nextPost}/>

@@ -146,14 +146,14 @@ module.exports = (options) => {
           respectDNT: true,
         },
       },
-
+/*
       {
         resolve: `gatsby-plugin-typography`,
         options: {
           pathToConfigModule: require.resolve(`./src/utils/typography.js`),
         },
       },
-
+*/
       `gatsby-plugin-react-helmet`,
       `gatsby-plugin-sitemap`,
       `gatsby-plugin-material-ui`,

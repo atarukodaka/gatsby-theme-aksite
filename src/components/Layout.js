@@ -96,7 +96,6 @@ const TopPane = ({ siteTitle, siteDescription }) => {
 
 ////////////////////////////////////////////////////////////////
 // Middle
-
 const cssMiddlePane = css`
     margin-top: 2rem;
 `
@@ -105,7 +104,10 @@ const cssTableOfContents = css`
     top: 0;
     li {
         /* font-size: 0.8rem; */
-        a { text-decoration: none; }
+        a { 
+            text-decoration: none; 
+            color: ${theme.palette.text.primary};
+        }
     }
 `
 const cssSidebar = css`

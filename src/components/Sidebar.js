@@ -8,6 +8,8 @@ import MonthlyArchives from './MonthlyArchives'
 import DirectoryTree from './DirectoryTree'
 import Card from './Card'
 import RecentPosts from './RecentPosts'
+import { css } from '@emotion/react'
+import theme from '../styles/theme'
 
 const query = graphql`
 {
@@ -18,15 +20,19 @@ const query = graphql`
 }
 `
 
-
-
 const Profile = () => {
     const { site } = useStaticQuery(query)
     const twitterUrl = `http://www.twitter.com/${site.siteMetadata.social.twitter}`
     const gitHubUrl = `http://github.com/${site.siteMetadata.social.github}`
 
+    const cssProfile = css`
+        a {
+            text-decoration: none;
+            color: ${theme.palette.text.primary};
+        }
+    `
     return (
-        <div>
+        <div css={cssProfile}>
             <div>Author: {site.siteMetadata.author}</div>
             <div>
                 <a href={twitterUrl}><TwitterIcon aria-label="button" /></a>

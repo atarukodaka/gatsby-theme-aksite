@@ -29,9 +29,11 @@ const Title = styled.h1`
     padding: 0.5em;
     font-weight: bold;
 
-    /*background: ${theme.palette.primary.dark}; */
     color: ${theme.palette.primary.contrastText};
     background: linear-gradient(to bottom,  ${light} 0%, ${dark} 100%)
+
+    /*background: ${theme.palette.primary.dark}; */
+    /* color: ${theme.palette.text.primary}; */
     /* background: linear-gradient(to bottom,  #4848aa 0%, #222277 100%);   */
      /* color: white;  */
 `

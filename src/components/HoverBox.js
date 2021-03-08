@@ -1,5 +1,7 @@
 import styled from '@emotion/styled'
 
+import theme from '../styles/theme'
+
 const HoverBox = styled.div`
 
 &:hover {
@@ -9,6 +11,7 @@ const HoverBox = styled.div`
 a {
     text-decoration: none;
     /* color: black; */
+    color: ${theme.palette.text.primary}
 }
 `
 
