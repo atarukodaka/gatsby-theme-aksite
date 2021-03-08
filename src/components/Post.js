@@ -18,6 +18,7 @@ import CoverImage from './CoverImage'
 import directoryLabel from '../utils/directory_label'
 import PostCard from './PostCard'
 //import postTitle from './postTitle'
+//import PageTitle from './PageTitle'
 
 import theme from '../styles/theme'
 

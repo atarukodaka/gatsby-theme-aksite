@@ -30,7 +30,7 @@ const CoverImage = ({ node, size = "regular", ...props }) => {
     return (
         <div css={cssWrapper} {...props}>
             {node.frontmatter.cover &&
-                (<GatsbyImage image={node.frontmatter.cover.childImageSharp.gatsbyImageData} style={{height: "100px"}}/>)
+                (<GatsbyImage image={node.frontmatter.cover.childImageSharp.gatsbyImageData}/>)
             }
         </div>
     )

@@ -4,6 +4,8 @@ import PostCard from './PostCard'
 import Typography from '@material-ui/core/Typography'
 import { css } from '@emotion/react'
 import theme from '../styles/theme'
+import { List, ListItem} from '@material-ui/core'
+import HoverBox from './HoverBox'
 
 const query = graphql`
 {
@@ -24,24 +26,25 @@ const cssItem = css`
         text-decoration: none;
     }
 `
-const RecentPosts = (  ) => {
+const RecentPosts = () => {
     const { recentPosts } = useStaticQuery(query)
 
     return (
-        
-            <ul>
-        {recentPosts.nodes.map(node => (
-            <Typography>
-            <li key={node.id}  css={cssItem}>  
-                <Link to={node.fields.slug} color="inherit">
-                    {node.fields.postTitle}[{node.fields.directory}]
-                </Link>
-            </li>
-            </Typography>
-        ))}
-        </ul>
-        
-        )
+        <List>
+            {recentPosts.nodes.map(node => (
+                <ListItem key={node.id} css={cssItem}>
+                    <HoverBox>
+                    <Link to={node.fields.slug} >
+                        <Typography>
+                            {node.fields.postTitle}[{node.fields.directory}]
+                        </Typography>
+                    </Link>
+                    </HoverBox>
+                </ListItem>
+            ))}
+        </List>
+
+    )
     /*
     return (<nav>
         {recentPosts.nodes.map(node => (

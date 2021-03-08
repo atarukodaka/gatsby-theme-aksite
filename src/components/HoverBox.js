@@ -8,7 +8,7 @@ const HoverBox = styled.div`
     /* background-color: #eee; */
     background-color: ${theme.palette.action.hover};
     opacity: 0.7;
-}
+    }
 a {
     text-decoration: none;
     /* color: black; */
