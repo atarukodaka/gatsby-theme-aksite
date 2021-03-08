@@ -1,14 +1,9 @@
 body {
     /* font-family: "Segoe UI", MeiryoKe_PGothic, "Meiryo", "Meiryo UI", Georgia, Palatino, "Palatino Linotype", Times, "Times New Roman", serif; */
     /* background-color: #eee;  */
-    color: red;
+
 }
 
-
-.pageTitle {
-    margin-top: 1em;
-    margin-bottom: 2em;
-}
 .gatsby-highlight-code-line {
     background-color: #444444;
     display: block;

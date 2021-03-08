@@ -18,26 +18,8 @@ import CoverImage from './CoverImage'
 import directoryLabel from '../utils/directory_label'
 import PostCard from './PostCard'
 //import postTitle from './postTitle'
-//import PageTitle from './PageTitle'
+import PageTitle from './PageTitle'
 
-import theme from '../styles/theme'
-
-const light = theme.palette.primary.light
-const dark = theme.palette.primary.dark
-
-const Title = styled.h1`
-    margin-bottom: 0.5rem;
-    padding: 0.5em;
-    font-weight: bold;
-
-    color: ${theme.palette.primary.contrastText};
-    background: linear-gradient(to bottom,  ${light} 0%, ${dark} 100%)
-
-    /*background: ${theme.palette.primary.dark}; */
-    /* color: ${theme.palette.text.primary}; */
-    /* background: linear-gradient(to bottom,  #4848aa 0%, #222277 100%);   */
-     /* color: white;  */
-`
 const Description = styled.div`
     padding: 1rem;  
 `
@@ -115,7 +97,7 @@ const Post = ({ node, siblings, prevPost, nextPost }) => {
         <div css={cssPost} className={styles.post}>
             <Header>
                 <div>{node.frontmatter.date}</div>
-                <Title>{node.fields.postTitle}</Title>
+                <PageTitle>{node.fields.postTitle}</PageTitle>
                 <DirectoryBox directory={node.fields.directory} />
                 <CoverImage node={node} />
                 <Description>{node.frontmatter.description}</Description>

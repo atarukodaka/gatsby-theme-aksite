@@ -7,13 +7,14 @@ import { PostCard } from "../components/PostCard"
 import Layout from "../components/Layout"
 import SEO from '../components/SEO'
 import Breadcrumb from '../components/Breadcrumb'
+import PageTitle from '../components/PageTitle'
 
 
 const ArchiveTemplate = ( {title, nodes, crumbs, pagination_parameters, showTitle = true} ) => (
     <Layout title={title}>
       <SEO title={title}/>
       <Breadcrumb crumbs={crumbs} />
-      { showTitle && (<h1 className="pageTitle">{title}</h1>)}
+      { showTitle && (<PageTitle>{title}</PageTitle>)}
       {
         nodes.map(node => (
           <PostCard node={node} key={node.id} />

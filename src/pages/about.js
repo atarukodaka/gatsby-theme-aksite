@@ -5,7 +5,7 @@ import GitHubIcon from '@material-ui/icons/GitHub';
 import TwitterIcon from '@material-ui/icons/Twitter';
 
 import Layout from "../components/Layout"
-import LinkPost from '../components/LinkPost'
+import PageTitle from '../components/PageTitle'
 
 export const query = graphql`
   query {
@@ -24,7 +24,7 @@ const AboutPage = ({ data, pageContext }) => {
   return (
     <Layout title="about">
       <Breadcrumb crumbs={crumbs} crumbLabel='About' />
-      <h2 className="pageTitle">About</h2>
+      <PageTitle>About</PageTitle>
       <p>title: {data.site.siteMetadata.title} </p>
       <p>author: {data.site.siteMetadata.author} </p>
       <p>description: {data.site.siteMetadata.description} </p>
@@ -32,11 +32,6 @@ const AboutPage = ({ data, pageContext }) => {
         <a href={twitterUrl}><TwitterIcon aria-label="button" /></a>
         <a href={gitHubUrl}><GitHubIcon aria-label="button" /></a>
       </div>
-      <LinkPost to="/game/umamusume/"/>
-      <LinkPost to="/">top</LinkPost>
-      <LinkPost to="/archives/202002">archives</LinkPost>
-
-
     </Layout>
   )
 }
