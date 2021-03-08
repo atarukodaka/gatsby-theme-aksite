@@ -45,7 +45,7 @@ const Tree = ({ items }) => (
 
 const TableOfContents = ({ items }) => (
     <div css={cssTableOfContents}>
-        <h3>Table of Contents</h3>
+        <Typography variant="h3">Table of Contents</Typography>
         <Tree items={items || []} />
     </div>
 )

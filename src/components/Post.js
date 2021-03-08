@@ -7,6 +7,7 @@ import styled from '@emotion/styled'
 import { css } from '@emotion/react'
 import Grid from '@material-ui/core/Grid'
 import Divider from '@material-ui/core/Divider'
+import Typography from '@material-ui/core/Typography'
 //import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
 //import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
@@ -72,14 +73,14 @@ const PrevNextPost = ({ prevPost, nextPost }) => (
     <nav style={{ marginBottom: "2rem" }}>
         <Grid container>
             <Grid item sm={4}>
-                <h4 style={{ textAlign: "left" }}>
+                <Typography variant="h4" style={{ textAlign: "left" }}>
                     《 PREV POST
-            </h4>
+                </Typography>
                 {prevPost && (<PostCard node={prevPost} />)}
             </Grid>
             <Grid item sm={4} />
             <Grid item sm={4}>
-                <h4 style={{ textAlign: "right" }}>NEXT POST》</h4>
+                <Typography variant="h4" style={{ textAlign: "right" }}>NEXT POST》</Typography>
                 {nextPost && (<PostCard node={nextPost} />)}
             </Grid>
         </Grid>
@@ -109,7 +110,7 @@ const Post = ({ node, siblings, prevPost, nextPost }) => {
                     title={node.fields.postTitle}/>
                 <PrevNextPost prevPost={prevPost} nextPost={nextPost} />
                 <Divider />
-                <h3>Siblings on '{directoryLabel(node.fields.directory)}'</h3>
+                <Typography variant="h3">Siblings on '{directoryLabel(node.fields.directory)}'</Typography>
                 <Siblings nodes={siblings} />
             </Footer>
         </div>

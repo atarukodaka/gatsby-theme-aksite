@@ -7,6 +7,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import { Drawer, IconButton, Divider } from '@material-ui/core'
 import { css } from '@emotion/react'
 import Container from '@material-ui/core/Container'
+import Typography from '@material-ui/core/Typography'
 
 import Profile from './Profile'
 import MonthlyArchives from './MonthlyArchives'
@@ -14,6 +15,7 @@ import DirectoryTree from './DirectoryTree'
 import GoogleSearch from './GoogleSearch'
 import theme from '../styles/theme'
 import useSiteMetadata from '../hooks/useSiteMetadata'
+
 
 const cssSiteTitle = css`
     padding-top: 40px;
@@ -74,8 +76,8 @@ const HeaderPane = () => {
 
             <div css={cssSiteTitle}>
                 <Container>
-                    <h1>{title}</h1>
-                    <h3>{description}</h3>
+                    <Typography variant="h1">{title}</Typography>
+                    <Typography variant="h3">{description}</Typography>
                 </Container>
             </div>
         </header>

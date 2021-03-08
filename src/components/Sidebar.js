@@ -5,27 +5,28 @@ import Profile from './Profile'
 import DirectoryTree from './DirectoryTree'
 import RecentPosts from './RecentPosts'
 import MonthlyArchives from './MonthlyArchives'
+import Typography from '@material-ui/core/Typography'
 
 const Sidebar = () => {
     return (
         <div>
             <Card>
-                <h3>Profile</h3>
+                <Typography variant="h3">Profile</Typography>
                 <Profile/>
             </Card>
 
             <Card>
-                <h3>Directories</h3>
+                <Typography variant="h3">Directories</Typography>
                 <DirectoryTree />
             </Card>
             
             <Card>
-                <h3>Recent Posts</h3>
+                <Typography variant="h3">Recent Posts</Typography>
                 <RecentPosts />
             </Card>
             
             <Card>
-                <h3>Monthly Archives</h3>
+                <Typography variant="h3">Monthly Archives</Typography>
                 <MonthlyArchives />
             </Card>
         </div>

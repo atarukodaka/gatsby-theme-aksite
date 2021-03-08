@@ -24,7 +24,32 @@ const theme = createMuiTheme({
             "Helvetica",
             "Arial",
             "sans-serif",
-        ].join(',')
+        ].join(','),
+        h1: {
+            fontSize: "3rem",
+            fontWeight: "bold",
+            marginBottom: "2rem",
+        },
+        h2: {
+            fontSize: "1.6rem",
+            fontWeight: "bold",
+            marginTop: "3rem",
+            marginBottom: "1.6rem",
+        },
+        h3: {
+            fontSize: "1.45rem",
+            fontWeight: "bold",
+            marginTop: "1rem",
+            marginBottom: "1rem",
+        },
+        h4: {
+            fontSize: "1.4rem",
+            fontWeight: "bold",
+            marginTop: "1rem",
+            marginBottom: "1rem",
+        },
+        
+
     }
 })
 export default theme

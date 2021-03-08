@@ -2,6 +2,7 @@ import React from "react"
 import { Link } from "gatsby"
 import { css } from '@emotion/react'
 import PropTypes from 'prop-types'
+import Typography from '@material-ui/core/Typography'
 
 import directoryLabel from '../utils/directory_label'
 import theme from '../styles/theme'
@@ -39,7 +40,9 @@ const cssDirectoryBox = css`
 const DirectoryBox = ({ directory, ...props }) => (
     <div css={cssDirectoryBox} {...props}>
         <Link to={'/' + directory}>
-            {directoryLabel(directory)}
+            <Typography variant="caption">
+                {directoryLabel(directory)}
+            </Typography>
         </Link>
     </div>
 
