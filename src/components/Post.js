@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography'
 import DirectoryBox from './DirectoryBox'
 import MdxComponents from './MdxComponents'
 import ShareSNS from './ShareSNS'
-import * as styles from "./post.module.css"
+// import * as styles from "./post.module.css"
 import CoverImage from './CoverImage'
 import directoryLabel from '../utils/directory_label'
 import PostCard from './PostCard'
@@ -51,11 +51,9 @@ const RenderMDX = ({ children }) => {
     //const shortcodes = {Image, PostLink}
     return (
         <MDXProvider components={MdxComponents}>
-            <div className={styles.body}>
-                <MDXRenderer>
-                    {children}
-                </MDXRenderer>
-            </div>
+            <MDXRenderer>
+                {children}
+            </MDXRenderer>
         </MDXProvider>
     )
 }
@@ -92,7 +90,7 @@ const Post = ({ node, siblings, prevPost, nextPost }) => {
     const { siteUrl } = useSiteMetadata()
 
     return (
-        <div css={cssPost} className={styles.post}>
+        <div css={cssPost}>
             <Header>
                 <div>{node.frontmatter.date}</div>
                 <PageTitle>{node.fields.postTitle}</PageTitle>

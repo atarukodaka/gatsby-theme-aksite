@@ -65,6 +65,7 @@ module.exports = (options) => {
               resolve: `gatsby-remark-autolink-headers`,
               options: {
                 isIconAfterHeader: true,
+                className: 'heading-anchor',
               }
             },
             {

@@ -3,7 +3,8 @@ import { graphql, useStaticQuery, Link } from 'gatsby'
 import Typography from '@material-ui/core/Typography'
 import { css } from '@emotion/react'
 import theme from '../styles/theme'
-import { List, ListItem} from '@material-ui/core'
+import List from '@material-ui/core/List'
+import ListItem from '@material-ui/core/ListItem'
 import HoverBox from './HoverBox'
 
 const query = graphql`

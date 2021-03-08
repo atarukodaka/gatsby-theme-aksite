@@ -10,11 +10,11 @@ import Breadcrumb from '../components/Breadcrumb'
 import PageTitle from '../components/PageTitle'
 
 
-const ArchiveTemplate = ( {title, nodes, crumbs, pagination_parameters, showTitle = true} ) => (
+const ArchiveTemplate = ( {title, nodes, crumbs, pagination_parameters} ) => (
     <Layout title={title}>
       <SEO title={title}/>
       <Breadcrumb crumbs={crumbs} />
-      { showTitle && (<PageTitle>{title}</PageTitle>)}
+      <PageTitle>{title}</PageTitle>
       {
         nodes.map(node => (
           <PostCard node={node} key={node.id} />

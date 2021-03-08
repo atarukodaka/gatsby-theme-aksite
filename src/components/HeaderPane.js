@@ -16,7 +16,6 @@ import GoogleSearch from './GoogleSearch'
 import theme from '../styles/theme'
 import useSiteMetadata from '../hooks/useSiteMetadata'
 
-
 const cssSiteTitle = css`
     padding-top: 40px;
     padding-bottom: 40px;
@@ -25,7 +24,7 @@ const cssSiteTitle = css`
     h1 { font-size: 4rem; }
     a { 
         text-decoration: none;
-        /* color: ${theme.palette.primary.main}; */
+        color: ${theme.palette.primary.main};
     }
 `
 const HeaderPane = () => {
@@ -76,8 +75,10 @@ const HeaderPane = () => {
 
             <div css={cssSiteTitle}>
                 <Container>
-                    <Typography variant="h1">{title}</Typography>
-                    <Typography variant="h3">{description}</Typography>
+                    <Link to="/">
+                        <Typography variant="h1">{title}</Typography>
+                        <Typography variant="h3">{description}</Typography>
+                    </Link>
                 </Container>
             </div>
         </header>

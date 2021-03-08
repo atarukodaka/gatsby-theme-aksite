@@ -1,7 +1,12 @@
 body {
     /* font-family: "Segoe UI", MeiryoKe_PGothic, "Meiryo", "Meiryo UI", Georgia, Palatino, "Palatino Linotype", Times, "Times New Roman", serif; */
     /* background-color: #eee;  */
+    counter-reset: h1; counter-reset: h2;   /* for heading numbering */
+}
 
+.heading-anchor {
+    opacity: 0.4;
+    margin-left: 0.2rem;
 }
 
 .gatsby-highlight-code-line {
