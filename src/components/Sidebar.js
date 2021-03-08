@@ -10,20 +10,12 @@ import Card from './Card'
 import RecentPosts from './RecentPosts'
 import { css } from '@emotion/react'
 import theme from '../styles/theme'
-
-const query = graphql`
-{
-    site {
-        ...siteInformation               
-    }
-   
-}
-`
+import useSiteMetadata from '../hooks/useSiteMetadata'
 
 const Profile = () => {
-    const { site } = useStaticQuery(query)
-    const twitterUrl = `http://www.twitter.com/${site.siteMetadata.social.twitter}`
-    const gitHubUrl = `http://github.com/${site.siteMetadata.social.github}`
+    const { author, social: { twitter, github }} = useSiteMetadata()
+    const twitterUrl = `http://www.twitter.com/${twitter}`
+    const gitHubUrl = `http://github.com/${github}`
 
     const cssProfile = css`
         a {
@@ -33,7 +25,7 @@ const Profile = () => {
     `
     return (
         <div css={cssProfile}>
-            <div>Author: {site.siteMetadata.author}</div>
+            <div>Author: {author}</div>
             <div>
                 <a href={twitterUrl}><TwitterIcon aria-label="button" /></a>
                 <a href={gitHubUrl}><GitHubIcon aria-label="button" /></a>

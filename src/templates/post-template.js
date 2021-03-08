@@ -9,7 +9,6 @@ import SEO from '../components/SEO'
 
 export const query = graphql`
     query ($slug: String!) {
-      site { siteMetadata { siteUrl }}
       mdx(fields: { slug: { eq: $slug }}){
         ...postFieldsBody
                

@@ -3,22 +3,18 @@ import PropTypes from "prop-types"
 import { graphql, useStaticQuery } from "gatsby"
 import { Helmet } from 'react-helmet'
 import { useLocation } from "@reach/router"
+import useSiteMetadata from '../hooks/useSiteMetadata'
 
-const query = graphql`
-{
-    site {
-        ...siteInformation
-    }
-}
-`
 const SEO = ( { title, description, cover, lang } ) => {
-    const { site }  = useStaticQuery(query)
     const { pathname } = useLocation()
-    const siteUrl = site.siteMetadata.siteUrl
-    const twitterUsername = site.siteMetadata.social.twitter
-    const coverImage = cover || site.siteMetadata.coverImage
+
+    const { title: siteTitle, description: siteDescription, siteUrl, 
+        coverImage: siteCoverImage, social: { twitter} } = useSiteMetadata()
+    const coverImage = cover || siteCoverImage
     const url = [siteUrl, pathname].join('/')
     
+    title ||= siteTitle
+    description ||= siteDescription
     const imageUrl = siteUrl + coverImage
   
     return (
@@ -32,8 +28,8 @@ const SEO = ( { title, description, cover, lang } ) => {
                 { property: 'og:description', content: description },
                 { property: 'og:image', content: imageUrl },
                 { name: 'twitter:card', content: 'summary'},
-                { name: 'twitter:creator', content: twitterUsername },
-                { name: 'twitter:title', content: title },
+                { name: 'twitter:creator', content: twitter },
+                { name: 'twitter:title', content: title},
                 { name: 'twitter:description', content: description },
                 { name: 'twitter:image', content: imageUrl }
             ]}

@@ -154,7 +154,9 @@ const MiddlePane = ({ children, tableOfContents }) => (
 
                 <Hidden smDown>
                     <Grid item md={3} xs={12}>
-                        <GoogleSearch cx={process.env.GCSE_CX} />
+                        <div style={{backgroundColor: "red"}}>
+                            <GoogleSearch cx={process.env.GCSE_CX} />
+                        </div>
                         {tableOfContents && (<TableOfContents items={tableOfContents.items} />)}
                     </Grid>
                 </Hidden>
