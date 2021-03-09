@@ -29,6 +29,16 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
     //console.log("theme options: ", themeOptions)
     const { createNodeField } = actions
 
+    const getDirectoryFullLabel = (directory, labels) => {
+        let i = 0
+
+        const parts = directory.split('/')
+        return parts.map(v => {
+            i = i + 1
+            return labels[`/${parts.slice(0, i).join('/')}`] || v
+        }).join(' / ')
+    }
+
     if (node.internal.type === `Mdx`) {
         const slug = createFilePath({ node, getNode })
         const directory = slug.split("/").slice(1, -2).join("/")
@@ -46,14 +56,20 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
         })
         createNodeField({
             node,
-            name: 'directoryLabel',
-            value: themeOptions.directoryLabels['/'+directory] || directory.split('/').pop()
+            name: 'directoryFullLabel',
+            //value: themeOptions.directoryLabels['/' + directory] || directory.split('/').pop()
+            value: getDirectoryFullLabel(directory, themeOptions.directoryLabels)
         })
-        
+        createNodeField({
+            node,
+            name: 'directoryLabel',
+            value: themeOptions.directoryLabels['/' + directory] || directory.split('/').pop()
+        })
 
-        const postTitle = (node.frontmatter.series) ? 
-                `${node.frontmatter.series.title}[${node.frontmatter.series.number}] ${node.frontmatter.title}` : 
-                node.frontmatter.title
+
+        const postTitle = (node.frontmatter.series) ?
+            `${node.frontmatter.series.title}[${node.frontmatter.series.number}] ${node.frontmatter.title}` :
+            node.frontmatter.title
         createNodeField({
             node,
             name: 'postTitle',

@@ -31,25 +31,33 @@ const cssDirectoryBox = css`
         margin-right: 0.5rem;
         text-decoration: none;
         color: ${theme.palette.text.primary};
+
+        &:hover {
+            background-color: ${theme.palette.action.active};
+        }
     }
-    &:hover {
-        background-color: ${theme.palette.action.active};
-    }
+
 `
 
-const DirectoryBox = ({ node, ...props }) => (
-    <div css={cssDirectoryBox} {...props}>
-        <Link to={'/' + node.fields.directory}>
-            <Typography variant="caption">
-                {node.fields.directoryLabel}
-            </Typography>
-        </Link>
-    </div>
+const BoxInside = ( { node} ) => (
+    <Typography variant="caption">
+        {node.fields.directoryFullLabel}
+    </Typography>
+)
 
+const DirectoryBox = ({ node, disableLink=false, ...props }) => (
+    <div css={cssDirectoryBox} {...props}>
+        { (disableLink ) ? (<BoxInside node={node}/>) : 
+            (<Link to={'/' + node.fields.directory}>
+                <BoxInside node={node}/>
+            </Link>)
+        }
+    </div>
 )
 
 DirectoryBox.prototype = {
-    directory: PropTypes.string.isRequired
+    directory: PropTypes.string.isRequired,
+    disableLink: PropTypes.bool
 }
 
 export default DirectoryBox

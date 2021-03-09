@@ -53,7 +53,7 @@ export const PostCard = ({ node, disableLink = false }) => (
             <CoverImage node={node} size="small" />
             <Date>{node.frontmatter.date}</Date>
             <Title>{node.fields.postTitle}</Title>
-            <DirectoryBox node={node} style={{ fontSize: "0.6rem" }} />
+            <DirectoryBox node={node} style={{ fontSize: "0.6rem" }} disableLink={true}/>
             <Excerpt>{node.frontmatter.description || node.excerpt}</Excerpt>
             <ClearImage />
         </Card>

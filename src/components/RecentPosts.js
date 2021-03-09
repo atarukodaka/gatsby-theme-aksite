@@ -6,6 +6,7 @@ import theme from '../styles/theme'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import HoverBox from './HoverBox'
+import PostCard from './PostCard'
 
 const query = graphql`
 {
@@ -29,31 +30,38 @@ const cssItem = css`
 const RecentPosts = () => {
     const { recentPosts } = useStaticQuery(query)
 
-    return (
-        <List>
-            {recentPosts.nodes.map(node => (
-                <ListItem key={node.id} css={cssItem}>
-                    <HoverBox>
-                    <Link to={node.fields.slug} >
-                        <Typography>
-                            {node.fields.postTitle}[{node.fields.directory}]
-                        </Typography>
-                    </Link>
-                    </HoverBox>
-                </ListItem>
-            ))}
-        </List>
+    const display = "card"
 
-    )
-    /*
-    return (<nav>
-        {recentPosts.nodes.map(node => (
-            <PostCard node={node} key={node.id} display="text"/>
-      
-            
-        ))}
-    </nav>)
-    */
+    switch (display) {
+        case "text":
+            return (
+                <List>
+                    {recentPosts.nodes.map(node => (
+                        <ListItem key={node.id} css={cssItem}>
+                            <HoverBox>
+                                <Link to={node.fields.slug} >
+                                    <Typography>
+                                        {node.fields.postTitle} [{node.fields.directoryFullLabel}]
+                        </Typography>
+                                </Link>
+                            </HoverBox>
+                        </ListItem>
+                    ))}
+                </List>
+            )
+
+            break
+        case "card":
+
+            return (<nav>
+                {recentPosts.nodes.map(node => (
+                    <PostCard node={node} key={node.id} display="text" />
+
+
+                ))}
+            </nav>)
+            break;
+    }
 }
 
 export default RecentPosts

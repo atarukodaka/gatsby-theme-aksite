@@ -46,15 +46,18 @@ const DirectoryTree = () => {
             const parent_dir = parts.join('/')
             const parent = list.find(v => v.name === parent_dir)
             const parent_id = (parent) ? parent.id : 0
+            const re = new RegExp(`^${directory}`)
 
-            list.push({ id: directory, parent: parent_id, name: directory, label: label, totalCount: 0 })
+            list.push({ id: directory, parent: parent_id, name: directory, label: label, 
+                totalCount: data.mdxPages.nodes.filter(v => re.test(v.fields.directory)).length })
         }
     })
-
+/*
     list.forEach(node => {
         const re = new RegExp(`^${node.name}`)
         node.totalCount = data.mdxPages.nodes.filter(v => re.test(v.fields.directory)).length
     })
+    */
     const allNodeIds = list.map(v=> v.name)
     const tree = new ListToTree(list).GetTree() || []
     //console.log("directory tree", tree)
