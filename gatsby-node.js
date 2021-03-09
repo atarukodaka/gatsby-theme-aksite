@@ -25,13 +25,24 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
     `);
 };
 
-exports.onCreateNode = ({ node, getNode, actions }) => {
+exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
+    //console.log("theme options: ", themeOptions)
     const { createNodeField } = actions
+
+    const getDirectoryFullLabel = (directory, labels) => {
+        let i = 0
+
+        const parts = directory.split('/')
+        return parts.map(v => {
+            i = i + 1
+            return labels[`/${parts.slice(0, i).join('/')}`] || v
+        }).join(' / ')
+    }
 
     if (node.internal.type === `Mdx`) {
         const slug = createFilePath({ node, getNode })
         const directory = slug.split("/").slice(1, -2).join("/")
-        console.log("create node: ", slug, "[", directory, "]")
+        //console.log("create node: ", slug, "[", directory, "]")
 
         createNodeField({
             node,
@@ -43,9 +54,22 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
             name: 'directory',
             value: directory
         })
-        const postTitle = (node.frontmatter.series) ? 
-                `${node.frontmatter.series.title}[${node.frontmatter.series.number}] ${node.frontmatter.title}` : 
-                node.frontmatter.title
+        createNodeField({
+            node,
+            name: 'directoryFullLabel',
+            //value: themeOptions.directoryLabels['/' + directory] || directory.split('/').pop()
+            value: getDirectoryFullLabel(directory, themeOptions.directoryLabels)
+        })
+        createNodeField({
+            node,
+            name: 'directoryLabel',
+            value: themeOptions.directoryLabels['/' + directory] || directory.split('/').pop()
+        })
+
+
+        const postTitle = (node.frontmatter.series) ?
+            `${node.frontmatter.series.title}[${node.frontmatter.series.number}] ${node.frontmatter.title}` :
+            node.frontmatter.title
         createNodeField({
             node,
             name: 'postTitle',
@@ -75,7 +99,7 @@ const createIndexPagination = ({ nodes, actions }) => {
     console.log("** index paginate")
     const { createPage } = actions
     const template = `${templateDir}/index-template.js`
-    console.log("resolve", require.resolve(template), require.resolve(template))
+    //console.log("resolve", require.resolve(template), require.resolve(template))
     paginate({
         createPage,
         items: nodes,
@@ -127,7 +151,7 @@ const createMonthlyArchives = ({ nodes, actions }) => {
         const items = nodes.filter(v => {
             const dt = new Date(v.frontmatter.date); return fromDate <= dt && dt < toDate
         })
-        console.log(`monthly archive: ${year}/${month} (${items.length}) [${monthlyArchivePath(year, month)}]`)
+        //console.log(`monthly archive: ${year}/${month} (${items.length}) [${monthlyArchivePath(year, month)}]`)
         paginate({
             createPage,
             items: items,

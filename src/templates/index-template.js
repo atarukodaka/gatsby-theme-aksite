@@ -26,20 +26,19 @@ const IndexTemplate = ( { data, pageContext } ) => {
   const { humanPageNumber, numberOfPages } = pageContext;
   const { breadcrumb: { crumbs } } = pageContext
 
-  const title = (humanPageNumber === 1) ? crumbs[0].crumbLabel : `index [${humanPageNumber}]`
+  //const title = (humanPageNumber === 1) ? crumbs[0].crumbLabel : `index [${humanPageNumber}]`
   
   const handleChange = (_event, p) => {
     navigate((p === 1) ? '/' : `/${p}`)
   }
-
+  const title = "Latest Articles" + ((humanPageNumber > 1) ? ` -  page ${humanPageNumber}` : '')
   const pagination_parameters = {
     numberOfPages: numberOfPages,
     humanPageNumber: humanPageNumber,
     onChangeHandler: handleChange
   }
   return (<ArchiveTemplate title={title} nodes={data.allMdx.nodes} crumbs={crumbs}
-    pagination_parameters={pagination_parameters}
-    showTitle={false}/>)
+    pagination_parameters={pagination_parameters} />)
     
   /*
   return (

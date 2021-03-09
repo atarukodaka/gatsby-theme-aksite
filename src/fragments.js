@@ -10,9 +10,7 @@ fragment postFields on Mdx {
     date(formatString: "YYYY-MM-DD"), title, description
     cover {
       childImageSharp {
-        fluid(maxWidth: 800) {
-          ...GatsbyImageSharpFluid
-        }
+        gatsbyImageData
       }
     }
     series {
@@ -21,7 +19,7 @@ fragment postFields on Mdx {
     }
   }        
   fields { 
-    slug, directory, postTitle
+    slug, directory, directoryFullLabel, directoryLabel, postTitle
   }
   tableOfContents
 }
@@ -37,6 +35,7 @@ fragment siteInformation on Site {
         author
         description
         coverImage
+        siteUrl
         social { twitter, github }
     }
 }

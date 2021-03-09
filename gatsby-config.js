@@ -13,18 +13,37 @@ require("dotenv").config({
 //console.log("tracking id", process.env.GA_TRACKING_ID)
 //console.log("google sce: ", process.env.GCSE_CX)
 
+/*
 const config = require('./config.js')
 
 const crumbLabelUpdates = (config.directory_labels) ? Object.keys(config.directory_labels).map(k => {
   return { pathname: k, crumbLabel: config.directory_labels[k] }
 }) : []
-
+*/
 //module.exports = {
 module.exports = (options) => {
+
+  const crumbLabelUpdates = (options.directoryLabels) ? Object.keys(options.directoryLabels).map(k => {
+    return { pathname: k, crumbLabel: options.directoryLabels[k] }
+  }) : []
+    
   return {
-    siteMetadata: config.siteMetadata,
+    siteMetadata: {
+      title: 'SITE TITLE',
+      author: 'AUTHOR NAME',
+      email: 'author@mail.address.com',
+      description: 'SITE DESCRIPTION',
+      siteUrl: 'https://site.address.come',
+      //siteUrl: `http://localhost:8000/`,
+      coverImage: '/images/top.png',
+      social: {
+        twitter: 'foo_bar',
+        github: 'foobar',
+      }      
+    },
     plugins: [
       `gatsby-transformer-sharp`,
+      `gatsby-plugin-image`,
       `gatsby-plugin-sharp`,
       `gatsby-remark-images`,
       {
@@ -64,6 +83,7 @@ module.exports = (options) => {
               resolve: `gatsby-remark-autolink-headers`,
               options: {
                 isIconAfterHeader: true,
+                className: 'heading-anchor',
               }
             },
             {
@@ -145,14 +165,14 @@ module.exports = (options) => {
           respectDNT: true,
         },
       },
-
+/*
       {
         resolve: `gatsby-plugin-typography`,
         options: {
           pathToConfigModule: require.resolve(`./src/utils/typography.js`),
         },
       },
-
+*/
       `gatsby-plugin-react-helmet`,
       `gatsby-plugin-sitemap`,
       `gatsby-plugin-material-ui`,

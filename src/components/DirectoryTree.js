@@ -9,7 +9,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 
 //import { Button } from '@material-ui/core'
 //const config = require('../../config')
-import directoryLabel from '../utils/directory_label'
 import { directoryArchivePath } from '../utils/archive_path'
 // import styles from './directory_archives.module.css'
 //import HoverBox from './HoverBox'
@@ -21,7 +20,7 @@ const query = graphql`
     mdxPages: allMdx {
         nodes {
             id
-            fields { slug, directory }
+            fields { slug, directory, directoryLabel}
         }
     }
 }
@@ -39,7 +38,7 @@ const DirectoryTree = () => {
             const parts = directory.split('/')
             //const label = parts.pop()
             //const label = config.directory_labels[`/${parts.join('/')}`] || parts.slice(-1)
-            const label = directoryLabel(directory).split('/').pop()
+            const label = node.fields.directoryLabel || node.fields.directory.toString().split('/').pop()
             parts.pop()
 
             //const label = node.fields.directory_name.split('/').pop()
@@ -47,15 +46,18 @@ const DirectoryTree = () => {
             const parent_dir = parts.join('/')
             const parent = list.find(v => v.name === parent_dir)
             const parent_id = (parent) ? parent.id : 0
+            const re = new RegExp(`^${directory}`)
 
-            list.push({ id: directory, parent: parent_id, name: directory, label: label, totalCount: 0 })
+            list.push({ id: directory, parent: parent_id, name: directory, label: label, 
+                totalCount: data.mdxPages.nodes.filter(v => re.test(v.fields.directory)).length })
         }
     })
-
+/*
     list.forEach(node => {
         const re = new RegExp(`^${node.name}`)
         node.totalCount = data.mdxPages.nodes.filter(v => re.test(v.fields.directory)).length
     })
+    */
     const allNodeIds = list.map(v=> v.name)
     const tree = new ListToTree(list).GetTree() || []
     //console.log("directory tree", tree)
