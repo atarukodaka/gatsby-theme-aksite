@@ -13,14 +13,15 @@ const SEO = ( { title, description, cover, lang } ) => {
     const coverImage = cover || siteCoverImage
     const url = [siteUrl, pathname].join('/')
     
-    title ||= siteTitle
+    //title ||= siteTitle
+    const fullTitle = `${title} | ${siteTitle}`
     description ||= siteDescription
     const imageUrl = siteUrl + coverImage
   
     return (
         <Helmet
             htmlAttributes={ (lang) ? { lang: lang } : {} }
-            title={title}
+            title={fullTitle}
             meta={[
                 { name: 'description', content: description },
                 { name: 'image', content: imageUrl },
@@ -29,7 +30,7 @@ const SEO = ( { title, description, cover, lang } ) => {
                 { property: 'og:image', content: imageUrl },
                 { name: 'twitter:card', content: 'summary'},
                 { name: 'twitter:creator', content: twitter },
-                { name: 'twitter:title', content: title},
+                { name: 'twitter:title', content: fullTitle},
                 { name: 'twitter:description', content: description },
                 { name: 'twitter:image', content: imageUrl }
             ]}
