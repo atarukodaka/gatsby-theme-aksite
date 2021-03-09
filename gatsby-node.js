@@ -10,22 +10,23 @@ const templateDir = "./src/templates"
 
 exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
     createTypes(`
-        type AksMdx implements Node {
-            frontmatter: AksMdxFrontmatter
+        type Mdx implements Node {
+            frontmatter: MdxFrontmatter
         }
-        type AksMdxFrontmatter {
+        type MdxFrontmatter {
             description: String
             cover: File @fileByRelativePath
-            series: AksSeries
+            series: Series
         }
-        type AksSeries {
+        type Series {
             title: String
             number: Int
         }
     `);
 };
 
-exports.onCreateNode = ({ node, getNode, actions }) => {
+exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
+    //console.log("theme options: ", themeOptions)
     const { createNodeField } = actions
 
     if (node.internal.type === `Mdx`) {
@@ -43,6 +44,13 @@ exports.onCreateNode = ({ node, getNode, actions }) => {
             name: 'directory',
             value: directory
         })
+        createNodeField({
+            node,
+            name: 'directoryLabel',
+            value: themeOptions.directoryLabels['/'+directory] || directory.split('/').pop()
+        })
+        
+
         const postTitle = (node.frontmatter.series) ? 
                 `${node.frontmatter.series.title}[${node.frontmatter.series.number}] ${node.frontmatter.title}` : 
                 node.frontmatter.title

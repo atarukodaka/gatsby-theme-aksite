@@ -4,7 +4,7 @@ import { css } from '@emotion/react'
 import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 
-import directoryLabel from '../utils/directory_label'
+//import directoryLabel from '../utils/directory_label'
 import theme from '../styles/theme'
 
 /*
@@ -37,11 +37,11 @@ const cssDirectoryBox = css`
     }
 `
 
-const DirectoryBox = ({ directory, ...props }) => (
+const DirectoryBox = ({ node, ...props }) => (
     <div css={cssDirectoryBox} {...props}>
-        <Link to={'/' + directory}>
+        <Link to={'/' + node.fields.directory}>
             <Typography variant="caption">
-                {directoryLabel(directory)}
+                {node.fields.directoryLabel}
             </Typography>
         </Link>
     </div>

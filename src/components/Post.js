@@ -16,7 +16,7 @@ import MdxComponents from './MdxComponents'
 import ShareSNS from './ShareSNS'
 // import * as styles from "./post.module.css"
 import CoverImage from './CoverImage'
-import directoryLabel from '../utils/directory_label'
+//import directoryLabel from '../utils/directory_label'
 import PostCard from './PostCard'
 //import postTitle from './postTitle'
 import PageTitle from './PageTitle'
@@ -94,7 +94,7 @@ const Post = ({ node, siblings, prevPost, nextPost }) => {
             <Header>
                 <div>{node.frontmatter.date}</div>
                 <PageTitle>{node.fields.postTitle}</PageTitle>
-                <DirectoryBox directory={node.fields.directory} />
+                <DirectoryBox node={node}/>
                 <CoverImage node={node} />
                 <Description>{node.frontmatter.description}</Description>
             </Header>
@@ -108,7 +108,7 @@ const Post = ({ node, siblings, prevPost, nextPost }) => {
                     title={node.fields.postTitle}/>
                 <PrevNextPost prevPost={prevPost} nextPost={nextPost} />
                 <Divider />
-                <Typography variant="h3">Siblings on '{directoryLabel(node.fields.directory)}'</Typography>
+                <Typography variant="h3">Siblings on '{node.fields.directoryLabel}'</Typography>
                 <Siblings nodes={siblings} />
             </Footer>
         </div>
