@@ -21,7 +21,7 @@ const Sidebar = () => {
             </Card>
             
             <Card>
-                <Typography variant="h3">Recently Posts</Typography>
+                <Typography variant="h3">Recently Posted</Typography>
                 <RecentPosts />
             </Card>
             
