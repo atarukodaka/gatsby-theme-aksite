@@ -2,12 +2,12 @@ import React from 'react'
 import { graphql, useStaticQuery, Link } from 'gatsby'
 import Typography from '@material-ui/core/Typography'
 import { css } from '@emotion/react'
-import theme from '../styles/theme'
+//import theme from '../styles/theme'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import HoverBox from './HoverBox'
 import PostCard from './PostCard'
-import Card from './Card'
+//import Card from './Card'
 
 const query = graphql`
 {

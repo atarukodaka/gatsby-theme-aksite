@@ -1,8 +1,7 @@
 import React from 'react'
 import Alert from '@material-ui/lab/Alert'
 
-
-import theme from '../styles/theme'
+import theme from '../../styles/theme'
 
 const Spoiler = ({ children }) => {
     const color = theme.palette.background.default

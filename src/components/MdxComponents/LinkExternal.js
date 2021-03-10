@@ -5,8 +5,10 @@ import React from 'react'
 import LaunchIcon from '@material-ui/icons/Launch';
 
 //import { grey_hover } from './link_hover'
-import Card from './Card'
-import HoverBox from './HoverBox'
+//import Card from '../Card'
+//import HoverBox from '../HoverBox'
+import Card from '../Card'
+import HoverBox from '../HoverBox'
 
 const LinkExternal = ({ children, to }) => (
     <HoverBox>

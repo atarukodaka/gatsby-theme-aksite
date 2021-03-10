@@ -3,13 +3,9 @@ import React from 'react'
 import { useStaticQuery, graphql, Link } from "gatsby"
 import PropTypes from 'prop-types'
 
-import PostCard from './PostCard'
-import Card from './Card'
-import HoverBox from './HoverBox'
-
-
-//const LinkPost = ( props ) => ( <></> )
-//export default LinkPost
+import PostCard from '../PostCard'
+import Card from '../Card'
+import HoverBox from '../HoverBox'
 
 /*
 
