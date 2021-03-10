@@ -15,6 +15,7 @@ const cssMainPane = css`
 const cssTableOfContents = css`
     position: sticky;
     top: 0;
+    opacity: 0.8;
     li {
         /* font-size: 0.8rem; */
         a { 
@@ -26,6 +27,8 @@ const cssTableOfContents = css`
 const cssSidebar = css`
     margin-right: 2rem;
     /* font-size: 0.8rem; */
+
+    
 `
 
 const Tree = ({ items }) => (

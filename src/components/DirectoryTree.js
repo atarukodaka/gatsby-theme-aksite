@@ -12,6 +12,7 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import { directoryArchivePath } from '../utils/archive_path'
 // import styles from './directory_archives.module.css'
 //import HoverBox from './HoverBox'
+import theme from '../styles/theme'
 
 const ListToTree = require('list-to-tree')
 
@@ -71,7 +72,7 @@ const DirectoryTree = () => {
         setExpanded(nodeIds);
       };
     */
-    return (<TreeView
+    return (<TreeView style={{opacity: 0.8}}
         defaultCollapseIcon={<ExpandMoreIcon />}
         defaultExpandIcon={<ChevronRightIcon />}
      //   expanded={expanded}
@@ -86,14 +87,17 @@ const DirectoryTree = () => {
 
 }
 
-const Tree = ({item}) => (
-    <TreeItem label={`${item.label} (${item.totalCount})`} nodeId={item.name}
+const Tree = ({item}) =>  {
+    const color = theme.palette.text.secondary    
+
+    return(
+    <TreeItem label={<>{item.label} ({item.totalCount})</>} nodeId={item.name}
         onClick={() => {}} 
         onLabelClick={(e) => {e.preventDefault(); navigate(directoryArchivePath(item.name))}}>
         { item.child && ( item.child.map(v => (<Tree item={v}/>)) ) }
     </TreeItem>
 )
-
+}
 /*
 const cssTree = css`
     margin-top: 0.2em;
