@@ -9,7 +9,6 @@ import Grid from '@material-ui/core/Grid'
 import { css } from '@emotion/react'
 import Typography from '@material-ui/core/Typography'
 import theme from '../styles/theme'
-import { GatsbyImage, StaticImage } from 'gatsby-plugin-image'
 
 const numberingColor = theme.palette.text.secondary
 const borderColor = theme.palette.action.active
@@ -66,7 +65,7 @@ const Heading4 = ( { children, ...props}) =>
 
 
 const MdxComponents = () => {
-    return { Alert, Baloon, Box, Link, LinkPost, LinkExternal, Series, Grid, GatsbyImage, StaticImage,
+    return { Alert, Baloon, Box, Link, LinkPost, LinkExternal, Series, Grid
         h2: Heading2,
         h3: Heading3,
         h4: Heading4,

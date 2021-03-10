@@ -56,8 +56,6 @@ const RecentPosts = () => {
             return (<nav>
                 {recentPosts.nodes.map(node => (
                     <PostCard node={node} key={node.id} display="text" />
-
-
                 ))}
             </nav>)
             break;
