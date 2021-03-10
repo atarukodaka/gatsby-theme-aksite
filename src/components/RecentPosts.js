@@ -49,16 +49,14 @@ const RecentPosts = () => {
                     ))}
                 </List>
             )
-
-            break
-        case "card":
+        case 'card':
+        default:
 
             return (<nav>
                 {recentPosts.nodes.map(node => (
                     <PostCard node={node} key={node.id} display="text" />
                 ))}
             </nav>)
-            break;
     }
 }
 
