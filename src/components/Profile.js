@@ -2,7 +2,6 @@ import React from 'react'
 import GitHubIcon from '@material-ui/icons/GitHub';
 import TwitterIcon from '@material-ui/icons/Twitter';
 import { css } from '@emotion/react'
-import theme from '../styles/theme'
 import useSiteMetadata from '../hooks/useSiteMetadata'
 
 

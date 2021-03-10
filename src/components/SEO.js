@@ -1,5 +1,6 @@
 import React from "react"
-import PropTypes from "prop-types"
+
+/* import PropTypes from "prop-types" */
 import { Helmet } from 'react-helmet'
 import { useLocation } from "@reach/router"
 import useSiteMetadata from '../hooks/useSiteMetadata'
@@ -14,7 +15,7 @@ const SEO = ( { title, description, cover, lang } ) => {
     
     //title ||= siteTitle
     const fullTitle = `${title} | ${siteTitle}`
-    description ||= siteDescription
+    const fullDescription = description || siteDescription
     const imageUrl = siteUrl + coverImage
   
     return (
@@ -22,21 +23,22 @@ const SEO = ( { title, description, cover, lang } ) => {
             htmlAttributes={ (lang) ? { lang: lang } : {} }
             title={fullTitle}
             meta={[
-                { name: 'description', content: description },
+                { name: 'description', content: fullDescription },
                 { name: 'image', content: imageUrl },
                 { property: 'og:url', content: url },
-                { property: 'og:description', content: description },
+                { property: 'og:description', content: fullDescription },
                 { property: 'og:image', content: imageUrl },
                 { name: 'twitter:card', content: 'summary'},
                 { name: 'twitter:creator', content: twitter },
                 { name: 'twitter:title', content: fullTitle},
-                { name: 'twitter:description', content: description },
+                { name: 'twitter:description', content: fullDescription },
                 { name: 'twitter:image', content: imageUrl }
             ]}
         />
     )
 }
 
+/*
 SEO.propTypes = {
     title: PropTypes.string.isRequired,  
     description: PropTypes.string,
@@ -50,4 +52,5 @@ SEO.propTypes = {
     cover: null,
     lang: null,
   }
+  */
 export default SEO

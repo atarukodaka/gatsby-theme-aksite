@@ -6,9 +6,10 @@ import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { css } from '@emotion/react'
 
-import LinkPost from './LinkPost'
+import theme from '../../styles/theme'
+
 import LinkExternal from './LinkExternal'
-import theme from '../styles/theme'
+import LinkPost from './LinkPost'
 import Series from './Series'
 import Baloon from './Baloon'
 import Spoiler from './Spoiler'
@@ -41,7 +42,7 @@ const cssH3 = css`
     &:before {
         color: ${numberingColor};
         font-size: large; 
-        content: counter(h3) ". "; 
+        content: counter(h2) "." counter(h3) ". "; 
     }
 )
 `
@@ -55,7 +56,7 @@ const cssH4 = css`
     &:before {
         color: ${numberingColor};
         font-size: large; 
-        content: counter(h4) ". "; 
+        content: counter(h2) "." counter(h3) "." counter(h4) ". "; 
     }
 )
 `
