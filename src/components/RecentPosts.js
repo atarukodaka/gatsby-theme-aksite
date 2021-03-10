@@ -7,6 +7,7 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import HoverBox from './HoverBox'
 import PostCard from './PostCard'
+import Card from './Card'
 
 const query = graphql`
 {
@@ -23,14 +24,17 @@ const query = graphql`
 
 const cssItem = css`
     a {
-        color: ${theme.palette.text.primary};
         text-decoration: none;
     }
+    background: url(/icons/right_arrow.png) no-repeat;
+    padding-top: 4px;
+    opacity: 0.8;
+
 `
 const RecentPosts = () => {
     const { recentPosts } = useStaticQuery(query)
 
-    const display = "card"
+    const display = "text"
 
     switch (display) {
         case "text":
@@ -39,11 +43,12 @@ const RecentPosts = () => {
                     {recentPosts.nodes.map(node => (
                         <ListItem key={node.id} css={cssItem}>
                             <HoverBox>
-                                <Link to={node.fields.slug} >
+                                <Link to={node.fields.slug}>
                                     <Typography>
                                         {node.fields.postTitle} [{node.fields.directoryFullLabel}]
-                        </Typography>
+                                    </Typography>
                                 </Link>
+
                             </HoverBox>
                         </ListItem>
                     ))}

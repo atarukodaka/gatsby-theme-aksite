@@ -7,6 +7,7 @@ import PropTypes from 'prop-types'
 
 import { monthlyArchivePath } from '../utils/archive_path'
 //import DirectoryLabel from '../utils/directory_label'
+import theme from '../styles/theme'
 
 const query = graphql`
 {
@@ -50,10 +51,10 @@ const MonthlyArchives = (  ) => {
     
     //const defaultExpanded = ( expandAll) ? years : []
     const defaultExpanded = [] // TODO
-
+    
     //  
     return (
-        <TreeView
+        <TreeView style={{opacity: 0.8}}
         defaultCollapseIcon={<ExpandMoreIcon />}
         defaultExpandIcon={<ChevronRightIcon />}
         defaultExpanded={defaultExpanded}
@@ -64,11 +65,11 @@ const MonthlyArchives = (  ) => {
                     //const countTotal = items.reduce((prev, curr) => prev + curr.countTotal, 0)
                     const countTotal = items.reduce((prev, curr) => prev + curr.nodes.length, 0)
                     
-                    return (<TreeItem key={year} nodeId={year.toString()} label={ `${year} (${countTotal})`}>
+                    return (<TreeItem key={year} nodeId={year.toString()} label={ <>{year} ({countTotal})</>}>
                         {
                             items.map(item=>(
                                 <TreeItem key={item.id} nodeId={item.id} 
-                                 label={`${item.year}/${item.month} (${item.nodes.length})`}
+                                 label={<>{item.year}/{item.month} ({item.nodes.length})</>}
                                  onLabelClick={() => { navigate(item.path) }}>
                                     {/* item.nodes.map(node=>(
                                         <TreeItem key={node.id} label={`${node.frontmatter.title}[${DirectoryLabel(node.fields.directory)}]`}

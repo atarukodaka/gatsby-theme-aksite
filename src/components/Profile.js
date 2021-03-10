@@ -14,8 +14,8 @@ const Profile = () => {
     const cssProfile = css`
         a {
             text-decoration: none;
-            color: ${theme.palette.text.primary};
         }
+        opacity: 0.8;
     `
     return (
         <div css={cssProfile}>

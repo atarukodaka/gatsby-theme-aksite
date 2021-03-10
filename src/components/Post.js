@@ -1,5 +1,5 @@
 import React from "react"
-//import { useStaticQuery, graphql } from "gatsby"
+import { useStaticQuery, graphql, Link } from "gatsby"
 import { MDXProvider } from "@mdx-js/react"
 import { MDXRenderer } from "gatsby-plugin-mdx"
 import { useLocation } from "@reach/router"
@@ -21,6 +21,8 @@ import PostCard from './PostCard'
 //import postTitle from './postTitle'
 import PageTitle from './PageTitle'
 import useSiteMetadata from '../hooks/useSiteMetadata'
+import HoverBox from './HoverBox'
+import Card from './Card'
 
 const Description = styled.div`
     padding: 1rem;  
@@ -61,7 +63,7 @@ const Siblings = ({ nodes }) => (
     <nav>
         <Grid container spacing={3}>
             {nodes.slice(0, 9).map(v =>
-                (<Grid item xs={12} sm={6} key={v.id}><PostCard node={v} /></Grid>))
+                (<Grid item xs={12} sm={12} key={v.id}><PostCard node={v} /></Grid>))
             }
         </Grid>
     </nav>
@@ -71,15 +73,11 @@ const PrevNextPost = ({ prevPost, nextPost }) => (
     <nav style={{ marginBottom: "2rem" }}>
         <Grid container>
             <Grid item sm={4}>
-                <Typography variant="h4" style={{ textAlign: "left" }}>
-                    《 PREV POST
-                </Typography>
-                {prevPost && (<PostCard node={prevPost} />)}
+                {prevPost && (<HoverBox><Card><Link to={prevPost.fields.slug}>《 {prevPost.fields.postTitle}</Link></Card></HoverBox>)}
             </Grid>
             <Grid item sm={4} />
             <Grid item sm={4}>
-                <Typography variant="h4" style={{ textAlign: "right" }}>NEXT POST》</Typography>
-                {nextPost && (<PostCard node={nextPost} />)}
+                {nextPost && (<HoverBox><Card><Link to={nextPost.fields.slug}>{nextPost.fields.postTitle} 》</Link></Card></HoverBox>)}
             </Grid>
         </Grid>
     </nav>
