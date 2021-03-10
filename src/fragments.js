@@ -10,7 +10,9 @@ fragment postFields on Mdx {
     date(formatString: "YYYY-MM-DD"), title, description
     cover {
       childImageSharp {
-        gatsbyImageData
+        fluid {
+          ...GatsbyImageSharpFluid
+        }        
       }
     }
     series {

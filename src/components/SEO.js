@@ -1,6 +1,5 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { graphql, useStaticQuery } from "gatsby"
 import { Helmet } from 'react-helmet'
 import { useLocation } from "@reach/router"
 import useSiteMetadata from '../hooks/useSiteMetadata'

@@ -31,7 +31,6 @@ module.exports = (options) => {
     },
     plugins: [
       `gatsby-transformer-sharp`,
-      `gatsby-plugin-image`,
       `gatsby-plugin-sharp`,
       `gatsby-remark-images`,
       {
