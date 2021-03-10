@@ -10,19 +10,7 @@ require("dotenv").config({
   path: `.env.${activeEnv}`,
 })
 
-//console.log("tracking id", process.env.GA_TRACKING_ID)
-//console.log("google sce: ", process.env.GCSE_CX)
-
-/*
-const config = require('./config.js')
-
-const crumbLabelUpdates = (config.directory_labels) ? Object.keys(config.directory_labels).map(k => {
-  return { pathname: k, crumbLabel: config.directory_labels[k] }
-}) : []
-*/
-//module.exports = {
 module.exports = (options) => {
-
   const crumbLabelUpdates = (options.directoryLabels) ? Object.keys(options.directoryLabels).map(k => {
     return { pathname: k, crumbLabel: options.directoryLabels[k] }
   }) : []
@@ -53,15 +41,13 @@ module.exports = (options) => {
           path: options.contentPath || `content/posts`,
         }
       },
-      /*
       {
         resolve: `gatsby-source-filesystem`,
         options: {
-          name: `images`,
-          path: `${__dirname}/content/images`,
+          name: `content-images`,
+          path: options.imagePath || `content/images`,
         },
       },
-      */
       {
         resolve: `gatsby-source-filesystem`,
         options: {
@@ -69,7 +55,6 @@ module.exports = (options) => {
           path: `src/pages`,
         },
       },
-
       {
         resolve: `gatsby-plugin-mdx`,
         options: {
@@ -156,7 +141,7 @@ module.exports = (options) => {
       {
         resolve: `gatsby-plugin-google-analytics`,
         options: {
-          trackingId: process.env.GA_TRACKING_ID,
+          trackingId: process.env.GA_TRACKING_ID || "",
           // Puts tracking script in the head instead of the body
           head: true,
           // Setting this parameter is optional
@@ -165,20 +150,10 @@ module.exports = (options) => {
           respectDNT: true,
         },
       },
-/*
-      {
-        resolve: `gatsby-plugin-typography`,
-        options: {
-          pathToConfigModule: require.resolve(`./src/utils/typography.js`),
-        },
-      },
-*/
       `gatsby-plugin-react-helmet`,
       `gatsby-plugin-sitemap`,
       `gatsby-plugin-material-ui`,
       `gatsby-plugin-emotion`,
-      // self-made-prlugins
-      //`gatsby-plugin-monthly-archives`
     ],
   }
 }
