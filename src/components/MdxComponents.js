@@ -1,14 +1,16 @@
+import React from 'react'
 import { Link } from 'gatsby'
 import Alert from '@material-ui/lab/Alert'
-import LinkPost from './LinkPost'
-import LinkExternal from './LinkExternal'
-import Series from './Series'
-import Baloon from './Baloon'
 import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
-import { css } from '@emotion/react'
 import Typography from '@material-ui/core/Typography'
+import { css } from '@emotion/react'
+
+import LinkPost from './LinkPost'
+import LinkExternal from './LinkExternal'
 import theme from '../styles/theme'
+import Series from './Series'
+import Baloon from './Baloon'
 
 const numberingColor = theme.palette.text.secondary
 const borderColor = theme.palette.action.active
@@ -65,7 +67,7 @@ const Heading4 = ( { children, ...props}) =>
 
 
 const MdxComponents = () => {
-    return { Alert, Baloon, Box, Link, LinkPost, LinkExternal, Series, Grid
+    return { Alert, Baloon, Box, Link, LinkPost, LinkExternal, Series, Grid,
         h2: Heading2,
         h3: Heading3,
         h4: Heading4,
