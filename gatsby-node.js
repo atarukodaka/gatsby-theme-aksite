@@ -1,5 +1,7 @@
-
 //const path = require(`path`)
+const fs = require(`fs`)
+const path = require(`path`)
+const mkdirp = require(`mkdirp`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
 const { paginate } = require('gatsby-awesome-pagination');
 
@@ -8,6 +10,22 @@ const { monthlyArchivePath, directoryArchivePath } = require('./src/utils/archiv
 const itemsPerPage = 10
 const templateDir = "./src/templates"
 
+exports.onPreBootstrap = ({store}, themeOptions) => {
+    const { program } = store.getState()
+
+    basePath = themeOptions.basePath || `/`
+    contentPath = themeOptions.contentPath || `content/posts`
+    assetPath = themeOptions.assetPath || `content/assets`
+  
+    const dirs = [path.join(program.directory, contentPath), path.join(program.directory, assetPath)]
+  
+    dirs.forEach((dir) => {
+      console.log(`Initializing ${dir} directory`)
+      if (!fs.existsSync(dir)) {
+        mkdirp.sync(dir)
+      }
+    })    
+}
 exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
     createTypes(`
         type Mdx implements Node {
@@ -29,14 +47,21 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
     //console.log("theme options: ", themeOptions)
     const { createNodeField } = actions
 
+    const getDirectoryLabel = (directory, labels) => {
+        console.log("get directory label", directory, labels)
+        if (labels === undefined) { return directory.pop() || "" }
+
+        return labels['/' + directory] || '/' + directory
+    }
     const getDirectoryFullLabel = (directory, labels) => {
+        if (labels === undefined) { return directory }
         let i = 0
 
         const parts = directory.split('/')
         return parts.map(v => {
             i = i + 1
             return labels[`/${parts.slice(0, i).join('/')}`] || v
-        }).join(' / ')
+        }).join('/')
     }
 
     if (node.internal.type === `Mdx`) {
@@ -63,7 +88,9 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
         createNodeField({
             node,
             name: 'directoryLabel',
-            value: themeOptions.directoryLabels['/' + directory] || directory.split('/').pop()
+            //value: themeOptions.directoryLabels['/' + directory] || directory.split('/').pop()
+            value: getDirectoryLabel(directory, themeOptions.directoryLabels)
+            //value: directory
         })
 
 

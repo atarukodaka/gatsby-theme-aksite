@@ -4,7 +4,7 @@
  * See: https://www.gatsbyjs.com/docs/gatsby-config/
  */
 
-const activeEnv = process.env.GATSBY_ACTIVE_ENV || process.env.NODE_ENV || "development"
+ const activeEnv = process.env.GATSBY_ACTIVE_ENV || process.env.NODE_ENV || "development"
 console.log(`Using environment config: '${activeEnv}'`)
 require("dotenv").config({
   path: `.env.${activeEnv}`,
@@ -43,8 +43,8 @@ module.exports = (options) => {
       {
         resolve: `gatsby-source-filesystem`,
         options: {
-          name: `content-images`,
-          path: options.imagePath || `content/images`,
+          name: `assets`,
+          path: options.assetPath || `content/assets`,
         },
       },
       {
@@ -140,7 +140,7 @@ module.exports = (options) => {
       {
         resolve: `gatsby-plugin-google-analytics`,
         options: {
-          trackingId: process.env.GA_TRACKING_ID || "",
+          trackingId: "`${process.env.GA_TRACKING_ID}`",
           // Puts tracking script in the head instead of the body
           head: true,
           // Setting this parameter is optional
