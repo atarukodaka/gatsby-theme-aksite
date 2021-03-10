@@ -32,7 +32,7 @@ const CoverImage = ({ node, size = "regular", ...props }) => {
     return (
         <div css={cssWrapper} {...props}>
             {node.frontmatter.cover &&
-                (<Img fluid={node.frontmatter.cover.childImageSharp.fluid} />)}         
+                (<Img fluid={node.frontmatter.cover.childImageSharp.fluid} />)    
             }
         </div>
     )

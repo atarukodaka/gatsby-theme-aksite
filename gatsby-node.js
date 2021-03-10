@@ -17,11 +17,12 @@ exports.onPreBootstrap = ({store}, themeOptions) => {
     contentPath = themeOptions.contentPath || `content/posts`
     assetPath = themeOptions.assetPath || `content/assets`
   
-    const dirs = [path.join(program.directory, contentPath), path.join(program.directory, assetPath)]
+    const dirs = [path.join(program.directory, contentPath), 
+        path.join(program.directory, assetPath)]
   
     dirs.forEach((dir) => {
-      console.log(`Initializing ${dir} directory`)
       if (!fs.existsSync(dir)) {
+        console.log(`Initializing ${dir} directory`)
         mkdirp.sync(dir)
       }
     })    
@@ -32,6 +33,7 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             frontmatter: MdxFrontmatter
         }
         type MdxFrontmatter {
+            date: Date @dateformat
             description: String
             cover: File @fileByRelativePath
             series: Series
@@ -48,10 +50,8 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
     const { createNodeField } = actions
 
     const getDirectoryLabel = (directory, labels) => {
-        console.log("get directory label", directory, labels)
-        if (labels === undefined) { return directory.pop() || "" }
-
-        return labels['/' + directory] || '/' + directory
+        return (labels) ? labels['/' + directory] || directory :
+            directory.pop() || "" 
     }
     const getDirectoryFullLabel = (directory, labels) => {
         if (labels === undefined) { return directory }
@@ -67,7 +67,6 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
     if (node.internal.type === `Mdx`) {
         const slug = createFilePath({ node, getNode })
         const directory = slug.split("/").slice(1, -2).join("/")
-        //console.log("create node: ", slug, "[", directory, "]")
 
         createNodeField({
             node,
@@ -81,19 +80,14 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
         })
         createNodeField({
             node,
-            name: 'directoryFullLabel',
-            //value: themeOptions.directoryLabels['/' + directory] || directory.split('/').pop()
-            value: getDirectoryFullLabel(directory, themeOptions.directoryLabels)
+            name: 'directoryLabel',
+            value: getDirectoryLabel(directory, themeOptions.directoryLabels)
         })
         createNodeField({
             node,
-            name: 'directoryLabel',
-            //value: themeOptions.directoryLabels['/' + directory] || directory.split('/').pop()
-            value: getDirectoryLabel(directory, themeOptions.directoryLabels)
-            //value: directory
+            name: 'directoryFullLabel',
+            value: getDirectoryFullLabel(directory, themeOptions.directoryLabels)
         })
-
-
         const postTitle = (node.frontmatter.series) ?
             `${node.frontmatter.series.title}[${node.frontmatter.series.number}] ${node.frontmatter.title}` :
             node.frontmatter.title
@@ -158,7 +152,7 @@ const createDirectoryArchives = ({ nodes, actions }) => {
                 archive: 'directory',
                 directory: directory,
                 regex: re.toString(),
-                count: nodes.length
+                //count: nodes.length
             }
         })
     })
@@ -197,7 +191,6 @@ const createMonthlyArchives = ({ nodes, actions }) => {
 }
 ////////////////
 exports.createPages = async ({ graphql, actions }) => {
-    const { createPage } = actions
     const { data: { mdxPages } } = await graphql(`
     {
         mdxPages: allMdx (sort: {fields: frontmatter___date, order: DESC}) {
@@ -217,8 +210,8 @@ exports.createPages = async ({ graphql, actions }) => {
     }`)
 
     // create pages
-    createMdxPages({ nodes: mdxPages.nodes, actions: { createPage } })
-    createIndexPagination({ nodes: mdxPages.nodes, actions: { createPage } })
-    createDirectoryArchives({ nodes: mdxPages.nodes, actions: { createPage } })
-    createMonthlyArchives({ nodes: mdxPages.nodes, actions: { createPage } })
+    createMdxPages({ nodes: mdxPages.nodes, actions: actions})
+    createIndexPagination({ nodes: mdxPages.nodes, actions: actions})
+    createDirectoryArchives({ nodes: mdxPages.nodes, actions: actions})
+    createMonthlyArchives({ nodes: mdxPages.nodes, actions: actions})
 }
