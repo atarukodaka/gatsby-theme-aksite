@@ -40,15 +40,13 @@ module.exports = (options) => {
           path: options.contentPath || `content/posts`,
         }
       },
-      /*
       {
         resolve: `gatsby-source-filesystem`,
         options: {
-          name: `content-images`,
-          path: options.imagePath || `content/images`,
+          name: `assets`,
+          path: options.assetPath || `content/assets`,
         },
       },
-      */
       {
         resolve: `gatsby-source-filesystem`,
         options: {

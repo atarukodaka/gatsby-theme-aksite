@@ -15,8 +15,9 @@ exports.onPreBootstrap = ({store}, themeOptions) => {
 
     basePath = themeOptions.basePath || `/`
     contentPath = themeOptions.contentPath || `content/posts`
+    assetPath = themeOptions.assetPath || `content/assets`
   
-    const dirs = [path.join(program.directory, contentPath)]
+    const dirs = [path.join(program.directory, contentPath), path.join(program.directory, assetPath)]
   
     dirs.forEach((dir) => {
       console.log(`Initializing ${dir} directory`)
