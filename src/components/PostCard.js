@@ -23,9 +23,12 @@ const Title = styled.h4`
 */
 
 const Excerpt = styled.div`
-    font-size: small;
+    /* font-size: small; */
     /* color: #444; */
+    /* 
     padding-left: 0.5rem;
+    */
+   font-size: 1rem;
     padding-right: 0.5rem;
 `
 
@@ -46,19 +49,51 @@ const Wrapper = ({ node, children, disableLink = false }) => {
         </HoverBox>)
 }
 
+export const PostCard = (props) => {
+    switch (props.display) {
+        case "text":
+            PostCardText(props)
+            break;
 
-export const PostCard = ({ node, disableLink = false }) => (
+        case "small":
+            PostCardSmall(props)
+            break;
+
+        default:
+            return (
+                <PostCardSmall {...props} />
+            )
+    }
+}
+
+export const PostCardMiddle = ({ node, disableLink = false }) => (
     <Wrapper node={node} disableLink={disableLink}>
         <Card>
             <CoverImage node={node} size="small" />
-            <Date>{node.frontmatter.date}</Date>
-            <Title>{node.fields.postTitle}</Title>
-            <DirectoryBox node={node} style={{ fontSize: "0.6rem" }} disableLink={true}/>
-            <Excerpt>{node.frontmatter.description || node.excerpt}</Excerpt>
-            <ClearImage />
+            <div style={{ marginLeft: "100px" }}>
+                <span style={{ marginRight: "1em" }}>{node.frontmatter.date}</span>
+                <DirectoryBox node={node} style={{ fontSize: "0.6rem" }} disableLink={true} />
+                <Title>{node.fields.postTitle}</Title>
+
+                <Excerpt>{node.frontmatter.description || node.excerpt}</Excerpt>
+                <ClearImage />
+            </div>
         </Card>
 
     </Wrapper>
 )
 
+const PostCardSmall = ({ node, disableLink = false }) => (
+    <Wrapper node={node} disableLink={disableLink}>
+        <Card>
+            <CoverImage node={node} size="small" imageSize="50px"/>
+            <div style={{ marginLeft: "60px" }}>
+
+                {node.fields.postTitle}
+                <ClearImage />
+            </div>
+        </Card></Wrapper>
+)
+
+const PostCardText = () => { }
 export default PostCard

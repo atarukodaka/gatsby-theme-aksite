@@ -124,7 +124,7 @@ const createIndexPagination = ({ nodes, actions }) => {
     paginate({
         createPage,
         items: nodes,
-        itemsPerPage: itemsPerPage,
+        itemsPerPage: 5, // itemsPerPage,
         //pathPrefix: ({ pageNumber }) => (pageNumber === 0 ? "/" : "/page"),
         pathPrefix: '/',
         component: require.resolve(template),

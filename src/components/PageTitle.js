@@ -11,7 +11,12 @@ const PageTitle = styled.h1`
     font-weight: bold;
 
     color: ${theme.palette.primary.contrastText};
-    background: linear-gradient(to bottom,  ${light} 0%, ${dark} 100%)
+    background: linear-gradient(to bottom,  ${light} 0%, ${dark} 100%);
+
+    a {
+        text-decoration: none;
+        color: ${theme.palette.primary.contrastText};
+    }
 
     /*background: ${theme.palette.primary.dark}; */
     /* color: ${theme.palette.text.primary}; */

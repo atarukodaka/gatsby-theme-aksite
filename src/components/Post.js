@@ -46,7 +46,7 @@ const cssPost = css`
     /* padding-right: 1em; */
     /* background-color:white; */
     /* box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);  */
-    box-shadow: 2px 2px 1px rgb(0 0 0 / 20%)
+    /* box-shadow: 2px 2px 1px rgb(0 0 0 / 20%) */
 //`
 
 const RenderMDX = ({ children }) => {
@@ -72,12 +72,13 @@ const Siblings = ({ nodes }) => (
 const PrevNextPost = ({ prevPost, nextPost }) => (
     <nav style={{ marginBottom: "2rem" }}>
         <Grid container>
-            <Grid item sm={4}>
+            <Grid item md={5} sm={12}>
+                <PostCard node={prevPost}/>
                 {prevPost && (<HoverBox><Card><Link to={prevPost.fields.slug}>《 {prevPost.fields.postTitle}</Link></Card></HoverBox>)}
             </Grid>
-            <Grid item sm={4} />
-            <Grid item sm={4}>
-                {nextPost && (<HoverBox><Card><Link to={nextPost.fields.slug}>{nextPost.fields.postTitle} 》</Link></Card></HoverBox>)}
+            <Grid item md={2} sm={12}/>
+            <Grid item md={5} sm={12}>
+                {nextPost && (<HoverBox ><Card><Link to={nextPost.fields.slug}>{nextPost.fields.postTitle} 》</Link></Card></HoverBox>)}
             </Grid>
         </Grid>
     </nav>
@@ -91,7 +92,7 @@ const Post = ({ node, siblings, prevPost, nextPost }) => {
         <div css={cssPost}>
             <Header>
                 <div>{node.frontmatter.date}</div>
-                <PageTitle>{node.fields.postTitle}</PageTitle>
+                <PageTitle><Link to={node.fields.slug}>{node.fields.postTitle}</Link></PageTitle>
                 <DirectoryBox node={node}/>
                 <CoverImage node={node} />
                 <Description>{node.frontmatter.description}</Description>
@@ -106,8 +107,10 @@ const Post = ({ node, siblings, prevPost, nextPost }) => {
                     title={node.fields.postTitle}/>
                 <PrevNextPost prevPost={prevPost} nextPost={nextPost} />
                 <Divider />
+                { siblings && (<>
                 <Typography variant="h3">Siblings on '{node.fields.directoryLabel}'</Typography>
                 <Siblings nodes={siblings} />
+                </>)}
             </Footer>
         </div>
     )

@@ -4,6 +4,8 @@ import { Pagination } from '@material-ui/lab'
 //import { Breadcrumb } from 'gatsby-plugin-breadcrumb'
 
 import { PostCard } from "../components/PostCard"
+import Post from '../components/Post'
+
 import Layout from "../components/Layout"
 import SEO from '../components/SEO'
 import Breadcrumb from '../components/Breadcrumb'

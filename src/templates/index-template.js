@@ -1,13 +1,12 @@
 import React from "react"
 import { graphql, navigate } from "gatsby"
-/*
+
 import { Breadcrumb } from 'gatsby-plugin-breadcrumb'
-import Layout from "../components/layout.js"
-import { Post } from "../components/post.js"
-import { PostCard } from '../components/post_card'
+import Layout from "../components/Layout.js"
+import { Post } from "../components/Post.js"
 import { Pagination } from '@material-ui/lab'
 import { Box } from '@material-ui/core'
-*/
+
 
 import ArchiveTemplate from './archive_template'
 
@@ -16,7 +15,7 @@ export const data = graphql`
     allMdx (sort: {fields: frontmatter___date, order: DESC},
       skip: $skip, limit: $limit){
       nodes {
-        ...postFields
+        ...postFieldsBody
       }
     }
   }
@@ -37,9 +36,21 @@ const IndexTemplate = ( { data, pageContext } ) => {
     humanPageNumber: humanPageNumber,
     onChangeHandler: handleChange
   }
+  /*
+  return (
+    <Layout title={title}>
+      {
+        data.allMdx.nodes.map(node=>(
+          <Post node={node} key={node.id}/>
+        ))
+      }
+    </Layout>
+  )
+  */
+  
   return (<ArchiveTemplate title={title} nodes={data.allMdx.nodes} crumbs={crumbs}
     pagination_parameters={pagination_parameters} />)
-    
+  
   /*
   return (
     <Layout title={label}>  
