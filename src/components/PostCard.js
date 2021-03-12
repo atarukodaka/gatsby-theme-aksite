@@ -39,61 +39,50 @@ const ClearImage = styled.div`
     clear: both;
 `
 
-const Wrapper = ({ node, children, disableLink = false }) => {
-    return (disableLink) ?
-        (<div>{children}</div>) :
-        (<HoverBox>
-            <Link to={node.fields.slug}>
+const Wrapper = ({ node, children }) => {
+    return (<HoverBox>
+        <Link to={node.fields.slug}>
+            <Card>
                 {children}
-            </Link>
-        </HoverBox>)
+            </Card>
+        </Link>
+    </HoverBox>)
 }
 
 export const PostCard = (props) => {
     switch (props.display) {
-        case "text":
-            PostCardText(props)
-            break;
-
-        case "small":
-            PostCardSmall(props)
+        case "simple":
+            PostCardSimple(props)
             break;
 
         default:
             return (
-                <PostCardSmall {...props} />
+                <PostCard {...props} />
             )
     }
 }
 
-export const PostCardMiddle = ({ node, disableLink = false }) => (
-    <Wrapper node={node} disableLink={disableLink}>
-        <Card>
-            <CoverImage node={node} size="small" />
-            <div style={{ marginLeft: "100px" }}>
-                <span style={{ marginRight: "1em" }}>{node.frontmatter.date}</span>
-                <DirectoryBox node={node} style={{ fontSize: "0.6rem" }} disableLink={true} />
-                <Title>{node.fields.postTitle}</Title>
-
-                <Excerpt>{node.frontmatter.description || node.excerpt}</Excerpt>
-                <ClearImage />
-            </div>
-        </Card>
-
+export const PostCardMiddle = ({ node }) => (
+    <Wrapper node={node} >
+        <CoverImage node={node} size="small" />
+        <div style={{ marginLeft: "100px" }}>
+            <span style={{ marginRight: "1em" }}>{node.frontmatter.date}</span>
+            <DirectoryBox node={node} style={{ fontSize: "0.6rem" }}/>
+            <Title>{node.fields.postTitle}</Title>
+            <Excerpt>{node.frontmatter.description || node.excerpt}</Excerpt>
+            <ClearImage />
+        </div>
     </Wrapper>
 )
 
-const PostCardSmall = ({ node, disableLink = false }) => (
-    <Wrapper node={node} disableLink={disableLink}>
-        <Card>
-            <CoverImage node={node} size="small" imageSize="50px"/>
-            <div style={{ marginLeft: "60px" }}>
-
-                {node.fields.postTitle}
-                <ClearImage />
-            </div>
-        </Card></Wrapper>
+const PostCardSimple = ({ node }) => (
+    <Wrapper node={node} >
+        <CoverImage node={node} size="small" imageSize="50px" />
+        <div style={{ marginLeft: "60px" }}>
+            {node.fields.postTitle}
+            <ClearImage />
+        </div>
+    </Wrapper>
 )
 
-const PostCardText = () => { }
 export default PostCard
