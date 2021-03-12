@@ -5,10 +5,8 @@ import Box from '@material-ui/core/Box'
 
 import DirectoryBox from './DirectoryBox'
 import CoverImage from './CoverImage'
-//import Card from './Card'
+import Card from './Card'
 import HoverBox from './HoverBox'
-//import postTitle from './postTitle'
-
 
 const Title = styled.div`
     font-size: 1.1rem;
@@ -17,27 +15,27 @@ const Title = styled.div`
     margin: 0em;
 `
 
-const Date = styled.div`
+const Date = styled.span`
     font-size: small;
 `
 const ClearImage = styled.div`
     clear: both;
 `
 
-
 export const PostCard = ({ node }) => (
     <HoverBox>
         <Link to={node.fields.slug}>
-            <Box p={1} boxShadow={1}>
+            <Card>
                 <CoverImage node={node} size="small" />
                 <Box ml={12}>
                     <Date>{node.frontmatter.date}</Date>
+                    <DirectoryBox>{node.fields.directoryLabel}</DirectoryBox>
                     <Title>{node.fields.postTitle}</Title>
-                    <DirectoryBox node={node} style={{ fontSize: "0.6rem" }} />
+                    
                     {node.frontmatter.description || node.excerpt}
                     <ClearImage />
                 </Box>
-            </Box>
+            </Card>
         </Link>
     </HoverBox>
 )

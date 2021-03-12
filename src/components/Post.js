@@ -8,17 +8,12 @@ import { css } from '@emotion/react'
 import Grid from '@material-ui/core/Grid'
 import Divider from '@material-ui/core/Divider'
 import Typography from '@material-ui/core/Typography'
-//import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos'
-//import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 
 import DirectoryBox from './DirectoryBox'
 import MdxComponents from './MdxComponents'
 import ShareSNS from './ShareSNS'
-// import * as styles from "./post.module.css"
 import CoverImage from './CoverImage'
-//import directoryLabel from '../utils/directory_label'
 import PostCard from './PostCard'
-//import postTitle from './postTitle'
 import PageTitle from './PageTitle'
 import useSiteMetadata from '../hooks/useSiteMetadata'
 import HoverBox from './HoverBox'
@@ -42,12 +37,7 @@ const Footer = styled.footer`
 const cssPost = css`
     margin-top: 2em;
     margin-bottom: 2em;
-    /* padding-bottom: 1em; */
-    /* padding-right: 1em; */
-    /* background-color:white; */
-    /* box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);  */
-    /* box-shadow: 2px 2px 1px rgb(0 0 0 / 20%) */
-//`
+`
 
 const RenderMDX = ({ children }) => {
     return (
@@ -71,12 +61,10 @@ const Siblings = ({ nodes }) => (
 const PrevNextPost = ({ prevPost, nextPost }) => (
     <nav style={{ marginBottom: "2rem" }}>
         <Grid container>
-            <Grid item md={5} sm={12}>
-                <PostCard node={prevPost}/>
+            <Grid item md={6} sm={12}>
                 {prevPost && (<HoverBox><Card><Link to={prevPost.fields.slug}>《 {prevPost.fields.postTitle}</Link></Card></HoverBox>)}
             </Grid>
-            <Grid item md={2} sm={12}/>
-            <Grid item md={5} sm={12}>
+            <Grid item md={6} sm={12}>
                 {nextPost && (<HoverBox ><Card><Link to={nextPost.fields.slug}>{nextPost.fields.postTitle} 》</Link></Card></HoverBox>)}
             </Grid>
         </Grid>
@@ -92,7 +80,7 @@ const Post = ({ node, siblings, prevPost, nextPost }) => {
             <Header>
                 <div>{node.frontmatter.date}</div>
                 <PageTitle><Link to={node.fields.slug}>{node.fields.postTitle}</Link></PageTitle>
-                <DirectoryBox node={node}/>
+                <DirectoryBox><Link to={'/'+node.fields.dierctory}>{node.fields.directoryLabel}</Link></DirectoryBox>
                 <CoverImage node={node} />
                 <Description>{node.frontmatter.description}</Description>
             </Header>
