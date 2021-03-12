@@ -1,12 +1,9 @@
 import React from 'react'
 
-import { useStaticQuery, graphql, Link } from "gatsby"
+import { useStaticQuery, graphql } from "gatsby"
 import PropTypes from 'prop-types'
 
 import PostCard from '../PostCard'
-import Card from '../Card'
-import HoverBox from '../HoverBox'
-
 /*
 
 TODO: NOW TAKING TOO LONG TIME TO GET QUERY AND SOMETIMES CAUSES AN ERROR ON DEVELOP ENVIRONMENT.
@@ -22,23 +19,14 @@ const query = graphql`
     }
 `
 
-const LinkPost = ({ to, children, display = "card" }) => {
+const LinkPost = ({ to }) => {
     const data = useStaticQuery(query)
     const node = data.allMdx.nodes.find(v => v.fields.slug === to)
 
-    switch (display){
-    case "text":
-        return (<Link to={to}>{node?.frontmatter?.title || to}</Link>)
-    
-    default: // card
-        if (node === undefined) {
-            //return <div>NO SUCH SLUG: {to}</div> 
-            return (<HoverBox><Link to={to}><Card>{children}</Card></Link></HoverBox>)
-        } else {
-            return (<PostCard node={node} />)
-
-        }
-    }
+    return (node === undefined) ?
+        <div>NO SUCH SLUG: {to}</div>
+            :    
+        <PostCard node={node} />
 }
 
 LinkPost.propTypes = {

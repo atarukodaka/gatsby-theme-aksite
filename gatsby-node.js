@@ -50,8 +50,8 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
     const { createNodeField } = actions
 
     const getDirectoryLabel = (directory, labels) => {
-        return (labels) ? labels['/' + directory] || directory :
-            directory.pop() || "" 
+        const label = directory.split('/').pop()
+        return (labels) ? labels['/' + directory] || label : label
     }
     const getDirectoryFullLabel = (directory, labels) => {
         if (labels === undefined) { return directory }

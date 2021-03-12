@@ -50,7 +50,7 @@ const MonthlyArchives = (  ) => {
     const years = [...new Set(list.map(v=>v.year))].sort((a, b) => b-a)
     
     //const defaultExpanded = ( expandAll) ? years : []
-    const defaultExpanded = [] // TODO
+    const defaultExpanded = [(new Date()).getFullYear().toString()] // TODO
     
     //  
     return (

@@ -45,7 +45,7 @@ const RecentPosts = () => {
                             <HoverBox>
                                 <Link to={node.fields.slug}>
                                     <Typography>
-                                        {node.fields.postTitle} [{node.fields.directoryFullLabel}]
+                                        {node.fields.postTitle}
                                     </Typography>
                                 </Link>
 

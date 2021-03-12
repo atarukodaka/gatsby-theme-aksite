@@ -30,7 +30,7 @@ const Series = ( {title, current, display="card"} ) => {
     default:
         return (<nav>
             {nodes.map(node=>
-                (<PostCard node={node} key={node.id} disableLink={node.frontmatter.series.number === currentNumber } />))
+                (<PostCard node={node} key={node.id} />))
             }   
             </nav>)
     }
