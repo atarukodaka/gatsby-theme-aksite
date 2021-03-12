@@ -6,15 +6,14 @@ import { css } from '@emotion/react'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import HoverBox from './HoverBox'
-import PostCard from './PostCard'
+//import PostCard from './PostCard'
 //import Card from './Card'
-import theme from '../styles/theme'
+//import theme from '../styles/theme'
 
 const query = graphql`
 {
-    recentPosts: allMdx(
-        limit: 5,
-        sort: {fields: frontmatter___date, order: DESC}
+    recentPosts: allMdx(limit: 5,
+            sort: {fields: frontmatter___date, order: DESC}
         ) {
         nodes {
             ...postFields
@@ -35,6 +34,24 @@ const cssItem = css`
 const RecentPosts = () => {
     const { recentPosts } = useStaticQuery(query)
 
+    return (
+        <List>
+            {recentPosts.nodes.map(node => (
+                <ListItem key={node.id} css={cssItem}>
+                    <HoverBox>
+                        <Link to={node.fields.slug}>
+                            <Typography>
+                                {node.fields.postTitle}
+                            </Typography>
+                        </Link>
+
+                    </HoverBox>
+                </ListItem>
+            ))}
+        </List>
+    )
+}
+/*
     const display = "text"
 
     switch (display) {
@@ -46,12 +63,7 @@ const RecentPosts = () => {
                             <HoverBox>
                                 <Link to={node.fields.slug}>
                                     <Typography>
-<<<<<<< HEAD
-                                        <div style={{color: theme.palette.text.sedondary, fontSize: "0.8rem"}}>{node.frontmatter.date} [{node.fields.directoryFullLabel}]</div>
-                                        <div>{node.fields.postTitle} </div>
-=======
                                         {node.fields.postTitle}
->>>>>>> master
                                     </Typography>
                                 </Link>
 
@@ -69,6 +81,7 @@ const RecentPosts = () => {
                 ))}
             </nav>)
     }
-}
+    */
+
 
 export default RecentPosts
