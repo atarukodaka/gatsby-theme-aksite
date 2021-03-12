@@ -50,7 +50,6 @@ const cssPost = css`
 //`
 
 const RenderMDX = ({ children }) => {
-    //const shortcodes = {Image, PostLink}
     return (
         <MDXProvider components={MdxComponents}>
             <MDXRenderer>

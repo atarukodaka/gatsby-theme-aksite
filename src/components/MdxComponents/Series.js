@@ -15,8 +15,6 @@ const Series = ( {title, current, display="card"} ) => {
     const data = useStaticQuery(query)
     const nodes = data.allMdx.nodes.filter(v=>(v.frontmatter.series?.title === title)).sort((a, b)=> a.frontmatter.series.number - b.frontmatter.series.number)
     const currentNumber = parseInt(current)
-    //console.log("series title:", title)
-    //console.log("nodes length", nodes.length)
 
     switch (display){
     case "text":
@@ -30,7 +28,7 @@ const Series = ( {title, current, display="card"} ) => {
     default:
         return (<nav>
             {nodes.map(node=>
-                (<PostCard node={node} key={node.id} disableLink={node.frontmatter.series.number === currentNumber } />))
+                (<PostCard node={node} key={node.id} />))
             }   
             </nav>)
     }

@@ -46,8 +46,12 @@ const RecentPosts = () => {
                             <HoverBox>
                                 <Link to={node.fields.slug}>
                                     <Typography>
+<<<<<<< HEAD
                                         <div style={{color: theme.palette.text.sedondary, fontSize: "0.8rem"}}>{node.frontmatter.date} [{node.fields.directoryFullLabel}]</div>
                                         <div>{node.fields.postTitle} </div>
+=======
+                                        {node.fields.postTitle}
+>>>>>>> master
                                     </Typography>
                                 </Link>
 
