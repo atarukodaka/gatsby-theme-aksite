@@ -1,4 +1,3 @@
-//const path = require(`path`)
 const fs = require(`fs`)
 const path = require(`path`)
 const mkdirp = require(`mkdirp`)
@@ -46,12 +45,11 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
 };
 
 exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
-    //console.log("theme options: ", themeOptions)
     const { createNodeField } = actions
 
     const getDirectoryLabel = (directory, labels) => {
-        const label = directory.split('/').pop()
-        return (labels) ? labels['/' + directory] || label : label
+        const last = directory.split('/').pop()
+        return (labels) ? labels['/' + directory] || last : last
     }
     const getDirectoryFullLabel = (directory, labels) => {
         if (labels === undefined) { return directory }
@@ -124,7 +122,7 @@ const createIndexPagination = ({ nodes, actions }) => {
     paginate({
         createPage,
         items: nodes,
-        itemsPerPage: itemsPerPage,
+        itemsPerPage: 5, // itemsPerPage,
         //pathPrefix: ({ pageNumber }) => (pageNumber === 0 ? "/" : "/page"),
         pathPrefix: '/',
         component: require.resolve(template),

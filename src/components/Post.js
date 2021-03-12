@@ -71,12 +71,13 @@ const Siblings = ({ nodes }) => (
 const PrevNextPost = ({ prevPost, nextPost }) => (
     <nav style={{ marginBottom: "2rem" }}>
         <Grid container>
-            <Grid item sm={4}>
+            <Grid item md={5} sm={12}>
+                <PostCard node={prevPost}/>
                 {prevPost && (<HoverBox><Card><Link to={prevPost.fields.slug}>《 {prevPost.fields.postTitle}</Link></Card></HoverBox>)}
             </Grid>
-            <Grid item sm={4} />
-            <Grid item sm={4}>
-                {nextPost && (<HoverBox><Card><Link to={nextPost.fields.slug}>{nextPost.fields.postTitle} 》</Link></Card></HoverBox>)}
+            <Grid item md={2} sm={12}/>
+            <Grid item md={5} sm={12}>
+                {nextPost && (<HoverBox ><Card><Link to={nextPost.fields.slug}>{nextPost.fields.postTitle} 》</Link></Card></HoverBox>)}
             </Grid>
         </Grid>
     </nav>
@@ -90,7 +91,7 @@ const Post = ({ node, siblings, prevPost, nextPost }) => {
         <div css={cssPost}>
             <Header>
                 <div>{node.frontmatter.date}</div>
-                <PageTitle>{node.fields.postTitle}</PageTitle>
+                <PageTitle><Link to={node.fields.slug}>{node.fields.postTitle}</Link></PageTitle>
                 <DirectoryBox node={node}/>
                 <CoverImage node={node} />
                 <Description>{node.frontmatter.description}</Description>
@@ -105,8 +106,10 @@ const Post = ({ node, siblings, prevPost, nextPost }) => {
                     title={node.fields.postTitle}/>
                 <PrevNextPost prevPost={prevPost} nextPost={nextPost} />
                 <Divider />
+                { siblings && (<>
                 <Typography variant="h3">Siblings on '{node.fields.directoryLabel}'</Typography>
                 <Siblings nodes={siblings} />
+                </>)}
             </Footer>
         </div>
     )

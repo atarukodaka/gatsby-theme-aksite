@@ -8,6 +8,7 @@ import ListItem from '@material-ui/core/ListItem'
 import HoverBox from './HoverBox'
 import PostCard from './PostCard'
 //import Card from './Card'
+import theme from '../styles/theme'
 
 const query = graphql`
 {
@@ -45,7 +46,12 @@ const RecentPosts = () => {
                             <HoverBox>
                                 <Link to={node.fields.slug}>
                                     <Typography>
+<<<<<<< HEAD
+                                        <div style={{color: theme.palette.text.sedondary, fontSize: "0.8rem"}}>{node.frontmatter.date} [{node.fields.directoryFullLabel}]</div>
+                                        <div>{node.fields.postTitle} </div>
+=======
                                         {node.fields.postTitle}
+>>>>>>> master
                                     </Typography>
                                 </Link>
 

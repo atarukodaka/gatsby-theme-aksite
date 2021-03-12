@@ -6,7 +6,7 @@ import theme from '../styles/theme'
 
 const TopLayout = ({ children }) => (
     <ThemeProvider theme={theme}>
-        <CssBaseline />
+        {/* <CssBaseline /> */}
         {children}
     </ThemeProvider>
 )

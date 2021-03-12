@@ -8,6 +8,7 @@ import { Drawer, IconButton, Divider } from '@material-ui/core'
 import { css } from '@emotion/react'
 import Container from '@material-ui/core/Container'
 import Typography from '@material-ui/core/Typography'
+import Hidden from '@material-ui/core/Hidden'
 
 import Profile from './Profile'
 import MonthlyArchives from './MonthlyArchives'
@@ -17,11 +18,14 @@ import theme from '../styles/theme'
 import useSiteMetadata from '../hooks/useSiteMetadata'
 
 const cssSiteTitle = css`
-    padding-top: 40px;
-    padding-bottom: 40px;
     border-bottom: 2px solid #111; 
 
-    h1 { font-size: 4rem; }
+    h1 { 
+        padding-top: 40px;
+        padding-bottom: 40px;
+    
+        font-size: 3rem; 
+    }
     a { 
         text-decoration: none;
         color: ${theme.palette.primary.main};
@@ -74,12 +78,14 @@ const HeaderPane = () => {
             </Drawer>
 
             <div css={cssSiteTitle}>
+                <Hidden smDown>
                 <Container>
                     <Link to="/">
                         <Typography variant="h1">{title}</Typography>
-                        <Typography variant="h3">{description}</Typography>
+                        <Typography variant="h4">{description}</Typography>
                     </Link>
                 </Container>
+                </Hidden>
             </div>
         </header>
     )

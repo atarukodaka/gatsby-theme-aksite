@@ -1,18 +1,27 @@
 import React from 'react'
 import Alert from '@material-ui/lab/Alert'
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
 
-import theme from '../../styles/theme'
-
-const Spoiler = ({ children }) => {
-    const color = theme.palette.background.default
+const Spoiler = ({ warningText, children }) => {
+  
+    const title = warningText || "WARNING !!! SPOILER IS COMING !!! SURE TO OPEN ??"
     return (
-        <>
-            <Alert severity="warning"><strong>WARNING !!! SPOILER IS COMING !!!</strong></Alert>
+        
+            
+            <Accordion>
+                <AccordionSummary>
+                    <Alert severity="warning"><strong>{title}</strong></Alert>
+                </AccordionSummary>
+                <AccordionDetails style={{display: "block"}}>
+                <div style={{color: "white"}}>
+                    {children}
+                    </div>
+                </AccordionDetails>
+            </Accordion>
 
-            <div style={{ marginTop: "30rem", color: color }}>
-                {children}
-            </div>
-        </>
+        
     )
 }
 
