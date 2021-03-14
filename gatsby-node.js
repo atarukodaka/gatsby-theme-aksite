@@ -113,6 +113,23 @@ const createMdxPages = ({ nodes, actions }) => {
     })
 }
 ////////////////
+// top page
+const createTopPage = ( {nodes, actions }) => {
+    const node = (nodes) ? nodes[0] : null
+    
+    if (node == null){ return }
+    
+    console.log("** top page")
+    const { createPage } = actions
+    createPage({
+        path: "/", 
+        component: require.resolve(`${templateDir}/post-template.js`),
+        context: {
+            slug: node.fields.slug
+        }
+    })
+}
+////////////////
 // index paginate
 const createIndexPagination = ({ nodes, actions }) => {
     console.log("** index paginate")
@@ -128,7 +145,6 @@ const createIndexPagination = ({ nodes, actions }) => {
         component: require.resolve(template),
     })
 }
-
 ////////////////
 // directory archvies
 const createDirectoryArchives = ({ nodes, actions }) => {
@@ -209,7 +225,8 @@ exports.createPages = async ({ graphql, actions }) => {
 
     // create pages
     createMdxPages({ nodes: mdxPages.nodes, actions: actions})
-    createIndexPagination({ nodes: mdxPages.nodes, actions: actions})
+    createTopPage( { nodes: mdxPages.nodes, actions: actions })
+    //createIndexPagination({ nodes: mdxPages.nodes, actions: actions})
     createDirectoryArchives({ nodes: mdxPages.nodes, actions: actions})
     createMonthlyArchives({ nodes: mdxPages.nodes, actions: actions})
 }

@@ -44,7 +44,7 @@ const RenderMDX = ({ children }) => {
     )
 }
 
-const Post = ({ node, siblings, prevPost, nextPost }) => {
+const Post = ({ node }) => {
     const { pathname } = useLocation()
     const { siteUrl } = useSiteMetadata()
 

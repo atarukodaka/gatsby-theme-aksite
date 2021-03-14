@@ -88,10 +88,10 @@ const DirectoryTree = () => {
 }
 
 const Tree = ({item}) =>  {
-    const color = theme.palette.text.secondary    
+    //const color = theme.palette.text.secondary    
 
     return(
-    <TreeItem label={<>{item.label} ({item.totalCount})</>} nodeId={item.name}
+    <TreeItem label={<>{item.label} ({item.totalCount})</>} nodeId={item.name} key={item.name}
         onClick={() => {}} 
         onLabelClick={(e) => {e.preventDefault(); navigate(directoryArchivePath(item.name))}}>
         { item.child && ( item.child.map(v => (<Tree item={v}/>)) ) }

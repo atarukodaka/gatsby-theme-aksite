@@ -3,7 +3,7 @@ import { graphql, navigate } from "gatsby"
 
 import { Breadcrumb } from 'gatsby-plugin-breadcrumb'
 import Layout from "../components/Layout.js"
-import { Post } from "../components/Post.js"
+import Post from "../components/Post"
 import { Pagination } from '@material-ui/lab'
 import { Box } from '@material-ui/core'
 
@@ -21,12 +21,12 @@ export const data = graphql`
   }
 `
 
-const IndexTemplate = ( { data, pageContext } ) => {
+const IndexTemplate = ({ data, pageContext }) => {
   const { humanPageNumber, numberOfPages } = pageContext;
   const { breadcrumb: { crumbs } } = pageContext
 
   //const title = (humanPageNumber === 1) ? crumbs[0].crumbLabel : `index [${humanPageNumber}]`
-  
+
   const handleChange = (_event, p) => {
     navigate((p === 1) ? '/' : `/${p}`)
   }
@@ -36,21 +36,26 @@ const IndexTemplate = ( { data, pageContext } ) => {
     humanPageNumber: humanPageNumber,
     onChangeHandler: handleChange
   }
-  /*
+
   return (
     <Layout title={title}>
       {
-        data.allMdx.nodes.map(node=>(
-          <Post node={node} key={node.id}/>
+        data.allMdx.nodes.map(node => (
+          <Post node={node} key={node.id} />
         ))
       }
+      <Box display="flex" justifyContent="center" m={3}>
+        <Pagination count={pagination_parameters.numberOfPages} page={pagination_parameters.humanPageNumber} onChange={handleChange} />
+      </Box>
+
     </Layout>
   )
-  */
-  
+
+  /*
   return (<ArchiveTemplate title={title} nodes={data.allMdx.nodes} crumbs={crumbs}
     pagination_parameters={pagination_parameters} />)
   
+    */
   /*
   return (
     <Layout title={label}>  
