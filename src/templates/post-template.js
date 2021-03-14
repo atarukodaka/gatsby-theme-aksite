@@ -43,10 +43,10 @@ const PrevNextPost = ({ prevPost, nextPost }) => (
   <nav style={{ marginBottom: "2rem" }}>
       <Grid container>
           <Grid item md={6} sm={12}>
-              {prevPost && (<HoverBox><Card><Link to={prevPost.fields.slug}>《 {prevPost.fields.postTitle}</Link></Card></HoverBox>)}
+              {prevPost && (<HoverBox><Link to={prevPost.fields.slug}><Card>《 {prevPost.fields.postTitle}</Card></Link></HoverBox>)}
           </Grid>
           <Grid item md={6} sm={12}>
-              {nextPost && (<HoverBox ><Card><Link to={nextPost.fields.slug}>{nextPost.fields.postTitle} 》</Link></Card></HoverBox>)}
+              {nextPost && (<HoverBox ><Link to={nextPost.fields.slug}><Card>{nextPost.fields.postTitle} 》</Card></Link></HoverBox>)}
           </Grid>
       </Grid>
   </nav>
@@ -76,12 +76,12 @@ export default function PostTemplate({ data, pageContext }) {
         prevPost={prevPost} nextPost={nextPost} />
 
       <nav>
-        <PrevNextPost prevPost={prevPost} nextPost={nextPost} />
-        <Divider />
         {siblings && (<>
           <Typography variant="h3">Siblings on '{node.fields.directoryLabel}'</Typography>
           <Siblings nodes={siblings} />
         </>)}
+        <Divider />
+        <PrevNextPost prevPost={prevPost} nextPost={nextPost} />
       </nav>
     </Layout>
   )

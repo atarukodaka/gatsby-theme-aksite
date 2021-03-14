@@ -8,6 +8,7 @@ import { Pagination } from '@material-ui/lab'
 import { Box } from '@material-ui/core'
 
 
+import { listArchivePath } from '../utils/archive_path'
 import ArchiveTemplate from './archive_template'
 
 export const data = graphql`
@@ -28,7 +29,8 @@ const IndexTemplate = ({ data, pageContext }) => {
   //const title = (humanPageNumber === 1) ? crumbs[0].crumbLabel : `index [${humanPageNumber}]`
 
   const handleChange = (_event, p) => {
-    navigate((p === 1) ? '/' : `/${p}`)
+    //navigate((p === 1) ? '/list' : `/list/${p}`)
+    navigate(`${listArchivePath()}/${p}`)
   }
   const title = "Latest Articles" + ((humanPageNumber > 1) ? ` -  page ${humanPageNumber}` : '')
   const pagination_parameters = {
@@ -37,6 +39,7 @@ const IndexTemplate = ({ data, pageContext }) => {
     onChangeHandler: handleChange
   }
 
+  /*
   return (
     <Layout title={title}>
       {
@@ -50,12 +53,13 @@ const IndexTemplate = ({ data, pageContext }) => {
 
     </Layout>
   )
+*/
 
-  /*
   return (<ArchiveTemplate title={title} nodes={data.allMdx.nodes} crumbs={crumbs}
-    pagination_parameters={pagination_parameters} />)
+    pagination_parameters={pagination_parameters} />
+  )
   
-    */
+
   /*
   return (
     <Layout title={label}>  

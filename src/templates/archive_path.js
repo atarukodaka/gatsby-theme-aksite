@@ -6,3 +6,8 @@ exports.monthlyArchivePath = (year, month)=> {
 exports.directoryArchivePath = (directory) => {
     return `/${directory}`
 }
+
+exports.listArchivePath = () => {
+    return `/list`
+}
+
