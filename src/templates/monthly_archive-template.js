@@ -6,8 +6,12 @@ import { monthlyArchivePath } from '../utils/archive_path'
 
 export const query = graphql`
       query($fromDate: Date!, $toDate: Date!, $skip: Int!, $limit: Int!){        
-      allMdx(sort: {fields: frontmatter___date, order: DESC},
-        filter: { frontmatter: { date: { gte: $fromDate, lt: $toDate } }},
+      allMdx(
+        sort: {fields: frontmatter___date, order: DESC},
+        filter: { frontmatter: { 
+          date: { gte: $fromDate, lt: $toDate },
+          draft: {ne: true}
+         }},
         skip: $skip, limit: $limit) {
         nodes { 
           ...postFields

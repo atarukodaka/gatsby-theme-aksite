@@ -27,6 +27,7 @@ exports.onPreBootstrap = ({store}, themeOptions) => {
     })    
 }
 exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
+    console.log("create Scheme customization")
     createTypes(`
         type Mdx implements Node {
             frontmatter: MdxFrontmatter
@@ -116,11 +117,11 @@ const createMdxPages = ({ nodes, actions }) => {
 ////////////////
 // top page
 const createTopPage = ( {nodes, actions }) => {
-    const node = (nodes) ? nodes[0] : null
-    
+    const node = (nodes) ? nodes[0] : null    
     if (node == null){ return }
     
-    console.log("** top page")
+
+    console.log("** top page", node.fields.slug, node.frontmatter.draft)
     const { createPage } = actions
     createPage({
         path: "/", 
@@ -207,7 +208,8 @@ const createMonthlyArchives = ({ nodes, actions }) => {
 exports.createPages = async ({ graphql, actions }) => {
     const { data: { mdxPages } } = await graphql(`
     {
-        mdxPages: allMdx (sort: {fields: frontmatter___date, order: DESC}) {
+        mdxPages: allMdx (filter: {frontmatter: {draft: {ne: true} } },
+            sort: {fields: frontmatter___date, order: DESC}) {
             nodes {
                 id
                 frontmatter {

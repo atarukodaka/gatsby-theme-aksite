@@ -6,7 +6,9 @@ import ArchiveTemplate from './archive_template'
 export const query = graphql`
     query($regex: String!, $skip: Int!, $limit: Int!){        
       allMdx(sort:  {fields: frontmatter___date, order: DESC},
-        filter: {fields: {directory: {regex: $regex}}},
+        filter: {
+          frontmatter: { draft: {ne: true}},
+          fields: {directory: {regex: $regex}}},
         skip: $skip, limit: $limit) {
         nodes { 
           ...postFields

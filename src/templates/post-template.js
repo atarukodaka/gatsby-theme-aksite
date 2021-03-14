@@ -14,7 +14,8 @@ import PrevNextPost from '../components/PrevNextPost'
 
 export const post_query = graphql`
     query ($slug: String!) {
-      mdx(fields: { slug: { eq: $slug }}){
+      mdx(frontmatter: {draft: {ne: true} },
+        fields: { slug: { eq: $slug }}){
         ...postFieldsBody
                
       }

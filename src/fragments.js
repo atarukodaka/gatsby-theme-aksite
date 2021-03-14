@@ -6,9 +6,9 @@ export const postFields = graphql`
 fragment postFields on Mdx {
   id
   excerpt(pruneLength: 100)
-  draft
   frontmatter {
     date(formatString: "YYYY-MM-DD"), title, description
+    draft
     cover {
       childImageSharp {
         fluid {

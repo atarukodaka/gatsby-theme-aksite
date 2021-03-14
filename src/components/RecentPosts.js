@@ -33,10 +33,11 @@ const cssItem = css`
 `
 const RecentPosts = () => {
     const recentPosts = useAllPosts() // StaticQuery(query)
+    const numPosts = 5
 
     return (
         <List>
-            {recentPosts.nodes.map(node => (
+            {recentPosts.nodes.slice(0, numPosts).map(node => (
                 <ListItem key={node.id} css={cssItem}>
                     <HoverBox>
                         <Link to={node.fields.slug}>

@@ -10,7 +10,7 @@ const ListToTree = require('list-to-tree')
 
 const query = graphql`
 {
-    mdxPages: allMdx {
+    mdxPages: allMdx(filter: {frontmatter: {draft: {ne: true} }}){
         nodes {
             id
             fields { slug, directory, directoryLabel}
