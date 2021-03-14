@@ -1,5 +1,5 @@
 import React from "react"
-import { useStaticQuery, graphql, navigate } from "gatsby"
+import { navigate } from "gatsby"
 import { TreeView, TreeItem } from '@material-ui/lab'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
@@ -8,19 +8,8 @@ import PropTypes from 'prop-types'
 import { monthlyArchivePath } from '../utils/archive_path'
 //import DirectoryLabel from '../utils/directory_label'
 import theme from '../styles/theme'
+import useAllPosts from '../hooks/useAllPosts'
 
-const query = graphql`
-{
-    mdxPages: allMdx {
-        nodes {
-            id
-            fields { slug, directory }
-            frontmatter { title, date(formatString: "YYYY-MM-DD") }
-        }
-    }
-
-}                
-`
 
 const createMonthlyArchiveList = (  nodes  ) => {
     const list = []
@@ -45,8 +34,8 @@ const createMonthlyArchiveList = (  nodes  ) => {
 }
 
 const MonthlyArchives = (  ) => {
-    const data = useStaticQuery(query)
-    const list = createMonthlyArchiveList(data.mdxPages.nodes)
+    const allMdx = useAllPosts()
+    const list = createMonthlyArchiveList(allMdx.nodes)
     const years = [...new Set(list.map(v=>v.year))].sort((a, b) => b-a)
     
     //const defaultExpanded = ( expandAll) ? years : []

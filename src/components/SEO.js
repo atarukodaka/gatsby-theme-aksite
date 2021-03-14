@@ -11,7 +11,7 @@ const SEO = ( { title, description, cover, lang } ) => {
     const { title: siteTitle, description: siteDescription, siteUrl, 
         coverImage: siteCoverImage, social: { twitter} } = useSiteMetadata()
     const coverImage = cover || siteCoverImage
-    const url = [siteUrl, pathname].join('/')
+    const url = [siteUrl, pathname].join('')
     
     //title ||= siteTitle
     const fullTitle = `${title} | ${siteTitle}`

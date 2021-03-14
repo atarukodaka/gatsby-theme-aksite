@@ -1,27 +1,38 @@
 import React from "react"
-import { graphql } from "gatsby"
+import { graphql, Link } from "gatsby"
 //import { Breadcrumb } from 'gatsby-plugin-breadcrumb'
 import Breadcrumb from '../components/Breadcrumb'
+import Grid from '@material-ui/core/Grid'
+import Divider from '@material-ui/core/Divider'
+
 
 import Layout from "../components/Layout"
 import Post from "../components/Post"
 import SEO from '../components/SEO'
+import PostCard from '../components/PostCard'
+import PrevNextPost from '../components/PrevNextPost'
 
-export const query = graphql`
+export const post_query = graphql`
     query ($slug: String!) {
-      mdx(fields: { slug: { eq: $slug }}){
+      mdx(frontmatter: {draft: {ne: true} },
+        fields: { slug: { eq: $slug }}){
         ...postFieldsBody
                
-      }
-
-      allMdx(sort: {fields: frontmatter___date, order: ASC}) {
-        nodes {
-          ...postFields
-        }
       }
     }
 
 `
+/*
+const Siblings = ({ nodes }) => (
+  <nav>
+      <Grid container spacing={3}>
+          {nodes.slice(0, 9).map(v =>
+              (<Grid item xs={12} sm={12} key={v.id}><PostCard node={v} /></Grid>))
+          }
+      </Grid>
+  </nav>
+)
+*/
 
 export default function PostTemplate({ data, pageContext }) {
   console.log(`create/template: ${data.mdx.fields.slug}`)
@@ -31,20 +42,26 @@ export default function PostTemplate({ data, pageContext }) {
   const title = node.fields.postTitle || node.frontmatter.title
   const description = node.frontmatter.description || node.excerpt
   const cover = node.frontmatter.cover?.publicURL
-  const index = data.allMdx.nodes.map(v => v.id).indexOf(node.id)
-  const prevPost = (index > 0) ? data.allMdx.nodes[index - 1] : null
-  const nextPost = (index < data.allMdx.nodes.length) ? data.allMdx.nodes[index + 1] : null
+
+  /*
   const siblings = data.allMdx.nodes.filter(v =>
     (v.id !== node.id) && (v.fields.directory === node.fields.directory))
-
+*/
   return (
     <Layout tableOfContents={node.tableOfContents} >
       <SEO title={title} description={description} cover={cover} />
-
       <Breadcrumb crumbs={crumbs} crumbLabel={title} />
 
-      <Post node={node} siblings={siblings}
-        prevPost={prevPost} nextPost={nextPost} />
+      <Post node={node}/>
+      
+      <nav>        
+        { /* siblings && (<>
+          <Typography variant="h3">Siblings on '{node.fields.directoryLabel}'</Typography>
+          <Siblings nodes={siblings} />
+        </>) */}
+        <Divider />
+        <PrevNextPost node={node}/>
+      </nav>
     </Layout>
   )
 }
