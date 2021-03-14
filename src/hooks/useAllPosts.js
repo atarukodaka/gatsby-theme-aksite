@@ -5,7 +5,7 @@ const useAllPosts = () => {
     const query = graphql`
     {
         allMdx(filter: {frontmatter: {draft: {ne: true} } },
-            sort: {fields: frontmatter___date, order: ASC}) {
+            sort: {fields: frontmatter___date, order: DESC}) {
             nodes {
             ...postFields
             }

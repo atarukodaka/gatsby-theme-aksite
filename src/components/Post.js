@@ -53,7 +53,7 @@ const Post = ({ node }) => {
             <Header>
                 <div>{node.frontmatter.date}</div>
                 <PageTitle><Link to={node.fields.slug}>{node.fields.postTitle}</Link></PageTitle>
-                <DirectoryBox><Link to={'/' + node.fields.dierctory}>{node.fields.directoryLabel}</Link></DirectoryBox>
+                <DirectoryBox><Link to={'/' + node.fields.dierctory}>{node.fields.directoryFullLabel}</Link></DirectoryBox>
                 <CoverImage node={node} />
                 <Description>{node.frontmatter.description}</Description>
             </Header>
