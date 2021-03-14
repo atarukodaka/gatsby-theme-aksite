@@ -1,5 +1,5 @@
 import React from 'react'
-import { graphql, useStaticQuery, Link } from 'gatsby'
+import { Link } from 'gatsby'
 import Typography from '@material-ui/core/Typography'
 import { css } from '@emotion/react'
 //import theme from '../styles/theme'
@@ -9,7 +9,9 @@ import HoverBox from './HoverBox'
 //import PostCard from './PostCard'
 //import Card from './Card'
 //import theme from '../styles/theme'
+import useAllPosts from '../hooks/useAllPosts'
 
+/*
 const query = graphql`
 {
     recentPosts: allMdx(limit: 5,
@@ -21,6 +23,7 @@ const query = graphql`
     }
 }
 `
+*/
 
 const cssItem = css`
     a {
@@ -32,7 +35,7 @@ const cssItem = css`
 
 `
 const RecentPosts = () => {
-    const { recentPosts } = useStaticQuery(query)
+    const recentPosts = useAllPosts() // StaticQuery(query)
 
     return (
         <List>

@@ -1,23 +1,15 @@
 import React from 'react'
-import { useStaticQuery, graphql, Link } from 'gatsby'
+import { Link } from 'gatsby'
 import Grid from '@material-ui/core/Grid'
 import HoverBox from '../components/HoverBox'
 import Card from '../components/Card'
+import useAllPosts from '../hooks/useAllPosts'
 
 const PrevNextPost = ({ node }) => {
-    const query = graphql`
-    {
-        allMdx(sort: {fields: frontmatter___date, order: ASC}) {
-            nodes {
-            ...postFields
-            }
-        }
-    }
-    `
-    const data = useStaticQuery(query)
-    const index = data.allMdx.nodes.map(v => v.id).indexOf(node.id)
-    const prevPost = (index > 0) ? data.allMdx.nodes[index - 1] : null
-    const nextPost = (index < data.allMdx.nodes.length) ? data.allMdx.nodes[index + 1] : null
+    const allMdx = useAllPosts()
+    const index = allMdx.nodes.map(v => v.id).indexOf(node.id)
+    const prevPost = (index > 0) ? allMdx.nodes[index - 1] : null
+    const nextPost = (index < allMdx.nodes.length) ? allMdx.nodes[index + 1] : null
 
     return (
         <nav style={{ marginBottom: "2rem" }}>
