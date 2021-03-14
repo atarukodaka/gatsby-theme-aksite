@@ -48,7 +48,7 @@ const RecentPosts = () => {
                     </HoverBox>
                 </ListItem>
             ))}
-            <ListItem css={cssItem}><HoverBox><Link to="/list"><Typography>...and other posts</Typography></Link></HoverBox></ListItem>
+            <ListItem css={cssItem}><HoverBox><Link to="/list"><Typography>...and other older posts</Typography></Link></HoverBox></ListItem>
         </List>
     )
 }
