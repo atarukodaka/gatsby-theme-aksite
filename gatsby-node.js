@@ -36,6 +36,7 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             description: String
             cover: File @fileByRelativePath
             series: Series
+            draft: Boolean
         }
         type Series {
             title: String
