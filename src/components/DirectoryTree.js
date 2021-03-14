@@ -1,24 +1,16 @@
 import React from 'react'
 import { useStaticQuery, graphql, navigate } from "gatsby"
-//import { TreeView, TreeItem } from '@material-ui/lab'
-//import { css } from '@emotion/react'
 import { TreeView, TreeItem } from '@material-ui/lab'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 
-
-//import { Button } from '@material-ui/core'
-//const config = require('../../config')
 import { directoryArchivePath } from '../utils/archive_path'
-// import styles from './directory_archives.module.css'
-//import HoverBox from './HoverBox'
-import theme from '../styles/theme'
 
 const ListToTree = require('list-to-tree')
 
 const query = graphql`
 {
-    mdxPages: allMdx {
+    mdxPages: allMdx(filter: {frontmatter: {draft: {ne: true} }}){
         nodes {
             id
             fields { slug, directory, directoryLabel}

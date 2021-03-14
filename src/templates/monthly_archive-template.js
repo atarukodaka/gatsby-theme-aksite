@@ -1,18 +1,17 @@
 import React from "react"
 import { graphql, navigate } from "gatsby"
-//import { Breadcrumb } from 'gatsby-plugin-breadcrumb'
-//import Pagination from '@material-ui/lab/Pagination'
-//import Box from '@material-ui/core/Box'
 
 import ArchiveTemplate from './archive_template'
-//import { PostCard } from "../components/post_card.js"
-//import Layout from "../components/layout.js"
-import { monthlyArchivePath } from './archive_path'
+import { monthlyArchivePath } from '../utils/archive_path'
 
 export const query = graphql`
       query($fromDate: Date!, $toDate: Date!, $skip: Int!, $limit: Int!){        
-      allMdx(sort: {fields: frontmatter___date, order: DESC},
-        filter: { frontmatter: { date: { gte: $fromDate, lt: $toDate } }},
+      allMdx(
+        sort: {fields: frontmatter___date, order: DESC},
+        filter: { frontmatter: { 
+          date: { gte: $fromDate, lt: $toDate },
+          draft: {ne: true}
+         }},
         skip: $skip, limit: $limit) {
         nodes { 
           ...postFields

@@ -1,15 +1,14 @@
 import React from 'react'
-import { graphql, useStaticQuery, Link } from 'gatsby'
+import { Link } from 'gatsby'
 import Typography from '@material-ui/core/Typography'
 import { css } from '@emotion/react'
-//import theme from '../styles/theme'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import HoverBox from './HoverBox'
-//import PostCard from './PostCard'
-//import Card from './Card'
-//import theme from '../styles/theme'
 
+import HoverBox from './HoverBox'
+import useAllPosts from '../hooks/useAllPosts'
+
+/*
 const query = graphql`
 {
     recentPosts: allMdx(limit: 5,
@@ -21,6 +20,7 @@ const query = graphql`
     }
 }
 `
+*/
 
 const cssItem = css`
     a {
@@ -32,11 +32,12 @@ const cssItem = css`
 
 `
 const RecentPosts = () => {
-    const { recentPosts } = useStaticQuery(query)
+    const recentPosts = useAllPosts() // StaticQuery(query)
+    const numPosts = 5
 
     return (
         <List>
-            {recentPosts.nodes.map(node => (
+            {recentPosts.nodes.slice(0, numPosts).map(node => (
                 <ListItem key={node.id} css={cssItem}>
                     <HoverBox>
                         <Link to={node.fields.slug}>
@@ -48,6 +49,7 @@ const RecentPosts = () => {
                     </HoverBox>
                 </ListItem>
             ))}
+            <ListItem css={cssItem}><HoverBox><Link to="/list"><Typography>...and other older posts</Typography></Link></HoverBox></ListItem>
         </List>
     )
 }

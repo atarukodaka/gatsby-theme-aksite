@@ -6,9 +6,10 @@ import ArchiveTemplate from './archive_template'
 export const query = graphql`
     query($regex: String!, $skip: Int!, $limit: Int!){        
       allMdx(sort:  {fields: frontmatter___date, order: DESC},
-        filter: {fields: {directory: {regex: $regex}}},
-        skip: $skip, limit: $limit
-         ) {
+        filter: {
+          frontmatter: { draft: {ne: true}},
+          fields: {directory: {regex: $regex}}},
+        skip: $skip, limit: $limit) {
         nodes { 
           ...postFields
         }
@@ -28,14 +29,14 @@ export default function DirectoryArchiveTemplate({ data, pageContext }) {
   const title = `DIRECTORY: ${label}`
 
   //const picked = (({ foo, bar }) => ({ foo, bar }))(context);
-  
+
   const pagination_parameters = {
     numberOfPages: pageContext.numberOfPages,
     humanPageNumber: pageContext.humanPageNumber,
     onChangeHandler: (_e, p) => { handleChange(directory, p) }
   }
   return (<ArchiveTemplate title={title} nodes={data.allMdx.nodes} crumbs={crumbs}
-    pagination_parameters={pagination_parameters}/>)
-    
+    pagination_parameters={pagination_parameters} />)
+
 
 }

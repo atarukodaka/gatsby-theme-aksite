@@ -4,7 +4,7 @@ const mkdirp = require(`mkdirp`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
 const { paginate } = require('gatsby-awesome-pagination');
 
-const { monthlyArchivePath, directoryArchivePath } = require('./src/utils/archive_path');
+const { monthlyArchivePath, directoryArchivePath, listArchivePath,  } = require('./src/utils/archive_path');
 
 const itemsPerPage = 10
 const templateDir = "./src/templates"
@@ -27,6 +27,7 @@ exports.onPreBootstrap = ({store}, themeOptions) => {
     })    
 }
 exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
+    console.log("create Scheme customization")
     createTypes(`
         type Mdx implements Node {
             frontmatter: MdxFrontmatter
@@ -36,6 +37,7 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             description: String
             cover: File @fileByRelativePath
             series: Series
+            draft: Boolean
         }
         type Series {
             title: String
@@ -115,11 +117,11 @@ const createMdxPages = ({ nodes, actions }) => {
 ////////////////
 // top page
 const createTopPage = ( {nodes, actions }) => {
-    const node = (nodes) ? nodes[0] : null
-    
+    const node = (nodes) ? nodes[0] : null    
     if (node == null){ return }
     
-    console.log("** top page")
+
+    console.log("** top page", node.fields.slug, node.frontmatter.draft)
     const { createPage } = actions
     createPage({
         path: "/", 
@@ -130,18 +132,17 @@ const createTopPage = ( {nodes, actions }) => {
     })
 }
 ////////////////
-// index paginate
-const createIndexPagination = ({ nodes, actions }) => {
-    console.log("** index paginate")
+// list archives
+const createListArchives = ({ nodes, actions }) => {
+    console.log("** list archives")
     const { createPage } = actions
-    const template = `${templateDir}/index-template.js`
-    //console.log("resolve", require.resolve(template), require.resolve(template))
+    const template = `${templateDir}/list-template.js`
     paginate({
         createPage,
         items: nodes,
         itemsPerPage: itemsPerPage,
         //pathPrefix: ({ pageNumber }) => (pageNumber === 0 ? "/" : "/page"),
-        pathPrefix: '/',
+        pathPrefix: listArchivePath(), 
         component: require.resolve(template),
     })
 }
@@ -207,7 +208,8 @@ const createMonthlyArchives = ({ nodes, actions }) => {
 exports.createPages = async ({ graphql, actions }) => {
     const { data: { mdxPages } } = await graphql(`
     {
-        mdxPages: allMdx (sort: {fields: frontmatter___date, order: DESC}) {
+        mdxPages: allMdx (filter: {frontmatter: {draft: {ne: true} } },
+            sort: {fields: frontmatter___date, order: DESC}) {
             nodes {
                 id
                 frontmatter {
@@ -227,6 +229,7 @@ exports.createPages = async ({ graphql, actions }) => {
     createMdxPages({ nodes: mdxPages.nodes, actions: actions})
     createTopPage( { nodes: mdxPages.nodes, actions: actions })
     //createIndexPagination({ nodes: mdxPages.nodes, actions: actions})
+    createListArchives({ nodes: mdxPages.nodes, actions: actions})
     createDirectoryArchives({ nodes: mdxPages.nodes, actions: actions})
     createMonthlyArchives({ nodes: mdxPages.nodes, actions: actions})
 }
