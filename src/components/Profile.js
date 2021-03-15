@@ -23,8 +23,8 @@ const Profile = () => {
         <div css={cssProfile}>
             <div>Author: {author}</div>
             <div>
-                <a href={twitterUrl}><TwitterIcon aria-label="button"/></a>
-                <a href={gitHubUrl}><GitHubIcon aria-label="button"/></a>
+                <a href={twitterUrl} target="_blank" rel="noreferrer"><TwitterIcon aria-label="button"/></a>
+                <a href={gitHubUrl} target="_blank" rel="noreferrer"><GitHubIcon aria-label="button"/></a>
             </div>
         </div>
     )

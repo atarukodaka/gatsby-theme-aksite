@@ -4,24 +4,9 @@ import Typography from '@material-ui/core/Typography'
 import { css } from '@emotion/react'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
-import Box from '@material-ui/core/Box'
 
 import HoverBox from './HoverBox'
 import useAllPosts from '../hooks/useAllPosts'
-
-/*
-const query = graphql`
-{
-    recentPosts: allMdx(limit: 5,
-            sort: {fields: frontmatter___date, order: DESC}
-        ) {
-        nodes {
-            ...postFields
-        }
-    }
-}
-`
-*/
 
 const cssItem = css`
     a {
@@ -34,7 +19,7 @@ const cssItem = css`
 `
 const RecentPosts = () => {
     const recentPosts = useAllPosts() // StaticQuery(query)
-    const numPosts = 5
+    const numPosts = 5  // TODO: to be configuable
 
     return (
         <>

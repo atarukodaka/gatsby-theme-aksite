@@ -6,8 +6,6 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 import PropTypes from 'prop-types'
 
 import { monthlyArchivePath } from '../utils/archive_path'
-//import DirectoryLabel from '../utils/directory_label'
-import theme from '../styles/theme'
 import useAllPosts from '../hooks/useAllPosts'
 
 
@@ -25,8 +23,6 @@ const createMonthlyArchiveList = (  nodes  ) => {
                 path: monthlyArchivePath(year, month),
                 nodes: []} // , countTotal: 1}
             list.push(item)
-        //} else {
-           // item.countTotal ++
         }
         item.nodes.push(node)
     })
@@ -39,9 +35,8 @@ const MonthlyArchives = (  ) => {
     const years = [...new Set(list.map(v=>v.year))].sort((a, b) => b-a)
     
     //const defaultExpanded = ( expandAll) ? years : []
-    const defaultExpanded = [(new Date).getFullYear().toString()] // TODO
+    const defaultExpanded = [(new Date()).getFullYear().toString()] // TODO
     
-    //  
     return (
         <TreeView style={{opacity: 0.8}}
         defaultCollapseIcon={<ExpandMoreIcon />}
@@ -51,21 +46,14 @@ const MonthlyArchives = (  ) => {
             {
                 years.map(year=>{
                     const items = list.filter(v=> v.year === year)
-                    //const countTotal = items.reduce((prev, curr) => prev + curr.countTotal, 0)
                     const countTotal = items.reduce((prev, curr) => prev + curr.nodes.length, 0)
                     
                     return (<TreeItem key={year} nodeId={year.toString()} label={ <>{year} ({countTotal})</>}>
                         {
-                            items.map(item=>(
+                            items.sort((a, b)=> { return b.month - a.month}).map(item=>(
                                 <TreeItem key={item.id} nodeId={item.id} 
                                  label={<>{item.year}/{item.month} ({item.nodes.length})</>}
-                                 onLabelClick={() => { navigate(item.path) }}>
-                                    {/* item.nodes.map(node=>(
-                                        <TreeItem key={node.id} label={`${node.frontmatter.title}[${DirectoryLabel(node.fields.directory)}]`}
-                                         onLabelClick={() => { navigate(node.fields.slug) }}></TreeItem>
-                                    ))*/
-                                    }
-                                </TreeItem> 
+                                 onLabelClick={() => { navigate(item.path) }}/>
                             ))
                         }
                     </TreeItem>
