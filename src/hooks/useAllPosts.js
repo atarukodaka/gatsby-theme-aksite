@@ -1,7 +1,7 @@
 import { useStaticQuery, graphql } from 'gatsby'
 
 const useAllPosts = () => {
-    console.log("useAllPosts")
+    //console.log("useAllPosts")
     const query = graphql`
     {
         allMdx(filter: {frontmatter: {draft: {ne: true} } },

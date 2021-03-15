@@ -1,19 +1,11 @@
 import React from 'react'
 import { graphql, useStaticQuery, Link } from 'gatsby'
 import PostCard from './PostCard'
+import useAllPosts from '../../hooks/useAllPosts'
 
 const Series = ( {title, current, display="card"} ) => {
-    const query = graphql`
-        {
-            allMdx {
-                nodes {
-                    ...postFields
-                }
-            }
-        }
-    `
-    const data = useStaticQuery(query)
-    const nodes = data.allMdx.nodes.filter(v=>(v.frontmatter.series?.title === title)).sort((a, b)=> a.frontmatter.series.number - b.frontmatter.series.number)
+
+    const nodes = useAllPosts.nodes.filter(v=>(v.frontmatter.series?.title === title)).sort((a, b)=> a.frontmatter.series.number - b.frontmatter.series.number)
     const currentNumber = parseInt(current)
     //console.log("series title:", title)
     //console.log("nodes length", nodes.length)

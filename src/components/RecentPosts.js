@@ -4,6 +4,7 @@ import Typography from '@material-ui/core/Typography'
 import { css } from '@emotion/react'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
+import Box from '@material-ui/core/Box'
 
 import HoverBox from './HoverBox'
 import useAllPosts from '../hooks/useAllPosts'
@@ -36,6 +37,7 @@ const RecentPosts = () => {
     const numPosts = 5
 
     return (
+        <>
         <List>
             {recentPosts.nodes.slice(0, numPosts).map(node => (
                 <ListItem key={node.id} css={cssItem}>
@@ -49,8 +51,10 @@ const RecentPosts = () => {
                     </HoverBox>
                 </ListItem>
             ))}
-            <ListItem css={cssItem}><HoverBox><Link to="/list"><Typography>...and other older posts</Typography></Link></HoverBox></ListItem>
+            
         </List>
+        <HoverBox style={{marginLeft: "2rem", opacity: "0.8"}}><Link to="/list"><Typography>...and other older posts</Typography></Link></HoverBox>
+        </>
     )
 }
 /*
