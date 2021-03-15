@@ -8,20 +8,6 @@ import ListItem from '@material-ui/core/ListItem'
 import HoverBox from './HoverBox'
 import useAllPosts from '../hooks/useAllPosts'
 
-/*
-const query = graphql`
-{
-    recentPosts: allMdx(limit: 5,
-            sort: {fields: frontmatter___date, order: DESC}
-        ) {
-        nodes {
-            ...postFields
-        }
-    }
-}
-`
-*/
-
 const cssItem = css`
     a {
         text-decoration: none;
@@ -33,9 +19,10 @@ const cssItem = css`
 `
 const RecentPosts = () => {
     const recentPosts = useAllPosts() // StaticQuery(query)
-    const numPosts = 5
+    const numPosts = 5  // TODO: to be configuable
 
     return (
+        <>
         <List>
             {recentPosts.nodes.slice(0, numPosts).map(node => (
                 <ListItem key={node.id} css={cssItem}>
@@ -49,8 +36,10 @@ const RecentPosts = () => {
                     </HoverBox>
                 </ListItem>
             ))}
-            <ListItem css={cssItem}><HoverBox><Link to="/list"><Typography>...and other older posts</Typography></Link></HoverBox></ListItem>
+            
         </List>
+        <HoverBox style={{marginLeft: "2rem", opacity: "0.8"}}><Link to="/list"><Typography>...and other older posts</Typography></Link></HoverBox>
+        </>
     )
 }
 /*

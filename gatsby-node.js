@@ -136,7 +136,7 @@ const createTopPage = ( {nodes, actions }) => {
 const createListArchives = ({ nodes, actions }) => {
     console.log("** list archives")
     const { createPage } = actions
-    const template = `${templateDir}/list-template.js`
+    const template = `${templateDir}/list_archive-template.js`
     paginate({
         createPage,
         items: nodes,
