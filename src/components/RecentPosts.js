@@ -18,13 +18,13 @@ const cssItem = css`
 
 `
 const RecentPosts = () => {
-    const recentPosts = useAllPosts() // StaticQuery(query)
+    const recentPosts = useAllPosts().nodes.sort((a, b) => {return new Date(b.frontmatter.date) - new Date(a.frontmatter.date)}) 
     const numPosts = 5  // TODO: to be configuable
 
     return (
         <>
         <List>
-            {recentPosts.nodes.slice(0, numPosts).map(node => (
+            {recentPosts.slice(0, numPosts).map(node => (
                 <ListItem key={node.id} css={cssItem}>
                     <HoverBox>
                         <Link to={node.fields.slug}>

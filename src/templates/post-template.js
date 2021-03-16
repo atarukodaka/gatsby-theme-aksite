@@ -7,6 +7,7 @@ import Layout from "../components/Layout"
 import Post from "../components/Post"
 import SEO from '../components/SEO'
 import PrevNextPost from '../components/PrevNextPost'
+import RelevantPosts from '../components/RelevantPosts'
 
 export const post_query = graphql`
     query ($slug: String!) {
@@ -29,10 +30,6 @@ const Siblings = ({ nodes }) => (
   </nav>
 )
 */
-const RelevantPosts = ( {node} ) => (
-  <></>
-)
-
 export default function PostTemplate({ data, pageContext }) {
   console.log(`create/template: ${data.mdx.fields.slug}`)
   const node = data.mdx
@@ -58,8 +55,8 @@ export default function PostTemplate({ data, pageContext }) {
           <Typography variant="h3">Siblings on '{node.fields.directoryLabel}'</Typography>
           <Siblings nodes={siblings} />
         </>) */}
+        <h3>Relevant Posts</h3>
         <RelevantPosts node={node}/>
-        <Divider />
         <PrevNextPost node={node}/>
       </nav>
     </Layout>
