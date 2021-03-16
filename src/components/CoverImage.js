@@ -25,7 +25,7 @@ const CoverImage = ({ node, size = "regular", imageSize="80px", ...props }) => {
 const cssWrapperWide = css`
     .gatsby-image-wrapper {
         width: 100%;
-        height: 300px;
+        height: 200px;
 }
 `
 

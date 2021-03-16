@@ -1,6 +1,10 @@
 
 # Change Log
 
+## [1.0.2] - tbd
+### Added
+- Callout (mdx)
+
 ## [1.0.1] - 2021-03-16
 ### Fixed
 - post でdirectory 参照してるとこでタイポのためリンクが undefined に

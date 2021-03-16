@@ -13,7 +13,6 @@ import CoverImage from './CoverImage'
 import PageTitle from './PageTitle'
 import useSiteMetadata from '../hooks/useSiteMetadata'
 
-
 const Description = styled.div`
     padding: 1rem;  
 `
@@ -63,9 +62,7 @@ const Post = ({ node }) => {
                 </RenderMDX>
             </Main>
             <Footer>
-                <ShareSNS url={`${siteUrl}${pathname}`}
-                    title={node.fields.postTitle} />
-
+                <ShareSNS url={`${siteUrl}${pathname}`} title={node.fields.postTitle} />
             </Footer>
         </div>
     )
