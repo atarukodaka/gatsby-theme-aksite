@@ -2,7 +2,7 @@
   "name": "gatsby-theme-aksite",
   "private": true,
   "description": "A simplified bare-bones starter for Gatsby",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "gatsby-config.js",
   "license": "0BSD",
   "author": "Ataru KODAKA",
