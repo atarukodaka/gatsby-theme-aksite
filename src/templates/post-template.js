@@ -1,7 +1,7 @@
 import React from "react"
 import { graphql } from "gatsby"
-import Breadcrumb from '../components/Breadcrumb'
 
+import Breadcrumb from '../components/Breadcrumb'
 import Layout from "../components/Layout"
 import Post from "../components/Post"
 import SEO from '../components/SEO'

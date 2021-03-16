@@ -8,7 +8,7 @@ const Callout = ( {variant="info", children} ) => {
     const variants = {
         info: {
             fontSize: "1.1rem",
-            padding: "0.1rem"
+            padding: "0.5rem"
         },
         shout: {
             boxShadow: 1,

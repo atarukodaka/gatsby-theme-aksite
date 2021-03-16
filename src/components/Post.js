@@ -5,6 +5,7 @@ import { MDXRenderer } from "gatsby-plugin-mdx"
 import { useLocation } from "@reach/router"
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
+import Box from '@material-ui/core/Box'
 
 import DirectoryBox from './DirectoryBox'
 import MdxComponents from './MdxComponents'
