@@ -1,25 +1,38 @@
+A Gatsby theme for creating a portfolio site.
 
-## Custumized Gatsby Theme
+## Installation
+### For a new site
+
+If you're creating a new site and want to use the blog theme, you can use the blog theme starter. This will generate a new site that pre-configures use of the blog theme.
 
 ```shell
-cd your-gatsby-site
-yarn add https://github.com/atarukodaka/gatsby-theme-aksite
-
+gatsby new my-themed-blog https://github.com/foobar/..
 ```
 
-1.  **Start developing.**
+### For an existing site
 
-    Navigate into your new site’s directory and start it up.
+If you already have a site you'd like to add the blog theme to, you can manually configure it.
 
-    ```shell
-    cd my-site/
-    gatsby develop
-    ```
+1. Install the blog theme
 
-1.  **Open the source code and start editing!**
+```shell
+npm install http://github.com/atarukodaka/gatsby-theme-aksite
+```
 
-    Your site is now running at `http://localhost:8000`!
+2. Add the configuration to your `gatsby-config.js` file
 
-    _Note: You'll also see a second link: _`http://localhost:8000/___graphql`_. This is a tool you can use to experiment with querying your data. Learn more about using this tool in the [Gatsby tutorial](https://www.gatsbyjs.com/tutorial/part-five/#introducing-graphiql)._
+```js
+// gatsby-config.js
+module.exports = {
+  plugins: [
+    {
+      resolve: `gatsby-theme-aksite`,
+      options: {
+          contentPath: `content/posts`
+      },
+    },
+  ],
+}
+```
 
-    Open the `my-site` directory in your code editor of choice and edit `src/pages/index.js`. Save your changes and the browser will update in real time!
+### Whats Inside
