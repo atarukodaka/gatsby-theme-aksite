@@ -31,7 +31,7 @@ export default function PostTemplate({ data, pageContext }) {
   return (
     <Layout tableOfContents={node.tableOfContents} >
       <SEO title={title} description={description} cover={cover} />
-      <Breadcrumb crumbs={crumbs} crumbLabel={title} />
+      <Breadcrumb crumbs={crumbs} />
 
       <Post node={node}/>      
       <nav>        
