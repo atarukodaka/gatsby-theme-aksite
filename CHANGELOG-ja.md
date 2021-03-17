@@ -4,6 +4,7 @@
 ## [1.0.2] - tbd
 ### Added
 - Callout (mdx)
+- themeOption (contentPath, itemsPerPage など）を指定可
 
 ## [1.0.1] - 2021-03-16
 ### Fixed

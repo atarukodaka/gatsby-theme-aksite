@@ -4,18 +4,15 @@ const mkdirp = require(`mkdirp`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
 const { paginate } = require('gatsby-awesome-pagination');
 
+const withDefaults = require('./src/utils/default_options')
 const { monthlyArchivePath, directoryArchivePath, listArchivePath,  } = require('./src/utils/archive_path');
 
-const itemsPerPage = 10
 const templateDir = "./src/templates"
 
 exports.onPreBootstrap = ({store}, themeOptions) => {
+    const { contentPath, assetPath } = withDefaults(themeOptions) 
     const { program } = store.getState()
 
-    basePath = themeOptions.basePath || `/`
-    contentPath = themeOptions.contentPath || `content/posts`
-    assetPath = themeOptions.assetPath || `content/assets`
-  
     const dirs = [path.join(program.directory, contentPath), 
         path.join(program.directory, assetPath)]
   
@@ -119,7 +116,6 @@ const createMdxPages = ({ nodes, actions }) => {
 const createTopPage = ( {nodes, actions }) => {
     const node = (nodes) ? nodes[0] : null    
     if (node == null){ return }
-    
 
     console.log("** top page", node.fields.slug, node.frontmatter.draft)
     const { createPage } = actions
@@ -133,14 +129,14 @@ const createTopPage = ( {nodes, actions }) => {
 }
 ////////////////
 // list archives
-const createListArchives = ({ nodes, actions }) => {
+const createListArchives = ({ nodes, actions }, options) => {
     console.log("** list archives")
     const { createPage } = actions
     const template = `${templateDir}/list_archive-template.js`
     paginate({
         createPage,
         items: nodes,
-        itemsPerPage: itemsPerPage,
+        itemsPerPage: options.itemsPerPage,
         //pathPrefix: ({ pageNumber }) => (pageNumber === 0 ? "/" : "/page"),
         pathPrefix: listArchivePath(), 
         component: require.resolve(template),
@@ -148,7 +144,7 @@ const createListArchives = ({ nodes, actions }) => {
 }
 ////////////////
 // directory archvies
-const createDirectoryArchives = ({ nodes, actions }) => {
+const createDirectoryArchives = ({ nodes, actions }, options) => {
     console.log("** creating directory index")
     const { createPage } = actions
     const directories = [...new Set(nodes.map(node => node.fields.directory))]
@@ -159,7 +155,7 @@ const createDirectoryArchives = ({ nodes, actions }) => {
         paginate({
             createPage,
             items: items,
-            itemsPerPage: itemsPerPage,
+            itemsPerPage: options.itemsPerPage,
             //pathPrefix: `/${directory}`,
             pathPrefix: directoryArchivePath(directory),
             component: require.resolve(template),
@@ -174,7 +170,7 @@ const createDirectoryArchives = ({ nodes, actions }) => {
 }
 ////////////////
 // monthly archive
-const createMonthlyArchives = ({ nodes, actions }) => {
+const createMonthlyArchives = ({ nodes, actions }, options) => {
     console.log("** creating monthly archives")
     const { createPage } = actions
     const yearMonths = new Set(nodes.filter(v => v.frontmatter.yearmonth).map(node => node.frontmatter.yearmonth))
@@ -191,7 +187,7 @@ const createMonthlyArchives = ({ nodes, actions }) => {
         paginate({
             createPage,
             items: items,
-            itemsPerPage: itemsPerPage,
+            itemsPerPage: options.itemsPerPage,
             pathPrefix: monthlyArchivePath(year, month),
             component: require.resolve(`${templateDir}/monthly_archive-template.js`),
             context: {
@@ -205,7 +201,7 @@ const createMonthlyArchives = ({ nodes, actions }) => {
     })
 }
 ////////////////
-exports.createPages = async ({ graphql, actions }) => {
+exports.createPages = async ({ graphql, actions }, themeOptions) => {
     const { data: { mdxPages } } = await graphql(`
     {
         mdxPages: allMdx (filter: {frontmatter: {draft: {ne: true} } },
@@ -226,10 +222,12 @@ exports.createPages = async ({ graphql, actions }) => {
     }`)
 
     // create pages
+    const options = withDefaults(themeOptions)
+
     createMdxPages({ nodes: mdxPages.nodes, actions: actions})
     createTopPage( { nodes: mdxPages.nodes, actions: actions })
     //createIndexPagination({ nodes: mdxPages.nodes, actions: actions})
-    createListArchives({ nodes: mdxPages.nodes, actions: actions})
-    createDirectoryArchives({ nodes: mdxPages.nodes, actions: actions})
-    createMonthlyArchives({ nodes: mdxPages.nodes, actions: actions})
+    createListArchives({ nodes: mdxPages.nodes, actions: actions}, options)
+    createDirectoryArchives({ nodes: mdxPages.nodes, actions: actions}, options)
+    createMonthlyArchives({ nodes: mdxPages.nodes, actions: actions}, options)
 }
