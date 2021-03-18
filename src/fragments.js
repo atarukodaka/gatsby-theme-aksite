@@ -7,7 +7,7 @@ fragment postFields on Mdx {
   id
   excerpt(pruneLength: 100)
   frontmatter {
-    date(formatString: "YYYY-MM-DD"), title, description
+    date(formatString: "YYYY-MM-DD"), title, description, tags
     draft
     cover {
       childImageSharp {
