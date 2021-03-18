@@ -13,6 +13,7 @@ const withDefaults = require('./src/utils/default_options')
 
 module.exports = (themeOptions) => {
   const options = withDefaults(themeOptions)
+  //console.log("options", options)
   const crumbLabelUpdates = (options.directoryLabels) ? Object.keys(options.directoryLabels).map(k => {
     return { pathname: k, crumbLabel: options.directoryLabels[k] }
   }) : []

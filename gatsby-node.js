@@ -3,6 +3,7 @@ const path = require(`path`)
 const mkdirp = require(`mkdirp`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
 const { paginate } = require('gatsby-awesome-pagination');
+const { urlResolve } = require(`gatsby-core-utils`)
 
 const withDefaults = require('./src/utils/default_options')
 const { monthlyArchivePath, directoryArchivePath, tagArchivePath, listArchivePath,  } = require('./src/utils/archive_path');
@@ -99,13 +100,15 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
 }
 ////////////////////////////////////////////////////////////////
 // markdown pages
-const createMdxPages = ({ nodes, actions }) => {
+const createMdxPages = ({ nodes, actions }, options) => {
     console.log("** all markdown pages")
     const { createPage } = actions
     const template = `${templateDir}/post-template.js`
+    
     nodes.forEach(node => {
+        console.log("mdx page path", urlResolve(options.basePath, node.fields.slug))
         createPage({
-            path: node.fields.slug,
+            path: urlResolve(options.basePath, node.fields.slug),
             component: require.resolve(template),
             context: {
                 slug: node.fields.slug,
@@ -115,14 +118,14 @@ const createMdxPages = ({ nodes, actions }) => {
 }
 ////////////////
 // top page
-const createTopPage = ( {nodes, actions }) => {
+const createTopPage = ( {nodes, actions }, options) => {
     const node = (nodes) ? nodes[0] : null    
     if (node == null){ return }
 
     console.log("** top page", node.fields.slug, node.frontmatter.draft)
     const { createPage } = actions
     createPage({
-        path: "/", 
+        path: options.basePath,
         component: require.resolve(`${templateDir}/post-template.js`),
         context: {
             slug: node.fields.slug
@@ -255,8 +258,8 @@ exports.createPages = async ({ graphql, actions }, themeOptions) => {
     // create pages
     const options = withDefaults(themeOptions)
 
-    createMdxPages({ nodes: mdxPages.nodes, actions: actions})
-    createTopPage( { nodes: mdxPages.nodes, actions: actions })
+    createMdxPages({ nodes: mdxPages.nodes, actions: actions}, options)
+    createTopPage( { nodes: mdxPages.nodes, actions: actions }, options)
     //createIndexPagination({ nodes: mdxPages.nodes, actions: actions})
     createListArchives({ nodes: mdxPages.nodes, actions: actions}, options)
     createDirectoryArchives({ nodes: mdxPages.nodes, actions: actions}, options)
