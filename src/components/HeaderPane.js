@@ -14,6 +14,7 @@ import Profile from './Profile'
 import MonthlyArchives from './MonthlyArchives'
 import DirectoryTree from './DirectoryTree'
 import GoogleSearch from './GoogleSearch'
+import TagList from './TagList'
 import theme from '../styles/theme'
 import useSiteMetadata from '../hooks/useSiteMetadata'
 
@@ -73,6 +74,8 @@ const HeaderPane = () => {
                         <Divider />
                         <h3>Monthly</h3>
                         <MonthlyArchives />
+                        <h3>Tags</h3>
+                        <TagList/>
                     </nav>
                 </div>
             </Drawer>

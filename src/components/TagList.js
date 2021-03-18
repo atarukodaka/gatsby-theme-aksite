@@ -10,7 +10,7 @@ const clickHandler = (tag) => {
     navigate(tagArchivePath(tag))
 }
 
-const TagList = () => {
+const TagList = ( props) => {
     const query = graphql`
     {
         tags: allMdx(filter: {frontmatter: {draft: {ne: true} }}){
@@ -23,7 +23,7 @@ const TagList = () => {
     `
     const { tags } = useStaticQuery(query)
     return (
-        <div>
+        <div {...props}>
             {tags.group.sort((a,b)=>{return b.totalCount-a.totalCount}).map(node=>(
                 <Badge badgeContent={node.totalCount} color="primary">
                 <Chip color="primary" variant="outlined" label={node.tag} onClick={()=> {clickHandler(node.tag)}}/>

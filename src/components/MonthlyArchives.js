@@ -29,7 +29,7 @@ const createMonthlyArchiveList = (  nodes  ) => {
     return list
 }
 
-const MonthlyArchives = (  ) => {
+const MonthlyArchives = ( props ) => {
     const allMdx = useAllPosts()
     const list = createMonthlyArchiveList(allMdx.nodes)
     const years = [...new Set(list.map(v=>v.year))].sort((a, b) => b-a)
@@ -42,6 +42,7 @@ const MonthlyArchives = (  ) => {
         defaultCollapseIcon={<ExpandMoreIcon />}
         defaultExpandIcon={<ChevronRightIcon />}
         defaultExpanded={defaultExpanded}
+        {...props}
     >
             {
                 years.map(year=>{
