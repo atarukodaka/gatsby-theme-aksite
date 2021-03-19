@@ -5,7 +5,6 @@ import { MDXRenderer } from "gatsby-plugin-mdx"
 import { useLocation } from "@reach/router"
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import Box from '@material-ui/core/Box'
 import Chip from '@material-ui/core/Chip'
 
 import DirectoryBox from './DirectoryBox'
@@ -53,9 +52,8 @@ const clickHandler = (tag) => {
 const Tags = ({node}) => {
     if (node.frontmatter.tags === null) { return null }
 
-    return node.frontmatter.tags.map(tag => (<Chip label={tag} color="primary" variant="outlined" onClick={() => {clickHandler(tag)}} />))
-    
-
+    return node.frontmatter.tags.map(tag => 
+        (<Chip label={tag} color="primary" variant="outlined" onClick={() => {clickHandler(tag)}} />))
 }
 const Post = ({ node }) => {
     const { pathname } = useLocation()

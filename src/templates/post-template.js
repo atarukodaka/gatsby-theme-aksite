@@ -19,19 +19,21 @@ export const post_query = graphql`
 
 `
 
-export default function PostTemplate({ data, pageContext }) {
+export default function PostTemplate({ data, pageContext, location }) {
   console.log(`create/template: ${data.mdx.fields.slug}`)
   const node = data.mdx
-  const { breadcrumb: { crumbs } } = pageContext
+  const { isRoot, breadcrumb: { crumbs } } = pageContext
 
   const title = node.fields.postTitle || node.frontmatter.title
   const description = node.frontmatter.description || node.excerpt
   const cover = node.frontmatter.cover?.publicURL
+  const crumbLabel = (isRoot) ? null : node.fields.postTitle
 
   return (
     <Layout tableOfContents={node.tableOfContents} >
+      
       <SEO title={title} description={description} cover={cover} />
-      <Breadcrumb crumbs={crumbs} />
+      <Breadcrumb crumbs={crumbs} crumbLabel={crumbLabel}/>
 
       <Post node={node}/>      
       <nav>        

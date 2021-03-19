@@ -1,5 +1,4 @@
 import React from 'react'
-import Box from '@material-ui/core/Box'
 import Hidden from '@material-ui/core/Hidden'
 import { Link } from 'gatsby'
 import Grid from '@material-ui/core/Grid'
@@ -7,9 +6,9 @@ import HoverBox from '../components/HoverBox'
 import Card from '../components/Card'
 import useAllPosts from '../hooks/useAllPosts'
 
-const NavigateBox = ({ to, text }) => (
+const NavigateBox = ({ to, text, ...props }) => (
     <>
-        <HoverBox>
+        <HoverBox {...props}>
             <Link to={to}>
                 <Card>
                     {text}
@@ -22,7 +21,7 @@ const NavigateBox = ({ to, text }) => (
 
 const PrevPost = ({ node }) => {
     return (node) ? 
-        (<NavigateBox to={node.fields.slug} text={`${node.fields.postTitle}》`}/>)
+        (<NavigateBox to={node.fields.slug} text={`${node.fields.postTitle}》`}  style={{textAlign: "right"}}/>)
          :  null
 }
 

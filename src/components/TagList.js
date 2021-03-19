@@ -25,7 +25,7 @@ const TagList = ( props) => {
     return (
         <div {...props}>
             {tags.group.sort((a,b)=>{return b.totalCount-a.totalCount}).map(node=>(
-                <Badge badgeContent={node.totalCount} color="primary">
+                <Badge badgeContent={node.totalCount} color="primary" key={node.id}>
                 <Chip color="primary" variant="outlined" label={node.tag} onClick={()=> {clickHandler(node.tag)}}/>
                 </Badge>
                 ))

@@ -128,7 +128,8 @@ const createTopPage = ( {nodes, actions }, options) => {
         path: options.basePath,
         component: require.resolve(`${templateDir}/post-template.js`),
         context: {
-            slug: node.fields.slug
+            slug: node.fields.slug,
+            isRoot: true,
         }
     })
 }

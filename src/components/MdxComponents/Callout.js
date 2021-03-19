@@ -1,8 +1,5 @@
 import React from 'react'
 import Box from '@material-ui/core/Box'
-import { css } from '@emotion/react'
-
-import theme from '../../styles/theme'
 
 const Callout = ( {variant="info", children} ) => {
     const variants = {
