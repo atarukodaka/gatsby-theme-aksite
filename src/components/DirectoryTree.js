@@ -16,6 +16,12 @@ const query = graphql`
             fields { slug, directory, directoryLabel}
         }
     }
+    directories: allAksDirectory {
+        nodes {
+            id
+            name, label, fullLabel, pagePath
+        }
+    }
 }
 `
 
