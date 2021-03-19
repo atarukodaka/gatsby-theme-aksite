@@ -48,6 +48,7 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             label: String
             fullLabel: String
             pagePath: String
+            numberOfPosts: Int
         }    
     `);
 };
@@ -94,7 +95,6 @@ const getDirectoryFullLabel = (directory, labels) => {
 
 exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
     const { createNodeField } = actions
-
 
     if (node.internal.type === `Mdx`) {
         const slug = createFilePath({ node, getNode })
@@ -180,6 +180,54 @@ const createListArchives = ({ nodes, actions }, options) => {
     })
 }
 ////////////////
+// directory archvies
+const createDirectoryArchives = ({ nodes, actions }, options) => {
+    console.log("** creating directory index")
+    const { createPage, createNode } = actions
+    const directories = [...new Set(nodes.map(node => node.fields.directory))]
+    directories.filter(v=>!!v).forEach(directory => {
+        const re = new RegExp(`^${directory}`)
+        const items = nodes.filter(node => re.test(node.fields.directory))
+        const template = `${templateDir}/directory_archive-template.js`
+        paginate({
+            createPage,
+            items: items,
+            itemsPerPage: options.itemsPerPage,
+            //pathPrefix: `/${directory}`,
+            pathPrefix: directoryArchivePath(directory),
+            component: require.resolve(template),
+            context: {
+                archive: 'directory',
+                directory: directory,
+                regex: re.toString(),
+                //count: nodes.length
+            }
+        })
+        // register the directory into node
+        //console.log("options", options)
+        
+        const item = { name: directory,
+            label: getDirectoryLabel(directory, options.directoryLabels),
+            fullLabel: getDirectoryFullLabel(directory, options.directoryLabels),
+            pagePath: directoryArchivePath(directory),
+            numberOfPosts: nodes.filter(v=>re.test(v.fields.directory)).length
+         }
+         console.log("item", item)
+        createNode({
+            id: `gatsby-theme-aksite-directory-${directory}`,
+            parent: null,
+            children: [],
+            ...item,
+            internal: {
+                type: `AksDirectory`,
+                contentDigest: createContentDigest(item),
+                content: JSON.stringify(item),
+              },                    
+        })
+    })
+}
+
+////////////////
 // tag archvies
 const createTagArchives = ({ nodes, actions, tags }, options) => {
     console.log("** creating tag archive")
@@ -202,52 +250,6 @@ const createTagArchives = ({ nodes, actions, tags }, options) => {
         })
     })
 }
-////////////////
-// directory archvies
-const createDirectoryArchives = ({ nodes, actions }, options) => {
-    console.log("** creating directory index")
-    const { createPage, createNode } = actions
-    const directories = [...new Set(nodes.map(node => node.fields.directory))]
-    directories.forEach(directory => {
-        const re = new RegExp(`^${directory}`)
-        const items = nodes.filter(node => re.test(node.fields.directory))
-        const template = `${templateDir}/directory_archive-template.js`
-        paginate({
-            createPage,
-            items: items,
-            itemsPerPage: options.itemsPerPage,
-            //pathPrefix: `/${directory}`,
-            pathPrefix: directoryArchivePath(directory),
-            component: require.resolve(template),
-            context: {
-                archive: 'directory',
-                directory: directory,
-                regex: re.toString(),
-                //count: nodes.length
-            }
-        })
-        // register the directory into node
-        //console.log("options", options)
-        const item = { name: directory,
-            label: getDirectoryLabel(directory, options.directoryLabels),
-            fullLabel: getDirectoryFullLabel(directory, options.directoryLabels),
-            pagePath: directoryArchivePath(directory)
-         }
-
-        createNode({
-            id: `gatsby-theme-aksite-directory-${directory}`,
-            parent: null,
-            children: [],
-            ...item,
-            internal: {
-                type: `AksDirectory`,
-                contentDigest: createContentDigest(item),
-                content: JSON.stringify(item),
-              },                    
-        })
-    })
-}
-
 ////////////////
 // monthly archive
 const createMonthlyArchives = ({ nodes, actions }, options) => {
