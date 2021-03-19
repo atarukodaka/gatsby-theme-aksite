@@ -1,5 +1,5 @@
 import React from "react"
-import { Link, navigate } from "gatsby"
+import { Link, navigate, useStaticQuery } from "gatsby"
 import { MDXProvider } from "@mdx-js/react"
 import { MDXRenderer } from "gatsby-plugin-mdx"
 import { useLocation } from "@reach/router"
@@ -13,7 +13,7 @@ import ShareSNS from './ShareSNS'
 import CoverImage from './CoverImage'
 import PageTitle from './PageTitle'
 import useSiteMetadata from '../hooks/useSiteMetadata'
-import { directoryArchivePath, tagArchivePath } from '../utils/archive_path'
+import { tagArchivePath } from '../utils/archive_path'
 
 const Description = styled.div`
     padding: 1rem;  
@@ -59,12 +59,28 @@ const Post = ({ node }) => {
     const { pathname } = useLocation()
     const { siteUrl } = useSiteMetadata()
 
+    const query = graphql`
+    {
+        directories: allAksDirectory { 
+            nodes {
+                id, name, label, fullLabel, pagePath, numberOfPosts
+            }
+        }
+    }
+    `
+    const data = useStaticQuery(query)
+    const dir_node = data.directories.nodes.find(v=>v.name === node.fields.directory)
+    
+    console.log("directory node", dir_node)
+    //const { label, fullLabel, pagePath } = directory_node
     return (
         <div css={cssPost}>
             <Header>
                 <div>
                     {node.frontmatter.date}
-                    <DirectoryBox><Link to={directoryArchivePath(node.fields.directory)}>{node.fields.directoryFullLabel}</Link></DirectoryBox>
+                    {(dir_node) ? 
+                        (<DirectoryBox><Link to={dir_node.pagePath}>{dir_node.fullLabel}</Link></DirectoryBox>)
+                        : null}
                 </div>
                 <PageTitle><Link to={node.fields.slug}>{node.fields.postTitle}</Link></PageTitle>
                 <Tags node={node}/>
