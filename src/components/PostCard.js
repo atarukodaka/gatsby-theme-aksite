@@ -43,8 +43,7 @@ export const PostCard = ({ node }) => {
                 <CoverImage node={node} size="small" />
                 <Box ml={12}>
                     <Date>{node.frontmatter.date}</Date>
-                    {dir_node &&
-                    (<DirectoryBox>{dir_node.fullLabel}</DirectoryBox>)}
+                    <DirectoryBox directory={node.fields.directory}/>
                     <Title>{node.fields.postTitle}</Title>
                     {node.frontmatter.description || node.excerpt}
                     <ClearImage />

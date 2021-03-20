@@ -1,6 +1,6 @@
 import React from "react"
+import { useStaticQuery, Link } from 'gatsby'
 import { css } from '@emotion/react'
-import PropTypes from 'prop-types'
 import Typography from '@material-ui/core/Typography'
 
 import theme from '../styles/theme'
@@ -24,16 +24,31 @@ const cssDirectoryBox = css`
 
 `
 
-const DirectoryBox = ({ node, children, ...rest }) => (
-    <div css={cssDirectoryBox} {...rest}>
+const DirectoryBox = ({ directory, enableLink, ...rest }) => {
+    const query = graphql`
+    {
+        directories: allAksDirectory { 
+            nodes {
+                id, name, label, fullLabel, pagePath, numberOfPosts
+            }
+        }
+    }
+    `
+    const data = useStaticQuery(query)
+    const dir_node = data.directories.nodes.find(v => v.name === directory)
+    const FullLabel = ({ dir_node }) => (
         <Typography variant="caption">
-            {children}
+            {dir_node.fullLabel}
         </Typography>
-    </div>
-)
+    )
 
-DirectoryBox.prototype = {
-    directory: PropTypes.string.isRequired,
+    return (dir_node) ?
+        (<div css={cssDirectoryBox} {...rest}>
+            { (enableLink) ?
+                (<Link to={dir_node.pagePath}><FullLabel dir_node={dir_node} /></Link>)
+                : (<FullLabel dir_node={dir_node} />)
+            }
+        </div>)
+        : null
 }
-
 export default DirectoryBox

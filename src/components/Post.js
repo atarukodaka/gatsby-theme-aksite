@@ -59,28 +59,12 @@ const Post = ({ node }) => {
     const { pathname } = useLocation()
     const { siteUrl } = useSiteMetadata()
 
-    const query = graphql`
-    {
-        directories: allAksDirectory { 
-            nodes {
-                id, name, label, fullLabel, pagePath, numberOfPosts
-            }
-        }
-    }
-    `
-    const data = useStaticQuery(query)
-    const dir_node = data.directories.nodes.find(v=>v.name === node.fields.directory)
-    
-    console.log("directory node", dir_node)
-    //const { label, fullLabel, pagePath } = directory_node
     return (
         <div css={cssPost}>
             <Header>
                 <div>
                     {node.frontmatter.date}
-                    {(dir_node) ? 
-                        (<DirectoryBox><Link to={dir_node.pagePath}>{dir_node.fullLabel}</Link></DirectoryBox>)
-                        : null}
+                    <DirectoryBox directory={node.fields.directory} enableLink={true}/>
                 </div>
                 <PageTitle><Link to={node.fields.slug}>{node.fields.postTitle}</Link></PageTitle>
                 <Tags node={node}/>
