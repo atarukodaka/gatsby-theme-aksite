@@ -3,10 +3,11 @@ const path = require(`path`)
 const mkdirp = require(`mkdirp`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
 const { paginate } = require('gatsby-awesome-pagination');
-const { urlResolve } = require(`gatsby-core-utils`)
+const { urlResolve, createContentDigest } = require(`gatsby-core-utils`)
 
 const withDefaults = require('./src/utils/default_options')
 const { monthlyArchivePath, directoryArchivePath, tagArchivePath, listArchivePath,  } = require('./src/utils/archive_path');
+const { navigate } = require('gatsby-link');
 
 const templateDir = "./src/templates"
 
@@ -43,26 +44,58 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             title: String
             number: Int
         }
+        type AksDirectory implements Node {
+            name: String
+            label: String
+            fullLabel: String
+            pagePath: String
+            numberOfPosts: Int
+        }    
     `);
 };
 
+/*
+exports.sourceNodes = ({ actions: { createTypes, createNode } } ) => {
+    createTypes(`type AksDirectory implements Node {
+        name: String
+        label: String
+        fullLabel: String
+        PagePath: String
+    }`)
+
+    const item = { name: "foo", label: "label", fullLabel: "FULLLABEL"}
+    createNode({
+        id: `gatsby-theme-aks-directory`,
+        parent: null,
+        children: [],
+        ...item,
+        internal: {
+            type: `AksDirectory`,
+            contentDigest: createContentDigest(item),
+            content: JSON.stringify(item),
+          },        
+    }
+    )
+}
+*/
+const getDirectoryLabel = (directory, labels) => {
+    const last = directory.split('/').pop()
+    //console.log("getdirecotyrlabel", directory, labels, last)
+    return (labels) ? labels['/' + directory] || last : last
+}
+const getDirectoryFullLabel = (directory, labels) => {
+    if (labels === undefined) { return directory }
+    let i = 0
+
+    const parts = directory.split('/')
+    return parts.map(v => {
+        i = i + 1
+        return labels[`/${parts.slice(0, i).join('/')}`] || v
+    }).join('/')
+}
+
 exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
     const { createNodeField } = actions
-
-    const getDirectoryLabel = (directory, labels) => {
-        const last = directory.split('/').pop()
-        return (labels) ? labels['/' + directory] || last : last
-    }
-    const getDirectoryFullLabel = (directory, labels) => {
-        if (labels === undefined) { return directory }
-        let i = 0
-
-        const parts = directory.split('/')
-        return parts.map(v => {
-            i = i + 1
-            return labels[`/${parts.slice(0, i).join('/')}`] || v
-        }).join('/')
-    }
 
     if (node.internal.type === `Mdx`) {
         const slug = createFilePath({ node, getNode })
@@ -78,6 +111,7 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
             name: 'directory',
             value: directory
         })
+        /*
         createNodeField({
             node,
             name: 'directoryLabel',
@@ -88,6 +122,7 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
             name: 'directoryFullLabel',
             value: getDirectoryFullLabel(directory, themeOptions.directoryLabels)
         })
+        */
         const postTitle = (node.frontmatter.series) ?
             `${node.frontmatter.series.title}[${node.frontmatter.series.number}] ${node.frontmatter.title}` :
             node.frontmatter.title
@@ -106,9 +141,8 @@ const createMdxPages = ({ nodes, actions }, options) => {
     const template = `${templateDir}/post-template.js`
     
     nodes.forEach(node => {
-        console.log("mdx page path", urlResolve(options.basePath, node.fields.slug))
         createPage({
-            path: urlResolve(options.basePath, node.fields.slug),
+            path: urlResolve('/', node.fields.slug),
             component: require.resolve(template),
             context: {
                 slug: node.fields.slug,
@@ -125,7 +159,7 @@ const createTopPage = ( {nodes, actions }, options) => {
     console.log("** top page", node.fields.slug, node.frontmatter.draft)
     const { createPage } = actions
     createPage({
-        path: options.basePath,
+        path: '/',
         component: require.resolve(`${templateDir}/post-template.js`),
         context: {
             slug: node.fields.slug,
@@ -145,15 +179,67 @@ const createListArchives = ({ nodes, actions }, options) => {
         itemsPerPage: options.itemsPerPage,
         //pathPrefix: ({ pageNumber }) => (pageNumber === 0 ? "/" : "/page"),
         pathPrefix: listArchivePath(), 
-        component: require.resolve(template),
+        component: require.resolve(template)
     })
 }
+////////////////
+// directory archvies
+const createDirectoryArchives = ({ nodes, actions }, options) => {
+    console.log("** creating directory index")
+    const { createPage, createNode } = actions
+    const directories = [...new Set(nodes.map(node => node.fields.directory))]
+    directories.filter(v=>!!v).forEach(directory => {
+        const re = new RegExp(`^${directory}`)
+        const items = nodes.filter(node => re.test(node.fields.directory))
+        const template = `${templateDir}/directory_archive-template.js`
+        //        const pagePath = directoryArchivePath(directory)
+        const pagePath = `/${directory}`
+
+        paginate({
+            createPage,
+            items: items,
+            itemsPerPage: options.itemsPerPage,
+            //pathPrefix: `/${directory}`,
+            pathPrefix: pagePath,
+            component: require.resolve(template),
+            context: {
+                archive: 'directory',
+                directory: directory,
+                regex: re.toString(),
+                //count: nodes.length
+            }
+        })
+        // register the directory into node
+        //console.log("options", options)
+        
+
+        const item = { name: directory,
+            label: getDirectoryLabel(directory, options.directoryLabels),
+            fullLabel: getDirectoryFullLabel(directory, options.directoryLabels),
+            pagePath: pagePath,
+            numberOfPosts: nodes.filter(v=>re.test(v.fields.directory)).length
+         }
+         console.log("item", item)
+        createNode({
+            id: `gatsby-theme-aksite-directory-${directory}`,
+            parent: null,
+            children: [],
+            ...item,
+            internal: {
+                type: `AksDirectory`,
+                contentDigest: createContentDigest(item),
+                content: JSON.stringify(item),
+              },                    
+        })
+    })
+}
+
 ////////////////
 // tag archvies
 const createTagArchives = ({ nodes, actions, tags }, options) => {
     console.log("** creating tag archive")
     const { createPage } = actions
-    console.log("tags", tags)
+    //console.log("tags", tags)
     tags.group.forEach(node => {
         const tag = node.tag
         const items = nodes.filter(node => node.frontmatter.tags?.includes(tag))
@@ -167,32 +253,6 @@ const createTagArchives = ({ nodes, actions, tags }, options) => {
             context: {
                 archive: 'tag',
                 tag: tag
-            }
-        })
-    })
-}
-////////////////
-// directory archvies
-const createDirectoryArchives = ({ nodes, actions }, options) => {
-    console.log("** creating directory index")
-    const { createPage } = actions
-    const directories = [...new Set(nodes.map(node => node.fields.directory))]
-    directories.forEach(directory => {
-        const re = new RegExp(`^${directory}`)
-        const items = nodes.filter(node => re.test(node.fields.directory))
-        const template = `${templateDir}/directory_archive-template.js`
-        paginate({
-            createPage,
-            items: items,
-            itemsPerPage: options.itemsPerPage,
-            //pathPrefix: `/${directory}`,
-            pathPrefix: directoryArchivePath(directory),
-            component: require.resolve(template),
-            context: {
-                archive: 'directory',
-                directory: directory,
-                regex: re.toString(),
-                //count: nodes.length
             }
         })
     })
@@ -231,6 +291,7 @@ const createMonthlyArchives = ({ nodes, actions }, options) => {
 }
 ////////////////
 exports.createPages = async ({ graphql, actions }, themeOptions) => {
+
     const { data: { mdxPages, tags } } = await graphql(`
     {
         mdxPages: allMdx (filter: {frontmatter: {draft: {ne: true} } },

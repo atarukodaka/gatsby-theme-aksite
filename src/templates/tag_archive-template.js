@@ -1,6 +1,5 @@
 import React from "react"
 import { graphql, navigate } from "gatsby"
-//import { directoryArchivePath } from '../utils/archive_path'
 import ArchiveTemplate from './archive_template'
 
 export const query = graphql`
@@ -17,7 +16,6 @@ export const query = graphql`
     }
   `
 const handleChange = (tag, p) => {
-  //const path = directoryArchivePath(directory)
     const path = `/tag/${tag}/${p}`
   navigate((p === 1) ? path : `${path}/${p}`)
 }

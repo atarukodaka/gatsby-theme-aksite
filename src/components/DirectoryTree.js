@@ -4,8 +4,6 @@ import { TreeView, TreeItem } from '@material-ui/lab'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 
-import { directoryArchivePath } from '../utils/archive_path'
-
 const ListToTree = require('list-to-tree')
 
 const query = graphql`
@@ -16,14 +14,34 @@ const query = graphql`
             fields { slug, directory, directoryLabel}
         }
     }
+    directories: allAksDirectory {
+        nodes {
+            id
+            name, label, fullLabel, pagePath, numberOfPosts
+        }
+    }
 }
 `
 
 const DirectoryTree = () => {
     const data = useStaticQuery(query)
 
-    const list = []
+    //const list = []
 
+    const list = data.directories.nodes.map(node=>{
+        const parts = node.name.split('/')
+        parts.pop()
+        const parent_dir = parts.join('/')
+        
+        
+        return {id: node.name, parent: (parent_dir) ? parent_dir : 0,
+            name: node.name, label: node.label,
+            pagePath: node.pagePath,
+            numberOfPosts: node.numberOfPosts}
+    })
+    //console.log("directory list", list)
+
+    /*
     data.mdxPages.nodes.filter(v => v.fields.directory !== "").forEach(node => {
         const directory = node.fields.directory
         const item = list.find(v => v.name === directory)
@@ -41,6 +59,7 @@ const DirectoryTree = () => {
                 totalCount: data.mdxPages.nodes.filter(v => re.test(v.fields.directory)).length })
         }
     })
+    */
 
     const allNodeIds = list.map(v=> v.name)
     const tree = new ListToTree(list).GetTree() || []
@@ -60,10 +79,10 @@ const DirectoryTree = () => {
 
 const Tree = ({item}) =>  {
     return(
-    <TreeItem label={<>{item.label} ({item.totalCount})</>} nodeId={item.name} key={item.name}
+    <TreeItem label={<>{item.label} ({item.numberOfPosts})</>} nodeId={item.name} 
         onClick={() => {}} 
-        onLabelClick={(e) => {e.preventDefault(); navigate(directoryArchivePath(item.name))}}>
-        { item.child && ( item.child.map(v => (<Tree item={v}/>)) ) }
+        onLabelClick={(e) => {e.preventDefault(); navigate(item.pagePath)}}>
+        { item.child && ( item.child.map(v => (<Tree item={v} key={v.name}/>)) ) }
     </TreeItem>
 )
 }

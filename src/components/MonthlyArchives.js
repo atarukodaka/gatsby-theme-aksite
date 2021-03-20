@@ -65,10 +65,4 @@ const MonthlyArchives = ( props ) => {
     )
 }
 
-MonthlyArchives.propTypes = {
-    expandAll: PropTypes.bool,
-}
-MonthlyArchives.defaultProps = {
-    expandAll: false,
-}
 export default MonthlyArchives

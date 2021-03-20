@@ -22,7 +22,7 @@ fragment postFields on Mdx {
     }
   }        
   fields { 
-    slug, directory, directoryFullLabel, directoryLabel, postTitle
+    slug, directory, postTitle
   }
   tableOfContents
 }

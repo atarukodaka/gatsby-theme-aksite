@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'gatsby'
+import { useStaticQuery, Link } from 'gatsby'
 import styled from '@emotion/styled'
 import Box from '@material-ui/core/Box'
 
@@ -22,16 +22,30 @@ const ClearImage = styled.div`
     clear: both;
 `
 
-export const PostCard = ({ node }) => (
+export const PostCard = ({ node }) => {
+    const query = graphql`
+    {
+        directories: allAksDirectory { 
+            nodes {
+                id, name, label, fullLabel, pagePath, numberOfPosts
+            }
+        }
+    }
+    `
+    const data = useStaticQuery(query)
+    const dir_node = data.directories.nodes.find(v=>v.name === node.fields.directory)
+
+
+    return (
     <HoverBox>
         <Link to={node.fields.slug}>
             <Card>
                 <CoverImage node={node} size="small" />
                 <Box ml={12}>
                     <Date>{node.frontmatter.date}</Date>
-                    <DirectoryBox>{node.fields.directoryFullLabel}</DirectoryBox>
+                    {dir_node &&
+                    (<DirectoryBox>{dir_node.fullLabel}</DirectoryBox>)}
                     <Title>{node.fields.postTitle}</Title>
-                    
                     {node.frontmatter.description || node.excerpt}
                     <ClearImage />
                 </Box>
@@ -39,5 +53,5 @@ export const PostCard = ({ node }) => (
         </Link>
     </HoverBox>
 )
-
+    }
 export default PostCard
