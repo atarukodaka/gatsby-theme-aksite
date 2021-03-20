@@ -37,6 +37,7 @@ module.exports = (themeOptions) => {
         github: 'foobar',
       }      
     },
+    pathPrefix: '/blog',
     plugins: [
       `gatsby-transformer-sharp`,
       `gatsby-plugin-sharp`,
@@ -144,6 +145,7 @@ module.exports = (themeOptions) => {
           },
           crumbLabelUpdates: crumbLabelUpdates,
           //trailingSlashes: true,
+          usePathPrefix: '/blog'
         }
       },
       {

@@ -24,7 +24,7 @@ const ClearImage = styled.div`
 
 export const PostCard = ({ node }) => (
     <HoverBox>
-        <Link to={node.fields.slug}>
+        <Link to={node.fields.path}>
             <Card>
                 <CoverImage node={node} size="small" />
                 <Box ml={12}>

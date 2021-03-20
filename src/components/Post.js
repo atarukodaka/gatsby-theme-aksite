@@ -60,6 +60,7 @@ const Tags = ({node}) => {
 const Post = ({ node }) => {
     const { pathname } = useLocation()
     const { siteUrl } = useSiteMetadata()
+    console.log("path: ", node.fields.path)
 
     return (
         <div css={cssPost}>
@@ -68,7 +69,7 @@ const Post = ({ node }) => {
                     {node.frontmatter.date}
                     <DirectoryBox directory={node.fields.directory} enableLink={true}/>
                 </div>
-                <PageTitle><Link to={node.fields.slug}>{node.fields.postTitle}</Link></PageTitle>
+                <PageTitle><Link to={node.fields.path}>{node.fields.postTitle}</Link></PageTitle>
                 { /* <Tags node={node}/> */ }
                 <CoverImage node={node} />
                 <Description>{node.frontmatter.description}</Description>
