@@ -6,9 +6,6 @@ const { paginate } = require('gatsby-awesome-pagination');
 const { urlResolve, createContentDigest } = require(`gatsby-core-utils`)
 
 const withDefaults = require('./src/utils/default_options')
-//const { tagArchivePath, listArchivePath,  } = require('./src/utils/archive_path');
-//const { navigate } = require('gatsby-link');
-
 const templateDir = "./src/templates"
 
 exports.onPreBootstrap = ({store}, themeOptions) => {
@@ -118,7 +115,7 @@ const createMdxPages = ({ nodes, actions }, options) => {
     
     nodes.forEach(node => {
         createPage({
-            path: urlResolve('/', node.fields.slug),
+            path: urlResolve(options.basePath, node.fields.slug),
             component: require.resolve(template),
             context: {
                 slug: node.fields.slug,
@@ -135,7 +132,7 @@ const createTopPage = ( {nodes, actions }, options) => {
     console.log("** top page", node.fields.slug, node.frontmatter.draft)
     const { createPage } = actions
     createPage({
-        path: '/',
+        path: options.basePath,
         component: require.resolve(`${templateDir}/post-template.js`),
         context: {
             slug: node.fields.slug,
@@ -149,13 +146,13 @@ const createListArchives = ({ nodes, actions }, options) => {
     console.log("** list archives")
     const { createPage } = actions
     const template = `${templateDir}/list_archive-template.js`
-    const pagePath = "/list"
+    const pagePath = urlResolve(options.basePath, `/list`)
     paginate({
         createPage,
         items: nodes,
         itemsPerPage: options.itemsPerPage,
         //pathPrefix: ({ pageNumber }) => (pageNumber === 0 ? "/" : "/page"),
-        pathPrefix: listArchivePath(), 
+        pathPrefix: pagePath,
         component: require.resolve(template),
         context: {
             pagePath: pagePath
@@ -173,7 +170,7 @@ const createDirectoryArchives = ({ nodes, actions }, options) => {
         const items = nodes.filter(node => re.test(node.fields.directory))
         const template = `${templateDir}/directory_archive-template.js`
         //        const pagePath = directoryArchivePath(directory)
-        const pagePath = `/${directory}`
+        const pagePath = urlResolve(options.basePath, directory)
 
         paginate({
             createPage,
@@ -186,7 +183,6 @@ const createDirectoryArchives = ({ nodes, actions }, options) => {
                 archive: 'directory',
                 directory: directory,
                 regex: re.toString(),
-                //count: nodes.length
             }
         })
 
@@ -212,6 +208,7 @@ const createDirectoryArchives = ({ nodes, actions }, options) => {
 
 ////////////////
 // tag archvies
+/*
 const createTagArchives = ({ nodes, actions, tags }, options) => {
     console.log("** creating tag archive")
     const { createPage } = actions
@@ -235,6 +232,7 @@ const createTagArchives = ({ nodes, actions, tags }, options) => {
         })
     })
 }
+*/
 ////////////////
 // monthly archive
 const createMonthlyArchives = ({ nodes, actions }, options) => {
@@ -251,7 +249,7 @@ const createMonthlyArchives = ({ nodes, actions }, options) => {
             const dt = new Date(v.frontmatter.date); return fromDate <= dt && dt < toDate
         })
 
-        const pagePath = `/archives/${year}${month.toString().padStart(2,0)}`
+        const pagePath = urlResolve(options.basePath, `archives/${year}${month.toString().padStart(2,0)}`)
 
         paginate({
             createPage,
@@ -289,7 +287,7 @@ const createMonthlyArchives = ({ nodes, actions }, options) => {
 ////////////////
 exports.createPages = async ({ graphql, actions }, themeOptions) => {
 
-    const { data: { mdxPages, tags } } = await graphql(`
+    const { data: { mdxPages } } = await graphql(`
     {
         mdxPages: allMdx (filter: {frontmatter: {draft: {ne: true} } },
             sort: {fields: frontmatter___date, order: DESC}) {
@@ -306,12 +304,7 @@ exports.createPages = async ({ graphql, actions }, themeOptions) => {
                 }
             }            
         }
-        tags: allMdx (filter: {frontmatter: {draft: {ne: true} } }){
-            group(field: frontmatter___tags) {
-            tag: fieldValue
-            totalCount
-          }
-        }
+
     }`)
 
     // create pages
@@ -322,6 +315,15 @@ exports.createPages = async ({ graphql, actions }, themeOptions) => {
     //createIndexPagination({ nodes: mdxPages.nodes, actions: actions})
     createListArchives({ nodes: mdxPages.nodes, actions: actions}, options)
     createDirectoryArchives({ nodes: mdxPages.nodes, actions: actions}, options)
-    createTagArchives({ nodes: mdxPages.nodes, actions: actions, tags: tags}, options)
+    //createTagArchives({ nodes: mdxPages.nodes, actions: actions, tags: tags}, options)
     createMonthlyArchives({ nodes: mdxPages.nodes, actions: actions}, options)
+/*
+        tags: allMdx (filter: {frontmatter: {draft: {ne: true} } }){
+            group(field: frontmatter___tags) {
+            tag: fieldValue
+            totalCount
+          }
+        }
+*/        
+
 }
