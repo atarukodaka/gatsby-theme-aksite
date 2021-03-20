@@ -63,18 +63,21 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
     `);
 };
 
-const getDirectoryLabel = (directory, labels) => {
+const getDirectoryLabel = (directory, labels = []) => {
     const last = directory.split('/').pop()
-    return (labels) ? labels['/' + directory] || last : last
+    const item = labels.find(v=> directory === v.directory)
+    return item?.label || last
+    //return (item) ? item.label : "LAST"
+    //return (labels) ? labels['/' + directory] || last : last
 }
-const getDirectoryFullLabel = (directory, labels) => {
-    if (labels === undefined) { return directory }
+const getDirectoryFullLabel = (directory, labels = []) => {
     let i = 0
 
     const parts = directory.split('/')
-    return parts.map(v => {
+    return parts.map(part => {
         i = i + 1
-        return labels[`/${parts.slice(0, i).join('/')}`] || v
+        //return labels[`/${parts.slice(0, i).join('/')}`] || v
+        return labels.find(v=>v.directory === `${parts.slice(0, i).join('/')}`)?.label || part
     }).join('/')
 }
 
