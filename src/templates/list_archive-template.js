@@ -1,7 +1,6 @@
 import React from "react"
 import { graphql, navigate } from "gatsby"
 
-import { listArchivePath } from '../utils/archive_path'
 import ArchiveTemplate from './archive_template'
 
 export const data = graphql`

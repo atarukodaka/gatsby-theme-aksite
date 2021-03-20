@@ -6,7 +6,7 @@ const { paginate } = require('gatsby-awesome-pagination');
 const { urlResolve, createContentDigest } = require(`gatsby-core-utils`)
 
 const withDefaults = require('./src/utils/default_options')
-const { tagArchivePath, listArchivePath,  } = require('./src/utils/archive_path');
+//const { tagArchivePath, listArchivePath,  } = require('./src/utils/archive_path');
 //const { navigate } = require('gatsby-link');
 
 const templateDir = "./src/templates"
