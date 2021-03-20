@@ -1,3 +1,4 @@
+/*
 import React from "react"
 import { graphql, navigate } from "gatsby"
 import ArchiveTemplate from './archive_template'
@@ -35,3 +36,4 @@ export default function TagArchiveTemplate({ data, pageContext }) {
 
 
 }
+*/

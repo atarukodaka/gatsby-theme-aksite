@@ -6,7 +6,7 @@ import Profile from './Profile'
 import DirectoryTree from './DirectoryTree'
 import RecentPosts from './RecentPosts'
 import MonthlyArchives from './MonthlyArchives'
-import TagList from './TagList'
+//import TagList from './TagList'
 
 
 const Sidebar = () => {
@@ -32,10 +32,12 @@ const Sidebar = () => {
                 <MonthlyArchives />
             </Card>
             
+            {/*
             <Card>
                 <Typography variant="h3">Tags</Typography>
                 <TagList />
             </Card>
+            */}
         </div>
     )
 }

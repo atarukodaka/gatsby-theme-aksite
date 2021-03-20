@@ -1,3 +1,4 @@
+/*
 import React from 'react'
 import { useStaticQuery, graphql, navigate} from "gatsby"
 import Chip from '@material-ui/core/Chip'
@@ -37,3 +38,5 @@ const TagList = ( props) => {
 }
 
 export default TagList
+
+*/

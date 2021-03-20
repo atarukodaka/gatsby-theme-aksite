@@ -13,7 +13,7 @@ import ShareSNS from './ShareSNS'
 import CoverImage from './CoverImage'
 import PageTitle from './PageTitle'
 import useSiteMetadata from '../hooks/useSiteMetadata'
-import { tagArchivePath } from '../utils/archive_path'
+//import { tagArchivePath } from '../utils/archive_path'
 
 const Description = styled.div`
     padding: 1rem;  
@@ -45,6 +45,7 @@ const RenderMDX = ({ children }) => {
     )
 }
 
+/*
 const clickHandler = (tag) => {
     //alert(tag)
     navigate(tagArchivePath(tag))
@@ -55,6 +56,7 @@ const Tags = ({node}) => {
     return node.frontmatter.tags.map(tag => 
         (<Chip label={tag} color="primary" variant="outlined" onClick={() => {clickHandler(tag)}} />))
 }
+*/
 const Post = ({ node }) => {
     const { pathname } = useLocation()
     const { siteUrl } = useSiteMetadata()
@@ -67,7 +69,7 @@ const Post = ({ node }) => {
                     <DirectoryBox directory={node.fields.directory} enableLink={true}/>
                 </div>
                 <PageTitle><Link to={node.fields.slug}>{node.fields.postTitle}</Link></PageTitle>
-                <Tags node={node}/>
+                { /* <Tags node={node}/> */ }
                 <CoverImage node={node} />
                 <Description>{node.frontmatter.description}</Description>
             </Header>
