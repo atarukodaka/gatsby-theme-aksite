@@ -1,5 +1,6 @@
 import React from "react"
 import { graphql, navigate } from "gatsby"
+
 import ArchiveTemplate from './archive_template'
 
 export const query = graphql`
@@ -25,6 +26,8 @@ export const query = graphql`
   
 export default function DirectoryArchiveTemplate({ data, pageContext }) {
   const { breadcrumb: { crumbs } } = pageContext
+  //const { previousPagePath, nextPagePath } = pageContext
+  
   //const label = crumbs.slice(1).map(v => v.crumbLabel).join('/')
   const label = data.aksDirectory.label
   const title = `DIRECTORY: ${label}`

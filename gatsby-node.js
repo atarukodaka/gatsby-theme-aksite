@@ -7,7 +7,7 @@ const { urlResolve, createContentDigest } = require(`gatsby-core-utils`)
 
 const withDefaults = require('./src/utils/default_options')
 const { tagArchivePath, listArchivePath,  } = require('./src/utils/archive_path');
-const { navigate } = require('gatsby-link');
+//const { navigate } = require('gatsby-link');
 
 const templateDir = "./src/templates"
 
@@ -58,36 +58,16 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             pagePath: String
             numberOfPosts: Int
         }
+        type AksConfig implements Node {
+            basePath: String
+            contentPath: String
+            listPath: String
+        }
     `);
 };
 
-/*
-exports.sourceNodes = ({ actions: { createTypes, createNode } } ) => {
-    createTypes(`type AksDirectory implements Node {
-        name: String
-        label: String
-        fullLabel: String
-        PagePath: String
-    }`)
-
-    const item = { name: "foo", label: "label", fullLabel: "FULLLABEL"}
-    createNode({
-        id: `gatsby-theme-aks-directory`,
-        parent: null,
-        children: [],
-        ...item,
-        internal: {
-            type: `AksDirectory`,
-            contentDigest: createContentDigest(item),
-            content: JSON.stringify(item),
-          },        
-    }
-    )
-}
-*/
 const getDirectoryLabel = (directory, labels) => {
     const last = directory.split('/').pop()
-    //console.log("getdirecotyrlabel", directory, labels, last)
     return (labels) ? labels['/' + directory] || last : last
 }
 const getDirectoryFullLabel = (directory, labels) => {
@@ -169,13 +149,17 @@ const createListArchives = ({ nodes, actions }, options) => {
     console.log("** list archives")
     const { createPage } = actions
     const template = `${templateDir}/list_archive-template.js`
+    const pagePath = "/list"
     paginate({
         createPage,
         items: nodes,
         itemsPerPage: options.itemsPerPage,
         //pathPrefix: ({ pageNumber }) => (pageNumber === 0 ? "/" : "/page"),
         pathPrefix: listArchivePath(), 
-        component: require.resolve(template)
+        component: require.resolve(template),
+        context: {
+            pagePath: pagePath
+        }
     })
 }
 ////////////////
@@ -205,9 +189,6 @@ const createDirectoryArchives = ({ nodes, actions }, options) => {
                 //count: nodes.length
             }
         })
-        // register the directory into node
-        //console.log("options", options)
-        
 
         const item = { name: directory,
             label: getDirectoryLabel(directory, options.directoryLabels),
@@ -239,6 +220,7 @@ const createTagArchives = ({ nodes, actions, tags }, options) => {
         const tag = node.tag
         const items = nodes.filter(node => node.frontmatter.tags?.includes(tag))
         const template = `${templateDir}/tag_archive-template.js`
+        const pagePath = `/${tag}`
         paginate({
             createPage,
             items: items,
@@ -247,7 +229,8 @@ const createTagArchives = ({ nodes, actions, tags }, options) => {
             component: require.resolve(template),
             context: {
                 archive: 'tag',
-                tag: tag
+                tag: tag,
+                pagePath: pagePath
             }
         })
     })

@@ -15,21 +15,20 @@ export const query = graphql`
       }
     }
   `
-const handleChange = (tag, p) => {
-    const path = `/tag/${tag}/${p}`
-  navigate((p === 1) ? path : `${path}/${p}`)
+const handleChange = (pagePath, tag, p) => {
+    const path = `${pagePath}/${tag}/${p}`
+    navigate((p === 1) ? path : `${path}/${p}`)
 }
 
 export default function TagArchiveTemplate({ data, pageContext }) {
-  const { directory } = pageContext
-  const { breadcrumb: { crumbs } } = pageContext
-  const label = crumbs.slice(1).map(v => v.crumbLabel).pop()
-  const title = `TAG: ${label}`
+  const { tag } = pageContext
+  const { pagePath, breadcrumb: { crumbs } } = pageContext
+  const title = `TAG: ${tag}`
 
   const pagination_parameters = {
     numberOfPages: pageContext.numberOfPages,
     humanPageNumber: pageContext.humanPageNumber,
-    onChangeHandler: (_e, p) => { handleChange(directory, p) }
+    onChangeHandler: (_e, p) => { handleChange(pagePath, tag, p) }
   }
   return (<ArchiveTemplate title={title} nodes={data.allMdx.nodes} crumbs={crumbs}
     pagination_parameters={pagination_parameters} />)

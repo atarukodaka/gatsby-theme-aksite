@@ -22,21 +22,7 @@ const ClearImage = styled.div`
     clear: both;
 `
 
-export const PostCard = ({ node }) => {
-    const query = graphql`
-    {
-        directories: allAksDirectory { 
-            nodes {
-                id, name, label, fullLabel, pagePath, numberOfPosts
-            }
-        }
-    }
-    `
-    const data = useStaticQuery(query)
-    const dir_node = data.directories.nodes.find(v=>v.name === node.fields.directory)
-
-
-    return (
+export const PostCard = ({ node }) => (
     <HoverBox>
         <Link to={node.fields.slug}>
             <Card>
@@ -52,5 +38,5 @@ export const PostCard = ({ node }) => {
         </Link>
     </HoverBox>
 )
-    }
+
 export default PostCard
