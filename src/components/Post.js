@@ -1,10 +1,11 @@
 import React from "react"
-import { Link } from "gatsby"
+import { Link, navigate, useStaticQuery } from "gatsby"
 import { MDXProvider } from "@mdx-js/react"
 import { MDXRenderer } from "gatsby-plugin-mdx"
 import { useLocation } from "@reach/router"
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
+import Chip from '@material-ui/core/Chip'
 
 import DirectoryBox from './DirectoryBox'
 import MdxComponents from './MdxComponents'
@@ -12,7 +13,7 @@ import ShareSNS from './ShareSNS'
 import CoverImage from './CoverImage'
 import PageTitle from './PageTitle'
 import useSiteMetadata from '../hooks/useSiteMetadata'
-
+//import { tagArchivePath } from '../utils/archive_path'
 
 const Description = styled.div`
     padding: 1rem;  
@@ -44,6 +45,18 @@ const RenderMDX = ({ children }) => {
     )
 }
 
+/*
+const clickHandler = (tag) => {
+    //alert(tag)
+    navigate(tagArchivePath(tag))
+}
+const Tags = ({node}) => {
+    if (node.frontmatter.tags === null) { return null }
+
+    return node.frontmatter.tags.map(tag => 
+        (<Chip label={tag} color="primary" variant="outlined" onClick={() => {clickHandler(tag)}} />))
+}
+*/
 const Post = ({ node }) => {
     const { pathname } = useLocation()
     const { siteUrl } = useSiteMetadata()
@@ -51,9 +64,12 @@ const Post = ({ node }) => {
     return (
         <div css={cssPost}>
             <Header>
-                <div>{node.frontmatter.date}</div>
+                <div>
+                    {node.frontmatter.date}
+                    <DirectoryBox directory={node.fields.directory} enableLink={true}/>
+                </div>
                 <PageTitle><Link to={node.fields.slug}>{node.fields.postTitle}</Link></PageTitle>
-                <DirectoryBox><Link to={'/' + node.fields.directory}>{node.fields.directoryFullLabel}</Link></DirectoryBox>
+                { /* <Tags node={node}/> */ }
                 <CoverImage node={node} />
                 <Description>{node.frontmatter.description}</Description>
             </Header>
@@ -63,9 +79,7 @@ const Post = ({ node }) => {
                 </RenderMDX>
             </Main>
             <Footer>
-                <ShareSNS url={`${siteUrl}${pathname}`}
-                    title={node.fields.postTitle} />
-
+                <ShareSNS url={`${siteUrl}${pathname}`} title={node.fields.postTitle} />
             </Footer>
         </div>
     )

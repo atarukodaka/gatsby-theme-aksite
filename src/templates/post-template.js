@@ -1,8 +1,7 @@
 import React from "react"
 import { graphql } from "gatsby"
-import Breadcrumb from '../components/Breadcrumb'
-import Divider from '@material-ui/core/Divider'
 
+import Breadcrumb from '../components/Breadcrumb'
 import Layout from "../components/Layout"
 import Post from "../components/Post"
 import SEO from '../components/SEO'
@@ -19,45 +18,28 @@ export const post_query = graphql`
     }
 
 `
-/*
-const Siblings = ({ nodes }) => (
-  <nav>
-      <Grid container spacing={3}>
-          {nodes.slice(0, 9).map(v =>
-              (<Grid item xs={12} sm={12} key={v.id}><PostCard node={v} /></Grid>))
-          }
-      </Grid>
-  </nav>
-)
-*/
-export default function PostTemplate({ data, pageContext }) {
+
+export default function PostTemplate({ data, pageContext, location }) {
   console.log(`create/template: ${data.mdx.fields.slug}`)
   const node = data.mdx
-  const { breadcrumb: { crumbs } } = pageContext
+  const { isRoot, breadcrumb: { crumbs } } = pageContext
 
   const title = node.fields.postTitle || node.frontmatter.title
   const description = node.frontmatter.description || node.excerpt
   const cover = node.frontmatter.cover?.publicURL
+  const crumbLabel = (isRoot) ? null : node.fields.postTitle
 
-  /*
-  const siblings = data.allMdx.nodes.filter(v =>
-    (v.id !== node.id) && (v.fields.directory === node.fields.directory))
-*/
   return (
     <Layout tableOfContents={node.tableOfContents} >
-      <SEO title={title} description={description} cover={cover} />
-      <Breadcrumb crumbs={crumbs} />
-
-      <Post node={node}/>
       
+      <SEO title={title} description={description} cover={cover} />
+      <Breadcrumb crumbs={crumbs} crumbLabel={crumbLabel}/>
+
+      <Post node={node}/>      
       <nav>        
-        { /* siblings && (<>
-          <Typography variant="h3">Siblings on '{node.fields.directoryLabel}'</Typography>
-          <Siblings nodes={siblings} />
-        </>) */}
+        <PrevNextPost node={node}/>
         <h3>Relevant Posts</h3>
         <RelevantPosts node={node}/>
-        <PrevNextPost node={node}/>
       </nav>
     </Layout>
   )

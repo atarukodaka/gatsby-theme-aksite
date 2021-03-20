@@ -1,7 +1,6 @@
 import React from "react"
 import { graphql, navigate } from "gatsby"
 
-import { listArchivePath } from '../utils/archive_path'
 import ArchiveTemplate from './archive_template'
 
 export const data = graphql`
@@ -18,17 +17,18 @@ export const data = graphql`
 `
 
 const IndexTemplate = ({ data, pageContext }) => {
-  const { humanPageNumber, numberOfPages } = pageContext;
-  const { breadcrumb: { crumbs } } = pageContext
+  const { humanPageNumber, numberOfPages,  } = pageContext;
+  console.log("listarchive contenxt", pageContext)
+  const { pagePath, breadcrumb: { crumbs } } = pageContext
 
-  const handleChange = (_event, p) => {
-    navigate(`${listArchivePath()}/${p}`)
+  const handleChange = (path, p) => {
+    navigate((p === 1) ? path : `${path}/${p}`)
   }
   const title = "Latest Articles" + ((humanPageNumber > 1) ? ` -  page ${humanPageNumber}` : '')
   const pagination_parameters = {
     numberOfPages: numberOfPages,
     humanPageNumber: humanPageNumber,
-    onChangeHandler: handleChange
+    onChangeHandler: (_e, p) => { handleChange(pagePath, p) }
   }
 
   return (<ArchiveTemplate title={title} nodes={data.allMdx.nodes} crumbs={crumbs}

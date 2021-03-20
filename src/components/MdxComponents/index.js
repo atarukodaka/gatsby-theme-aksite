@@ -13,6 +13,7 @@ import LinkPost from './LinkPost'
 import Series from './Series'
 import Baloon from './Baloon'
 import Spoiler from './Spoiler'
+import Callout from './Callout'
 
 const numberingColor = theme.palette.text.secondary
 const borderColor = theme.palette.action.active
@@ -70,6 +71,7 @@ const Heading4 = ( { children, ...props}) =>
 
 const MdxComponents = () => {
     return { Alert, Baloon, Box, Link, LinkPost, LinkExternal, Series, Grid, Spoiler,
+        Callout,
         h2: Heading2,
         h3: Heading3,
         h4: Heading4,

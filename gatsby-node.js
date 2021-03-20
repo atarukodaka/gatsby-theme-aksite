@@ -3,19 +3,15 @@ const path = require(`path`)
 const mkdirp = require(`mkdirp`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
 const { paginate } = require('gatsby-awesome-pagination');
+const { urlResolve, createContentDigest } = require(`gatsby-core-utils`)
 
-const { monthlyArchivePath, directoryArchivePath, listArchivePath,  } = require('./src/utils/archive_path');
-
-const itemsPerPage = 10
+const withDefaults = require('./src/utils/default_options')
 const templateDir = "./src/templates"
 
 exports.onPreBootstrap = ({store}, themeOptions) => {
+    const { contentPath, assetPath } = withDefaults(themeOptions) 
     const { program } = store.getState()
 
-    basePath = themeOptions.basePath || `/`
-    contentPath = themeOptions.contentPath || `content/posts`
-    assetPath = themeOptions.assetPath || `content/assets`
-  
     const dirs = [path.join(program.directory, contentPath), 
         path.join(program.directory, assetPath)]
   
@@ -26,6 +22,7 @@ exports.onPreBootstrap = ({store}, themeOptions) => {
       }
     })    
 }
+
 exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
     console.log("create Scheme customization")
     createTypes(`
@@ -38,31 +35,51 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             cover: File @fileByRelativePath
             series: Series
             draft: Boolean
+            tags: [String]
         }
         type Series {
             title: String
             number: Int
         }
+        type AksDirectory implements Node {
+            name: String
+            label: String
+            fullLabel: String
+            pagePath: String
+            numberOfPosts: Int
+        }    
+        type AksMonthly implements Node {
+            year: Int
+            month: Int
+            yearMonth: String
+            pagePath: String
+            numberOfPosts: Int
+        }
+        type AksConfig implements Node {
+            basePath: String
+            contentPath: String
+            listPath: String
+        }
     `);
 };
 
+const getDirectoryLabel = (directory, labels) => {
+    const last = directory.split('/').pop()
+    return (labels) ? labels['/' + directory] || last : last
+}
+const getDirectoryFullLabel = (directory, labels) => {
+    if (labels === undefined) { return directory }
+    let i = 0
+
+    const parts = directory.split('/')
+    return parts.map(v => {
+        i = i + 1
+        return labels[`/${parts.slice(0, i).join('/')}`] || v
+    }).join('/')
+}
+
 exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
     const { createNodeField } = actions
-
-    const getDirectoryLabel = (directory, labels) => {
-        const last = directory.split('/').pop()
-        return (labels) ? labels['/' + directory] || last : last
-    }
-    const getDirectoryFullLabel = (directory, labels) => {
-        if (labels === undefined) { return directory }
-        let i = 0
-
-        const parts = directory.split('/')
-        return parts.map(v => {
-            i = i + 1
-            return labels[`/${parts.slice(0, i).join('/')}`] || v
-        }).join('/')
-    }
 
     if (node.internal.type === `Mdx`) {
         const slug = createFilePath({ node, getNode })
@@ -78,16 +95,7 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
             name: 'directory',
             value: directory
         })
-        createNodeField({
-            node,
-            name: 'directoryLabel',
-            value: getDirectoryLabel(directory, themeOptions.directoryLabels)
-        })
-        createNodeField({
-            node,
-            name: 'directoryFullLabel',
-            value: getDirectoryFullLabel(directory, themeOptions.directoryLabels)
-        })
+
         const postTitle = (node.frontmatter.series) ?
             `${node.frontmatter.series.title}[${node.frontmatter.series.number}] ${node.frontmatter.title}` :
             node.frontmatter.title
@@ -100,13 +108,14 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
 }
 ////////////////////////////////////////////////////////////////
 // markdown pages
-const createMdxPages = ({ nodes, actions }) => {
+const createMdxPages = ({ nodes, actions }, options) => {
     console.log("** all markdown pages")
     const { createPage } = actions
     const template = `${templateDir}/post-template.js`
+    
     nodes.forEach(node => {
         createPage({
-            path: node.fields.slug,
+            path: urlResolve(options.basePath, node.fields.slug),
             component: require.resolve(template),
             context: {
                 slug: node.fields.slug,
@@ -116,83 +125,137 @@ const createMdxPages = ({ nodes, actions }) => {
 }
 ////////////////
 // top page
-const createTopPage = ( {nodes, actions }) => {
+const createTopPage = ( {nodes, actions }, options) => {
     const node = (nodes) ? nodes[0] : null    
     if (node == null){ return }
-    
 
     console.log("** top page", node.fields.slug, node.frontmatter.draft)
     const { createPage } = actions
     createPage({
-        path: "/", 
+        path: options.basePath,
         component: require.resolve(`${templateDir}/post-template.js`),
         context: {
-            slug: node.fields.slug
+            slug: node.fields.slug,
+            isRoot: true,
         }
     })
 }
 ////////////////
 // list archives
-const createListArchives = ({ nodes, actions }) => {
+const createListArchives = ({ nodes, actions }, options) => {
     console.log("** list archives")
     const { createPage } = actions
     const template = `${templateDir}/list_archive-template.js`
+    const pagePath = urlResolve(options.basePath, `/list`)
     paginate({
         createPage,
         items: nodes,
-        itemsPerPage: itemsPerPage,
+        itemsPerPage: options.itemsPerPage,
         //pathPrefix: ({ pageNumber }) => (pageNumber === 0 ? "/" : "/page"),
-        pathPrefix: listArchivePath(), 
+        pathPrefix: pagePath,
         component: require.resolve(template),
+        context: {
+            pagePath: pagePath
+        }
     })
 }
 ////////////////
 // directory archvies
-const createDirectoryArchives = ({ nodes, actions }) => {
+const createDirectoryArchives = ({ nodes, actions }, options) => {
     console.log("** creating directory index")
-    const { createPage } = actions
+    const { createPage, createNode } = actions
     const directories = [...new Set(nodes.map(node => node.fields.directory))]
-    directories.forEach(directory => {
+    directories.filter(v=>!!v).forEach(directory => {
         const re = new RegExp(`^${directory}`)
         const items = nodes.filter(node => re.test(node.fields.directory))
         const template = `${templateDir}/directory_archive-template.js`
+        //        const pagePath = directoryArchivePath(directory)
+        const pagePath = urlResolve(options.basePath, directory)
+
         paginate({
             createPage,
             items: items,
-            itemsPerPage: itemsPerPage,
+            itemsPerPage: options.itemsPerPage,
             //pathPrefix: `/${directory}`,
-            pathPrefix: directoryArchivePath(directory),
+            pathPrefix: pagePath,
             component: require.resolve(template),
             context: {
                 archive: 'directory',
                 directory: directory,
                 regex: re.toString(),
-                //count: nodes.length
+            }
+        })
+
+        const item = { name: directory,
+            label: getDirectoryLabel(directory, options.directoryLabels),
+            fullLabel: getDirectoryFullLabel(directory, options.directoryLabels),
+            pagePath: pagePath,
+            numberOfPosts: items.length
+        }
+        createNode({
+            id: `gatsby-theme-aksite-directory-${directory}`,
+            parent: null,
+            children: [],
+            ...item,
+            internal: {
+                type: `AksDirectory`,
+                contentDigest: createContentDigest(item),
+                content: JSON.stringify(item),
+              },                    
+        })
+    })
+}
+
+////////////////
+// tag archvies
+/*
+const createTagArchives = ({ nodes, actions, tags }, options) => {
+    console.log("** creating tag archive")
+    const { createPage } = actions
+    //console.log("tags", tags)
+    tags.group.forEach(node => {
+        const tag = node.tag
+        const items = nodes.filter(node => node.frontmatter.tags?.includes(tag))
+        const template = `${templateDir}/tag_archive-template.js`
+        const pagePath = `/${tag}`
+        paginate({
+            createPage,
+            items: items,
+            itemsPerPage: options.itemsPerPage,
+            pathPrefix: tagArchivePath(tag),
+            component: require.resolve(template),
+            context: {
+                archive: 'tag',
+                tag: tag,
+                pagePath: pagePath
             }
         })
     })
 }
+*/
 ////////////////
 // monthly archive
-const createMonthlyArchives = ({ nodes, actions }) => {
+const createMonthlyArchives = ({ nodes, actions }, options) => {
     console.log("** creating monthly archives")
-    const { createPage } = actions
+    const { createPage, createNode } = actions
     const yearMonths = new Set(nodes.filter(v => v.frontmatter.yearmonth).map(node => node.frontmatter.yearmonth))
     //console.log("yearmonths: ", yearMonths)  
-    yearMonths.forEach(node => {
-        const [year, month] = node.split('-').map(v => parseInt(v))
+    yearMonths.forEach(yearMonth => {
+        const [year, month] = yearMonth.split('-').map(v => parseInt(v))
         const fromDate = new Date(year, month - 1, 1)
         const nextMonth = new Date(year, month, 1)
         const toDate = new Date(nextMonth.getTime() - 1)
         const items = nodes.filter(v => {
             const dt = new Date(v.frontmatter.date); return fromDate <= dt && dt < toDate
         })
-        //console.log(`monthly archive: ${year}/${month} (${items.length}) [${monthlyArchivePath(year, month)}]`)
+
+        const pagePath = urlResolve(options.basePath, `archives/${year}${month.toString().padStart(2,0)}`)
+
         paginate({
             createPage,
             items: items,
-            itemsPerPage: itemsPerPage,
-            pathPrefix: monthlyArchivePath(year, month),
+            itemsPerPage: options.itemsPerPage,
+            pathPrefix: pagePath,
             component: require.resolve(`${templateDir}/monthly_archive-template.js`),
             context: {
                 archive: 'monthly',
@@ -202,10 +265,28 @@ const createMonthlyArchives = ({ nodes, actions }) => {
                 toDate: toDate.toISOString(),
             }
         })
+       
+        const item = { 
+            year: year, month: month, yearMonth: yearMonth,
+            pagePath: pagePath,
+            numberOfPosts: items.length
+         }
+        createNode({
+            id: `gatsby-theme-aksite-monthly-${item.yearMonth}`,
+            parent: null,
+            children: [],
+            ...item,
+            internal: {
+                type: `AksMonthly`,
+                contentDigest: createContentDigest(item),
+                content: JSON.stringify(item),
+              },                    
+        })
     })
 }
 ////////////////
-exports.createPages = async ({ graphql, actions }) => {
+exports.createPages = async ({ graphql, actions }, themeOptions) => {
+
     const { data: { mdxPages } } = await graphql(`
     {
         mdxPages: allMdx (filter: {frontmatter: {draft: {ne: true} } },
@@ -223,13 +304,26 @@ exports.createPages = async ({ graphql, actions }) => {
                 }
             }            
         }
+
     }`)
 
     // create pages
-    createMdxPages({ nodes: mdxPages.nodes, actions: actions})
-    createTopPage( { nodes: mdxPages.nodes, actions: actions })
+    const options = withDefaults(themeOptions)
+
+    createMdxPages({ nodes: mdxPages.nodes, actions: actions}, options)
+    createTopPage( { nodes: mdxPages.nodes, actions: actions }, options)
     //createIndexPagination({ nodes: mdxPages.nodes, actions: actions})
-    createListArchives({ nodes: mdxPages.nodes, actions: actions})
-    createDirectoryArchives({ nodes: mdxPages.nodes, actions: actions})
-    createMonthlyArchives({ nodes: mdxPages.nodes, actions: actions})
+    createListArchives({ nodes: mdxPages.nodes, actions: actions}, options)
+    createDirectoryArchives({ nodes: mdxPages.nodes, actions: actions}, options)
+    //createTagArchives({ nodes: mdxPages.nodes, actions: actions, tags: tags}, options)
+    createMonthlyArchives({ nodes: mdxPages.nodes, actions: actions}, options)
+/*
+        tags: allMdx (filter: {frontmatter: {draft: {ne: true} } }){
+            group(field: frontmatter___tags) {
+            tag: fieldValue
+            totalCount
+          }
+        }
+*/        
+
 }

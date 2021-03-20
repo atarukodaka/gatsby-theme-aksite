@@ -1,5 +1,6 @@
 import React from 'react'
-import { TwitterShareButton, TwitterIcon, FacebookShareButton, FacebookIcon } from 'react-share'
+import { TwitterShareButton, TwitterIcon, FacebookShareButton, FacebookIcon,
+        LinkedinShareButton, LinkedinIcon,  } from 'react-share'
 import { css } from '@emotion/react'
 import PropTypes from 'prop-types'
 
@@ -29,6 +30,11 @@ const ShareSNS = ({ title, url, iconSize, round }) => (
                 <TwitterIcon size={iconSize} round={round}/>
             </TwitterShareButton>
         </div>
+        <div css={shareItem}>
+            <LinkedinShareButton url={url} title={title}>
+                <LinkedinIcon size={iconSize} round={round}/>
+            </LinkedinShareButton>
+        </div>        
     </nav>
 )
 

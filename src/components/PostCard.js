@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'gatsby'
+import { useStaticQuery, Link } from 'gatsby'
 import styled from '@emotion/styled'
 import Box from '@material-ui/core/Box'
 
@@ -29,9 +29,8 @@ export const PostCard = ({ node }) => (
                 <CoverImage node={node} size="small" />
                 <Box ml={12}>
                     <Date>{node.frontmatter.date}</Date>
-                    <DirectoryBox>{node.fields.directoryFullLabel}</DirectoryBox>
+                    <DirectoryBox directory={node.fields.directory}/>
                     <Title>{node.fields.postTitle}</Title>
-                    
                     {node.frontmatter.description || node.excerpt}
                     <ClearImage />
                 </Box>
