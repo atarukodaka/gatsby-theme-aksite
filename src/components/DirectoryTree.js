@@ -4,8 +4,6 @@ import { TreeView, TreeItem } from '@material-ui/lab'
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight'
 
-//import { directoryArchivePath } from '../utils/archive_path'
-
 const ListToTree = require('list-to-tree')
 
 const query = graphql`
@@ -81,10 +79,10 @@ const DirectoryTree = () => {
 
 const Tree = ({item}) =>  {
     return(
-    <TreeItem label={<>{item.label} ({item.numberOfPosts})</>} nodeId={item.name} key={item.name}
+    <TreeItem label={<>{item.label} ({item.numberOfPosts})</>} nodeId={item.name} 
         onClick={() => {}} 
         onLabelClick={(e) => {e.preventDefault(); navigate(item.pagePath)}}>
-        { item.child && ( item.child.map(v => (<Tree item={v}/>)) ) }
+        { item.child && ( item.child.map(v => (<Tree item={v} key={v.name}/>)) ) }
     </TreeItem>
 )
 }

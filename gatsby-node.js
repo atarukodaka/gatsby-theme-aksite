@@ -7,6 +7,7 @@ const { urlResolve, createContentDigest } = require(`gatsby-core-utils`)
 
 const withDefaults = require('./src/utils/default_options')
 const { monthlyArchivePath, directoryArchivePath, tagArchivePath, listArchivePath,  } = require('./src/utils/archive_path');
+const { navigate } = require('gatsby-link');
 
 const templateDir = "./src/templates"
 
@@ -110,6 +111,7 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
             name: 'directory',
             value: directory
         })
+        /*
         createNodeField({
             node,
             name: 'directoryLabel',
@@ -120,6 +122,7 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
             name: 'directoryFullLabel',
             value: getDirectoryFullLabel(directory, themeOptions.directoryLabels)
         })
+        */
         const postTitle = (node.frontmatter.series) ?
             `${node.frontmatter.series.title}[${node.frontmatter.series.number}] ${node.frontmatter.title}` :
             node.frontmatter.title
@@ -176,7 +179,7 @@ const createListArchives = ({ nodes, actions }, options) => {
         itemsPerPage: options.itemsPerPage,
         //pathPrefix: ({ pageNumber }) => (pageNumber === 0 ? "/" : "/page"),
         pathPrefix: listArchivePath(), 
-        component: require.resolve(template),
+        component: require.resolve(template)
     })
 }
 ////////////////
@@ -189,12 +192,15 @@ const createDirectoryArchives = ({ nodes, actions }, options) => {
         const re = new RegExp(`^${directory}`)
         const items = nodes.filter(node => re.test(node.fields.directory))
         const template = `${templateDir}/directory_archive-template.js`
+        //        const pagePath = directoryArchivePath(directory)
+        const pagePath = `/${directory}`
+
         paginate({
             createPage,
             items: items,
             itemsPerPage: options.itemsPerPage,
             //pathPrefix: `/${directory}`,
-            pathPrefix: directoryArchivePath(directory),
+            pathPrefix: pagePath,
             component: require.resolve(template),
             context: {
                 archive: 'directory',
@@ -206,10 +212,11 @@ const createDirectoryArchives = ({ nodes, actions }, options) => {
         // register the directory into node
         //console.log("options", options)
         
+
         const item = { name: directory,
             label: getDirectoryLabel(directory, options.directoryLabels),
             fullLabel: getDirectoryFullLabel(directory, options.directoryLabels),
-            pagePath: directoryArchivePath(directory),
+            pagePath: pagePath,
             numberOfPosts: nodes.filter(v=>re.test(v.fields.directory)).length
          }
          console.log("item", item)

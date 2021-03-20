@@ -25,7 +25,8 @@ export const query = graphql`
   
 export default function DirectoryArchiveTemplate({ data, pageContext }) {
   const { breadcrumb: { crumbs } } = pageContext
-  const label = crumbs.slice(1).map(v => v.crumbLabel).join('/')
+  //const label = crumbs.slice(1).map(v => v.crumbLabel).join('/')
+  const label = data.aksDirectory.label
   const title = `DIRECTORY: ${label}`
 
   const pagination_parameters = {

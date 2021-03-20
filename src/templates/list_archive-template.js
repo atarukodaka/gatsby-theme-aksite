@@ -19,6 +19,7 @@ export const data = graphql`
 
 const IndexTemplate = ({ data, pageContext }) => {
   const { humanPageNumber, numberOfPages } = pageContext;
+  console.log("listarchive contenxt", pageContext)
   const { breadcrumb: { crumbs } } = pageContext
 
   const handleChange = (_event, p) => {
