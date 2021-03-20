@@ -55,6 +55,7 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             pagePath: String
             numberOfPosts: Int
         }
+       
     `);
 };
 
@@ -96,7 +97,6 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
             name: 'path',
             value: path
         })
-
         createNodeField({
             node,
             name: 'directory',
@@ -294,7 +294,9 @@ const createMonthlyArchives = ({ nodes, actions }, options) => {
 }
 ////////////////
 exports.createPages = async ({ graphql, actions }, themeOptions) => {
-
+    const { createNode } = actions
+    createNode({
+    })
     const { data: { mdxPages } } = await graphql(`
     {
         mdxPages: allMdx (filter: {frontmatter: {draft: {ne: true} } },

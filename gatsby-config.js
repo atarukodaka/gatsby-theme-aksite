@@ -10,12 +10,13 @@ require("dotenv").config({
   path: `.env.${activeEnv}`,
 })
 const withDefaults = require('./src/utils/default_options')
+const { urlResolve } = require(`gatsby-core-utils`)
 
 module.exports = (themeOptions) => {
   const options = withDefaults(themeOptions)
   //console.log("options", options)
   const crumbLabelUpdates = options.directoryLabels.map(item=>{
-    return { pathname: '/' + item.directory, crumbLabel: item.label}
+    return { pathname: urlResolve(options.basePath, item.directory), crumbLabel: item.label}
   })
   /*
   const crumbLabelUpdates = (options.directoryLabels) ? Object.keys(options.directoryLabels).map(k => {
@@ -37,7 +38,6 @@ module.exports = (themeOptions) => {
         github: 'foobar',
       }      
     },
-    pathPrefix: '/blog',
     plugins: [
       `gatsby-transformer-sharp`,
       `gatsby-plugin-sharp`,
@@ -145,7 +145,7 @@ module.exports = (themeOptions) => {
           },
           crumbLabelUpdates: crumbLabelUpdates,
           //trailingSlashes: true,
-          usePathPrefix: '/blog'
+          //usePathPrefix: '/blog'
         }
       },
       {

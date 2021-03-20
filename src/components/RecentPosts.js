@@ -27,7 +27,7 @@ const RecentPosts = () => {
             {recentPosts.slice(0, numPosts).map(node => (
                 <ListItem key={node.id} css={cssItem}>
                     <HoverBox>
-                        <Link to={node.fields.slug}>
+                        <Link to={node.fields.path}>
                             <Typography>
                                 {node.fields.postTitle}
                             </Typography>
@@ -42,37 +42,6 @@ const RecentPosts = () => {
         </>
     )
 }
-/*
-    const display = "text"
-
-    switch (display) {
-        case "text":
-            return (
-                <List>
-                    {recentPosts.nodes.map(node => (
-                        <ListItem key={node.id} css={cssItem}>
-                            <HoverBox>
-                                <Link to={node.fields.slug}>
-                                    <Typography>
-                                        {node.fields.postTitle}
-                                    </Typography>
-                                </Link>
-
-                            </HoverBox>
-                        </ListItem>
-                    ))}
-                </List>
-            )
-        case 'card':
-        default:
-
-            return (<nav>
-                {recentPosts.nodes.map(node => (
-                    <PostCard node={node} key={node.id} display="text" />
-                ))}
-            </nav>)
-    }
-    */
 
 
 export default RecentPosts
