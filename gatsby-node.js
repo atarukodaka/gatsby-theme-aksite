@@ -6,7 +6,7 @@ const { paginate } = require('gatsby-awesome-pagination');
 const { urlResolve, createContentDigest } = require(`gatsby-core-utils`)
 
 const withDefaults = require('./src/utils/default_options')
-const { monthlyArchivePath, directoryArchivePath, tagArchivePath, listArchivePath,  } = require('./src/utils/archive_path');
+const { tagArchivePath, listArchivePath,  } = require('./src/utils/archive_path');
 const { navigate } = require('gatsby-link');
 
 const templateDir = "./src/templates"
@@ -267,8 +267,9 @@ const createMonthlyArchives = ({ nodes, actions }, options) => {
         const items = nodes.filter(v => {
             const dt = new Date(v.frontmatter.date); return fromDate <= dt && dt < toDate
         })
-        //console.log(`monthly archive: ${year}/${month} (${items.length}) [${monthlyArchivePath(year, month)}]`)
-        const pagePath = monthlyArchivePath(year, month)
+
+        const pagePath = `/archives/${year}${month.toString().padStart(2,0)}`
+
         paginate({
             createPage,
             items: items,

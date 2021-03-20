@@ -7,6 +7,7 @@
 - themeOption (contentPath, itemsPerPage など）を指定可
 - タグ機能実装
 - タグ一覧、月別アーカイブ一覧追加
+- ディレクトリ、月別情報をノードに
 
 ## [1.0.1] - 2021-03-16
 ### Fixed
