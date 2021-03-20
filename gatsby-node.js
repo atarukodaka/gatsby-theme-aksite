@@ -6,7 +6,7 @@ const { paginate } = require('gatsby-awesome-pagination');
 const { urlResolve, createContentDigest } = require(`gatsby-core-utils`)
 
 const withDefaults = require('./src/utils/default_options')
-const { monthlyArchivePath, directoryArchivePath, tagArchivePath, listArchivePath,  } = require('./src/utils/archive_path');
+const { tagArchivePath, listArchivePath,  } = require('./src/utils/archive_path');
 const { navigate } = require('gatsby-link');
 
 const templateDir = "./src/templates"
@@ -51,6 +51,13 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             pagePath: String
             numberOfPosts: Int
         }    
+        type AksMonthly implements Node {
+            year: Int
+            month: Int
+            yearMonth: String
+            pagePath: String
+            numberOfPosts: Int
+        }
     `);
 };
 
@@ -111,18 +118,7 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
             name: 'directory',
             value: directory
         })
-        /*
-        createNodeField({
-            node,
-            name: 'directoryLabel',
-            value: getDirectoryLabel(directory, themeOptions.directoryLabels)
-        })
-        createNodeField({
-            node,
-            name: 'directoryFullLabel',
-            value: getDirectoryFullLabel(directory, themeOptions.directoryLabels)
-        })
-        */
+
         const postTitle = (node.frontmatter.series) ?
             `${node.frontmatter.series.title}[${node.frontmatter.series.number}] ${node.frontmatter.title}` :
             node.frontmatter.title
@@ -217,9 +213,8 @@ const createDirectoryArchives = ({ nodes, actions }, options) => {
             label: getDirectoryLabel(directory, options.directoryLabels),
             fullLabel: getDirectoryFullLabel(directory, options.directoryLabels),
             pagePath: pagePath,
-            numberOfPosts: nodes.filter(v=>re.test(v.fields.directory)).length
-         }
-         console.log("item", item)
+            numberOfPosts: items.length
+        }
         createNode({
             id: `gatsby-theme-aksite-directory-${directory}`,
             parent: null,
@@ -261,23 +256,25 @@ const createTagArchives = ({ nodes, actions, tags }, options) => {
 // monthly archive
 const createMonthlyArchives = ({ nodes, actions }, options) => {
     console.log("** creating monthly archives")
-    const { createPage } = actions
+    const { createPage, createNode } = actions
     const yearMonths = new Set(nodes.filter(v => v.frontmatter.yearmonth).map(node => node.frontmatter.yearmonth))
     //console.log("yearmonths: ", yearMonths)  
-    yearMonths.forEach(node => {
-        const [year, month] = node.split('-').map(v => parseInt(v))
+    yearMonths.forEach(yearMonth => {
+        const [year, month] = yearMonth.split('-').map(v => parseInt(v))
         const fromDate = new Date(year, month - 1, 1)
         const nextMonth = new Date(year, month, 1)
         const toDate = new Date(nextMonth.getTime() - 1)
         const items = nodes.filter(v => {
             const dt = new Date(v.frontmatter.date); return fromDate <= dt && dt < toDate
         })
-        //console.log(`monthly archive: ${year}/${month} (${items.length}) [${monthlyArchivePath(year, month)}]`)
+
+        const pagePath = `/archives/${year}${month.toString().padStart(2,0)}`
+
         paginate({
             createPage,
             items: items,
             itemsPerPage: options.itemsPerPage,
-            pathPrefix: monthlyArchivePath(year, month),
+            pathPrefix: pagePath,
             component: require.resolve(`${templateDir}/monthly_archive-template.js`),
             context: {
                 archive: 'monthly',
@@ -286,6 +283,23 @@ const createMonthlyArchives = ({ nodes, actions }, options) => {
                 fromDate: fromDate.toISOString(),
                 toDate: toDate.toISOString(),
             }
+        })
+       
+        const item = { 
+            year: year, month: month, yearMonth: yearMonth,
+            pagePath: pagePath,
+            numberOfPosts: items.length
+         }
+        createNode({
+            id: `gatsby-theme-aksite-monthly-${item.yearMonth}`,
+            parent: null,
+            children: [],
+            ...item,
+            internal: {
+                type: `AksMonthly`,
+                contentDigest: createContentDigest(item),
+                content: JSON.stringify(item),
+              },                    
         })
     })
 }
