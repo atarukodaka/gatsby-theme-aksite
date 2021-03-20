@@ -11,7 +11,7 @@ const query = graphql`
     mdxPages: allMdx(filter: {frontmatter: {draft: {ne: true} }}){
         nodes {
             id
-            fields { slug, directory, directoryLabel}
+            fields { slug, directory }
         }
     }
     directories: allAksDirectory {
