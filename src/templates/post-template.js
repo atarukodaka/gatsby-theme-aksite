@@ -23,7 +23,7 @@ export default function PostTemplate({ data, pageContext, location }) {
   console.log(`create/template: ${data.mdx.fields.slug}`)
   const node = data.mdx
   const { isRoot, breadcrumb: { crumbs } } = pageContext
-
+  console.log("crumb", crumbs)
   const title = node.fields.postTitle || node.frontmatter.title
   const description = node.frontmatter.description || node.excerpt
   const cover = node.frontmatter.cover?.publicURL

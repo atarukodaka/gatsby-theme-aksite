@@ -55,36 +55,38 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             pagePath: String
             numberOfPosts: Int
         }
-        type AksConfig implements Node {
-            basePath: String
-            contentPath: String
-            listPath: String
-        }
+       
     `);
 };
 
-const getDirectoryLabel = (directory, labels) => {
+const getDirectoryLabel = (directory, labels = []) => {
     const last = directory.split('/').pop()
-    return (labels) ? labels['/' + directory] || last : last
+    const item = labels.find(v=> directory === v.directory)
+    return item?.label || last
+    //return (item) ? item.label : "LAST"
+    //return (labels) ? labels['/' + directory] || last : last
 }
-const getDirectoryFullLabel = (directory, labels) => {
-    if (labels === undefined) { return directory }
+const getDirectoryFullLabel = (directory, labels = []) => {
     let i = 0
 
     const parts = directory.split('/')
-    return parts.map(v => {
+    return parts.map(part => {
         i = i + 1
-        return labels[`/${parts.slice(0, i).join('/')}`] || v
+        //return labels[`/${parts.slice(0, i).join('/')}`] || v
+        return labels.find(v=>v.directory === `${parts.slice(0, i).join('/')}`)?.label || part
     }).join('/')
 }
 
 exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
     const { createNodeField } = actions
+    const options = withDefaults(themeOptions)
 
     if (node.internal.type === `Mdx`) {
         const slug = createFilePath({ node, getNode })
         const directory = slug.split("/").slice(1, -2).join("/")
+        const path = urlResolve(options.basePath, slug)
 
+        //console.log("on-create-node slug:", slug, "path:", path)
         createNodeField({
             node,
             name: 'slug',
@@ -92,13 +94,18 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
         })
         createNodeField({
             node,
+            name: 'path',
+            value: path
+        })
+        createNodeField({
+            node,
             name: 'directory',
             value: directory
         })
-
         const postTitle = (node.frontmatter.series) ?
             `${node.frontmatter.series.title}[${node.frontmatter.series.number}] ${node.frontmatter.title}` :
             node.frontmatter.title
+
         createNodeField({
             node,
             name: 'postTitle',
@@ -112,10 +119,11 @@ const createMdxPages = ({ nodes, actions }, options) => {
     console.log("** all markdown pages")
     const { createPage } = actions
     const template = `${templateDir}/post-template.js`
-    
+
     nodes.forEach(node => {
+        //console.log("fields", node.fields)
         createPage({
-            path: urlResolve(options.basePath, node.fields.slug),
+            path: node.fields.path,
             component: require.resolve(template),
             context: {
                 slug: node.fields.slug,
@@ -286,7 +294,9 @@ const createMonthlyArchives = ({ nodes, actions }, options) => {
 }
 ////////////////
 exports.createPages = async ({ graphql, actions }, themeOptions) => {
-
+    const { createNode } = actions
+    createNode({
+    })
     const { data: { mdxPages } } = await graphql(`
     {
         mdxPages: allMdx (filter: {frontmatter: {draft: {ne: true} } },
@@ -300,7 +310,7 @@ exports.createPages = async ({ graphql, actions }, themeOptions) => {
                     series { title, number }
                 }
                 fields {
-                    slug, directory
+                    slug, directory, path
                 }
             }            
         }

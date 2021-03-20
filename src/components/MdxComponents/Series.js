@@ -15,7 +15,7 @@ const Series = ( {title, current, display="card"} ) => {
             { nodes.map(node=>(<li key={node.id}>
                     {(node.frontmatter.series.number === currentNumber) ? 
                         node.fields.postTitle :
-                        <Link to={node.fields.slug}>{node.fields.postTitle}</Link>}
+                        <Link to={node.fields.path}>{node.fields.postTitle}</Link>}
                 </li>))}
             </ul>)
     default:
