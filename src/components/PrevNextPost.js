@@ -1,35 +1,30 @@
 import React from 'react'
 import Hidden from '@material-ui/core/Hidden'
-import { Link } from 'gatsby'
+//import { Link } from 'gatsby'
 import Grid from '@material-ui/core/Grid'
-import HoverBox from '../components/HoverBox'
-import Card from '../components/Card'
+//import HoverBox from '../components/HoverBox'
+//import Card from '../components/Card'
 import useAllPosts from '../hooks/useAllPosts'
+import NavigateCard from './NavigateCard'
 
-const NavigateBox = ({ to, text, ...props }) => (
-    <>
-        <HoverBox {...props}>
-            <Link to={to}>
-                <Card>
-                    {text}
-                </Card>
-            </Link>
-        </HoverBox>
-    </>
-
-)
 
 const PrevPost = ({ node }) => {
-    return (node) ? 
-        (<NavigateBox to={node.fields.slug} text={`${node.fields.postTitle}》`}  style={{textAlign: "right"}}/>)
-         :  null
+    return (node) ?
+        (<NavigateCard to={node.fields.slug} style={{ textAlign: "right" }}>
+            {`${node.fields.postTitle}》`} 
+        </NavigateCard>
+        )
+        : null
 }
 
 
 const NextPost = ({ node }) => {
-    return (node) ? 
-        (<NavigateBox to={node.fields.slug} text={`《${node.fields.postTitle}`}/>)
-         :  null
+    return (node) ?
+        (<NavigateCard to={node.fields.slug} >
+            {`《${node.fields.postTitle}`}
+        </NavigateCard>
+        )
+        : null
 }
 
 const PrevNextPost = ({ node }) => {

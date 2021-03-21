@@ -5,8 +5,9 @@ import Box from '@material-ui/core/Box'
 
 import DirectoryBox from './DirectoryBox'
 import CoverImage from './CoverImage'
-import Card from './Card'
-import HoverBox from './HoverBox'
+//import Card from './Card'
+//import HoverBox from './HoverBox'
+import NavigateCard from './NavigateCard'
 
 const Title = styled.div`
     font-size: 1.1rem;
@@ -23,9 +24,7 @@ const ClearImage = styled.div`
 `
 
 export const PostCard = ({ node }) => (
-    <HoverBox>
-        <Link to={node.fields.path}>
-            <Card>
+    <NavigateCard to={node.fields.path}>
                 <CoverImage node={node} size="small" />
                 <Box ml={12}>
                     <Date>{node.frontmatter.date}</Date>
@@ -34,9 +33,7 @@ export const PostCard = ({ node }) => (
                     {node.frontmatter.description || node.excerpt}
                     <ClearImage />
                 </Box>
-            </Card>
-        </Link>
-    </HoverBox>
+    </NavigateCard>
 )
 
 export default PostCard
