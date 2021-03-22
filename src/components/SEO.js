@@ -4,8 +4,9 @@ import React from "react"
 import { Helmet } from 'react-helmet'
 import { useLocation } from "@reach/router"
 import useSiteMetadata from '../hooks/useSiteMetadata'
+//import useAksCOnfig from '../hooks/useAksConfig'
 
-const SEO = ( { title, description, cover, lang } ) => {
+const SEO = ( { title, description, cover, lang  } ) => {
     const { pathname } = useLocation()
 
     const { title: siteTitle, description: siteDescription, siteUrl, 
@@ -17,10 +18,11 @@ const SEO = ( { title, description, cover, lang } ) => {
     const fullTitle = `${title} | ${siteTitle}`
     const fullDescription = description || siteDescription
     const imageUrl = siteUrl + coverImage
+    const defaultLang = "ja" // TODO: shd be 'en' or customialbe??
   
     return (
         <Helmet
-            htmlAttributes={ (lang) ? { lang: lang } : {} }
+            htmlAttributes={{ lang: lang || defaultLang}}
             title={fullTitle}
             meta={[
                 { name: 'description', content: fullDescription },

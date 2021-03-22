@@ -6,7 +6,9 @@ const useAksConfig= () => {
     {
         aksConfig {
             basePath
+            assetPath
             listPath
+            itemsPerPage
         }
     }
     `

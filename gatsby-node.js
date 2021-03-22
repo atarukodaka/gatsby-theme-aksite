@@ -241,47 +241,6 @@ const createDirectoryArchives = ({ nodes, actions }, options) => {
                 content: JSON.stringify(item),
               },                    
         })
-
-        const directories = [...new Set(nodes.map(node => node.fields.directory))]
-        directories.filter(v=>!!v).forEach(directory => {
-            const re = new RegExp(`^${directory}`)
-            const items = nodes.filter(node => re.test(node.fields.directory))
-            const template = `${templateDir}/directory_archive-template.js`
-            //        const pagePath = directoryArchivePath(directory)
-            const pagePath = urlResolve(options.basePath, directory)
-    
-            paginate({
-                createPage,
-                items: items,
-                itemsPerPage: options.itemsPerPage,
-                //pathPrefix: `/${directory}`,
-                pathPrefix: pagePath,
-                component: require.resolve(template),
-                context: {
-                    archive: 'directory',
-                    directory: directory,
-                    regex: re.toString(),
-                }
-            })
-    
-            const item = { name: directory,
-                label: getDirectoryLabel(directory, options.directoryLabels),
-                fullLabel: getDirectoryFullLabel(directory, options.directoryLabels),
-                pagePath: pagePath,
-                numberOfPosts: items.length
-            }
-            createNode({
-                id: `gatsby-theme-aksite-directory-${directory}`,
-                parent: null,
-                children: [],
-                ...item,
-                internal: {
-                    type: `AksDirectory`,
-                    contentDigest: createContentDigest(item),
-                    content: JSON.stringify(item),
-                  },                    
-            })
-        })
     })
 }
 

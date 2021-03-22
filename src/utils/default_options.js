@@ -5,6 +5,8 @@ module.exports = (themeOptions) => {
     const listPath = themeOptions.listPath || `list`
     const itemsPerPage = themeOptions.itemsPerPage || 10
     const directoryLabels = themeOptions.directoryLabels || []
+    const defaultLang = themeOptions.defaultLang || 'en'
 
-    return { basePath, contentPath, assetPath, listPath, itemsPerPage, directoryLabels }
+    return { basePath, contentPath, assetPath, listPath, itemsPerPage, directoryLabels, 
+        defaultLang }
 }
