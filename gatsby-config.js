@@ -4,7 +4,7 @@
  * See: https://www.gatsbyjs.com/docs/gatsby-config/
  */
 
- const activeEnv = process.env.GATSBY_ACTIVE_ENV || process.env.NODE_ENV || "development"
+const activeEnv = process.env.GATSBY_ACTIVE_ENV || process.env.NODE_ENV || "development"
 console.log(`Using environment config: '${activeEnv}'`)
 require("dotenv").config({
   path: `.env.${activeEnv}`,
@@ -15,15 +15,15 @@ const { urlResolve } = require(`gatsby-core-utils`)
 module.exports = (themeOptions) => {
   const options = withDefaults(themeOptions)
   //console.log("options", options)
-  const crumbLabelUpdates = options.directoryLabels.map(item=>{
-    return { pathname: urlResolve(options.basePath, item.directory), crumbLabel: item.label}
+  const crumbLabelUpdates = options.directoryLabels.map(item => {
+    return { pathname: urlResolve(options.basePath, item.directory), crumbLabel: item.label }
   })
   /*
   const crumbLabelUpdates = (options.directoryLabels) ? Object.keys(options.directoryLabels).map(k => {
     return { pathname: k, crumbLabel: options.directoryLabels.find(v=> k === '/' + v.directory)?.label }
   }) : []
   */
-    
+
   return {
     siteMetadata: {
       title: 'SITE TITLE',
@@ -36,7 +36,7 @@ module.exports = (themeOptions) => {
       social: {
         twitter: 'foo_bar',
         github: 'foobar',
-      }      
+      }
     },
     plugins: [
       `gatsby-transformer-sharp`,
@@ -160,6 +160,7 @@ module.exports = (themeOptions) => {
           respectDNT: true,
         },
       },
+
       `gatsby-plugin-react-helmet`,
       `gatsby-plugin-sitemap`,
       `gatsby-plugin-material-ui`,
