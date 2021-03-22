@@ -9,7 +9,7 @@ const RelevantPosts = ( {node} ) => {
     
     return (<div style={{marginBottom: "2rem"}}>
             {siblings.slice(0, 5).map(v=>
-                (<PostCard node={v} />))
+                (<PostCard node={v} key={v.id} />))
             }
           
           </div>)

@@ -2,7 +2,7 @@ import React from 'react'
 import { Breadcrumb as BreadcrumbOriginal } from 'gatsby-plugin-breadcrumb'
 import { css } from '@emotion/react'
 import theme from '../styles/theme'
-import Typography from '@material-ui/core/Typography'
+//import Typography from '@material-ui/core/Typography'
 
 const cssBreadcrumb = css`
     a {
@@ -24,9 +24,7 @@ const cssBreadcrumb = css`
 
 const Breadcrumb = ( props ) => (
     <div css={cssBreadcrumb}>
-        <Typography>
         <BreadcrumbOriginal {...props} />
-        </Typography>
     </div>
 )
 

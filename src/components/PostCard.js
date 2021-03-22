@@ -1,5 +1,5 @@
 import React from 'react'
-import { useStaticQuery, Link } from 'gatsby'
+//import { useStaticQuery, Link } from 'gatsby'
 import styled from '@emotion/styled'
 import Box from '@material-ui/core/Box'
 
@@ -23,8 +23,8 @@ const ClearImage = styled.div`
     clear: both;
 `
 
-export const PostCard = ({ node }) => (
-    <NavigateCard to={node.fields.path}>
+export const PostCard = ({ node, ...props }) => (
+    <NavigateCard to={node.fields.path} {...props}>
                 <CoverImage node={node} size="small" />
                 <Box ml={12}>
                     <Date>{node.frontmatter.date}</Date>

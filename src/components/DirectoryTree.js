@@ -80,9 +80,10 @@ const DirectoryTree = () => {
 const Tree = ({item}) =>  {
     return(
     <TreeItem label={<>{item.label} ({item.numberOfPosts})</>} nodeId={item.name} 
+        key={item.name}
         onClick={() => {}} 
         onLabelClick={(e) => {e.preventDefault(); navigate(item.pagePath)}}>
-        { item.child && ( item.child.map(v => (<Tree item={v} key={v.name}/>)) ) }
+        { item.child && ( item.child.map(v => (<Tree item={v}/>)) ) }
     </TreeItem>
 )
 }

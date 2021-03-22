@@ -8,7 +8,7 @@
 - 月別アーカイブ一覧追加
 - ディレクトリ、月別情報をノードに
 - basePath 対応
-    - list/ をどうするか。config node を作るか？
+- config options: defaultLang
 
 ## [1.0.1] - 2021-03-16
 ### Fixed

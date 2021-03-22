@@ -1,9 +1,9 @@
 import React from 'react'
-import { Link } from 'gatsby'
+//import { Link } from 'gatsby'
 import Box from '@material-ui/core/Box'
 import { Pagination } from '@material-ui/lab'
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+//import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+//import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 import { PostCard } from "../components/PostCard"
 import Layout from "../components/Layout"
