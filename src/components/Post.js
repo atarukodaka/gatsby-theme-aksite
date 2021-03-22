@@ -1,11 +1,11 @@
 import React from "react"
-import { Link, navigate, useStaticQuery } from "gatsby"
+import { Link } from "gatsby"
 import { MDXProvider } from "@mdx-js/react"
 import { MDXRenderer } from "gatsby-plugin-mdx"
 import { useLocation } from "@reach/router"
 import styled from '@emotion/styled'
 import { css } from '@emotion/react'
-import Chip from '@material-ui/core/Chip'
+//import Chip from '@material-ui/core/Chip'
 
 import DirectoryBox from './DirectoryBox'
 import MdxComponents from './MdxComponents'

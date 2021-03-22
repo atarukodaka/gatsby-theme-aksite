@@ -48,8 +48,8 @@ const HeaderPane = () => {
         <header>
             <AppBar position="relative">
                 <Toolbar>
-                    <IconButton onClick={handleDrawerOpen} color="inherit">
-                        <MenuIcon />
+                    <IconButton onClick={handleDrawerOpen} color="inherit" aria-label="menu">
+                        <MenuIcon/>
                     </IconButton>
 
                     <Button color="inherit" component={Link} to="/">{title}</Button>

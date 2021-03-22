@@ -37,6 +37,12 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             draft: Boolean
             tags: [String]
         }
+        type AksConfig implements Node {
+            basePath: String!
+            assetPath: String!
+            listPath: String!
+            itemsPerPage: Int!
+        }
         type Series {
             title: String
             number: Int
@@ -58,6 +64,31 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
        
     `);
 };
+
+exports.sourceNodes = ( { actions: { createTypes, createNode } }, themeOptions) => {
+    const options = withDefaults(themeOptions)
+
+    const aksConfig = {
+        basePath: options.basePath,
+        assetPath: options.assetPath,
+        listPath: urlResolve(options.basePath, options.listPath),
+        itemsPerPage: options.itemsPerPage
+    }
+    createNode({
+        ...aksConfig,
+        id: 'gatsby-theme-aksite-config',
+        parent: null,
+        internal: {
+            type: `aksConfig`,
+            contentDigest: createContentDigest(aksConfig),
+            content: JSON.stringify(aksConfig),
+            description: `Aks Config`,
+          },
+    })
+
+    // == directory node ===
+   
+}
 
 const getDirectoryLabel = (directory, labels = []) => {
     const last = directory.split('/').pop()
@@ -86,7 +117,6 @@ exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
         const directory = slug.split("/").slice(1, -2).join("/")
         const path = urlResolve(options.basePath, slug)
 
-        //console.log("on-create-node slug:", slug, "path:", path)
         createNodeField({
             node,
             name: 'slug',
@@ -154,7 +184,7 @@ const createListArchives = ({ nodes, actions }, options) => {
     console.log("** list archives")
     const { createPage } = actions
     const template = `${templateDir}/list_archive-template.js`
-    const pagePath = urlResolve(options.basePath, `/list`)
+    const pagePath = urlResolve(options.basePath, options.listPath)
     paginate({
         createPage,
         items: nodes,
@@ -210,6 +240,47 @@ const createDirectoryArchives = ({ nodes, actions }, options) => {
                 contentDigest: createContentDigest(item),
                 content: JSON.stringify(item),
               },                    
+        })
+
+        const directories = [...new Set(nodes.map(node => node.fields.directory))]
+        directories.filter(v=>!!v).forEach(directory => {
+            const re = new RegExp(`^${directory}`)
+            const items = nodes.filter(node => re.test(node.fields.directory))
+            const template = `${templateDir}/directory_archive-template.js`
+            //        const pagePath = directoryArchivePath(directory)
+            const pagePath = urlResolve(options.basePath, directory)
+    
+            paginate({
+                createPage,
+                items: items,
+                itemsPerPage: options.itemsPerPage,
+                //pathPrefix: `/${directory}`,
+                pathPrefix: pagePath,
+                component: require.resolve(template),
+                context: {
+                    archive: 'directory',
+                    directory: directory,
+                    regex: re.toString(),
+                }
+            })
+    
+            const item = { name: directory,
+                label: getDirectoryLabel(directory, options.directoryLabels),
+                fullLabel: getDirectoryFullLabel(directory, options.directoryLabels),
+                pagePath: pagePath,
+                numberOfPosts: items.length
+            }
+            createNode({
+                id: `gatsby-theme-aksite-directory-${directory}`,
+                parent: null,
+                children: [],
+                ...item,
+                internal: {
+                    type: `AksDirectory`,
+                    contentDigest: createContentDigest(item),
+                    content: JSON.stringify(item),
+                  },                    
+            })
         })
     })
 }
@@ -294,9 +365,6 @@ const createMonthlyArchives = ({ nodes, actions }, options) => {
 }
 ////////////////
 exports.createPages = async ({ graphql, actions }, themeOptions) => {
-    const { createNode } = actions
-    createNode({
-    })
     const { data: { mdxPages } } = await graphql(`
     {
         mdxPages: allMdx (filter: {frontmatter: {draft: {ne: true} } },
@@ -327,13 +395,6 @@ exports.createPages = async ({ graphql, actions }, themeOptions) => {
     createDirectoryArchives({ nodes: mdxPages.nodes, actions: actions}, options)
     //createTagArchives({ nodes: mdxPages.nodes, actions: actions, tags: tags}, options)
     createMonthlyArchives({ nodes: mdxPages.nodes, actions: actions}, options)
-/*
-        tags: allMdx (filter: {frontmatter: {draft: {ne: true} } }){
-            group(field: frontmatter___tags) {
-            tag: fieldValue
-            totalCount
-          }
-        }
-*/        
+       
 
 }
