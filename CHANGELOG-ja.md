@@ -9,6 +9,7 @@
 - ディレクトリ、月別情報をノードに
 - basePath 対応
 - config options: defaultLang
+- Asc256 追加（昔のASCII256本のアレ）
 
 ## [1.0.1] - 2021-03-16
 ### Fixed

@@ -29,7 +29,7 @@ export default function DirectoryArchiveTemplate({ data, pageContext }) {
   //const { previousPagePath, nextPagePath } = pageContext
   
   //const label = crumbs.slice(1).map(v => v.crumbLabel).join('/')
-  const label = data.aksDirectory.label
+  const label = data.aksDirectory.fullLabel
   const title = `DIRECTORY: ${label}`
 
   const pagination_parameters = {

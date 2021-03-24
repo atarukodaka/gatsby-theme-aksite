@@ -37,12 +37,7 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             draft: Boolean
             tags: [String]
         }
-        type AksConfig implements Node {
-            basePath: String!
-            assetPath: String!
-            listPath: String!
-            itemsPerPage: Int!
-        }
+       
         type Series {
             title: String
             number: Int
@@ -60,17 +55,27 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             yearMonth: String
             pagePath: String
             numberOfPosts: Int
+            
         }
-       
+        type AksConfig implements Node {
+            basePath: String!
+            contentPath: String!
+            assetPath: String!
+            listPath: String!
+            itemsPerPage: Int!
+            
+        }
+ 
     `);
 };
 
-exports.sourceNodes = ( { actions: { createTypes, createNode } }, themeOptions) => {
+exports.sourceNodes = ( { actions: { createNode } }, themeOptions) => {
     const options = withDefaults(themeOptions)
 
     const aksConfig = {
         basePath: options.basePath,
         assetPath: options.assetPath,
+        contentPath: options.contentPath,
         listPath: urlResolve(options.basePath, options.listPath),
         itemsPerPage: options.itemsPerPage
     }
@@ -83,8 +88,9 @@ exports.sourceNodes = ( { actions: { createTypes, createNode } }, themeOptions) 
             contentDigest: createContentDigest(aksConfig),
             content: JSON.stringify(aksConfig),
             description: `Aks Config`,
-          },
+        },
     })
+
 
     // == directory node ===
    
