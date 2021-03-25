@@ -16,6 +16,9 @@ const theme = createMuiTheme({
         }*/
     },
     typography: {
+        body2: {
+            fontSize: "1rem"
+        },
         fontFamily: [
             "Segoe UI", "Meiryo",
             "Avenir Next",

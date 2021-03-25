@@ -76,6 +76,7 @@ const MdxComponents = () => {
         h2: Heading2,
         h3: Heading3,
         h4: Heading4,
+        //p: Typography,
      }
 }
 

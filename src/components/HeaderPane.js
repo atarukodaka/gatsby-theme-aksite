@@ -65,7 +65,6 @@ const HeaderPane = () => {
                     <Divider />
 
                     <nav>
-                        <GoogleSearch cx={gcse_cx} />
                         <h3>Profile</h3>
                         <Profile/>
                         <Divider/>
@@ -73,7 +72,10 @@ const HeaderPane = () => {
                         <DirectoryTree />
                         <Divider />
                         <h3>Monthly</h3>
-                        <MonthlyArchives />{/*
+                        <MonthlyArchives />
+                        <GoogleSearch cx={gcse_cx} />
+
+                        {/*
                         <h3>Tags</h3>
                         <TagList/>
                         */}

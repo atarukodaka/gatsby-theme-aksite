@@ -5,8 +5,9 @@ import { css } from '@emotion/react'
 const Asc256 = ( {children} ) => {
     const cssAsc = css`
         margin: 2rem;
-        font-size: 2.5rem;
+        font-size: 2.2rem;
         font-weight: 800;
+        text-align: center;
     `
     
     return (
