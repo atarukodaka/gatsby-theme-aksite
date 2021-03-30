@@ -29,6 +29,8 @@ export default function PostTemplate({ data, pageContext, location }) {
   const cover = node.frontmatter.cover?.publicURL
   const crumbLabel = (isRoot) ? null : node.fields.postTitle
 
+  console.log("cover url", node.frontmatter.cover)
+
   return (
     <Layout tableOfContents={node.tableOfContents} >
       

@@ -19,7 +19,8 @@ const SEO = ( { title, description, cover, lang  } ) => {
     const fullDescription = description || siteDescription
     const imageUrl = siteUrl + coverImage
     const defaultLang = "ja" // TODO: shd be 'en' or customialbe??
-  
+        
+    console.log("seo image url", cover, imageUrl)
     return (
         <Helmet
             htmlAttributes={{ lang: lang || defaultLang}}
