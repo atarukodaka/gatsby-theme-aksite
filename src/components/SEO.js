@@ -11,14 +11,16 @@ const SEO = ( { title, description, cover, lang  } ) => {
 
     const { title: siteTitle, description: siteDescription, siteUrl, 
         coverImage: siteCoverImage, social: { twitter} } = useSiteMetadata()
+    
     const coverImage = cover || siteCoverImage
     const url = [siteUrl, pathname].join('')
     
     //title ||= siteTitle
-    const ogType = ( pathname === '/') ? 'website' : 'article'
+    const isRoot = ( pathname === '/')
+    const ogType = isRoot ? 'website' : 'article'
 
-    const fullTitle = (ogType === 'website') ? title : `${title} | ${siteTitle}`
-    const fullDescription = (ogType === 'website') ? siteDescription : description || siteDescription
+    const fullTitle = (isRoot) ? siteTitle : `${title} | ${siteTitle}`
+    const fullDescription = (isRoot) ? siteDescription : description || siteDescription
     const imageUrl = siteUrl + coverImage
     const defaultLang = "ja" // TODO: shd be 'en' or customialbe??
     
