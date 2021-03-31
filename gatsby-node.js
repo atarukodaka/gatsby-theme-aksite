@@ -73,7 +73,13 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             description: String!
             image: String!
         }
- 
+        type File implements Node {
+            fields: FileFields
+        }
+        type FileFields {
+            link: String!
+            ogpImage: Boolean!
+        }
     `);
 };
 
@@ -118,6 +124,7 @@ const getDirectoryFullLabel = (directory, labels = []) => {
     }).join('/')
 }
 
+
 exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, themeOptions) => {
     const { createNodeField } = actions
     const options = withDefaults(themeOptions)
@@ -150,7 +157,33 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
             name: 'postTitle',
             value: postTitle
         })
-    } else if (node.internal.type === 'LinksYaml'){
+        /////
+        if (node.frontmatter.links) {
+            node.frontmatter.links.forEach(async link => {
+                console.log("formmatter links", link)
+                const data = await getOgp(link)
+                const imageNode = await createRemoteFileNode({
+                    url: data.image,
+                    cache: cache,
+                    createNode: actions.createNode,
+                    createNodeId: createNodeId,
+                    //name: 'OgpImage',
+                    parentNodeId: node.id,
+                    //sourceInstanceName: "ogpImage"
+                })
+                await actions.createNodeField({
+                    node: imageNode,
+                    name: 'ogpImage',
+                    value: true
+                })
+                await actions.createNodeField({
+                    node: imageNode,
+                    name: 'link',
+                    value: link
+                })
+            })
+        }
+    } else if (node.internal.type === 'LinksYaml') {
         const data = await getOgp(node.url)
         createNodeField({
             node,
@@ -173,7 +206,7 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
             value: data.image
         })
         // create remote node
-        if (data.image){
+        if (false && data.image) {
             console.log("remote image", data.image, createNodeId)
             const imageNode = await createRemoteFileNode({
                 url: data.image,
@@ -404,7 +437,7 @@ exports.createPages = async ({ graphql, actions }, themeOptions) => {
 
     // create pages
     const options = withDefaults(themeOptions)
- 
+
     createMdxPages({ nodes: mdxPages.nodes, actions: actions }, options)
     createTopPage({ nodes: mdxPages.nodes, actions: actions }, options)
     //createIndexPagination({ nodes: mdxPages.nodes, actions: actions})

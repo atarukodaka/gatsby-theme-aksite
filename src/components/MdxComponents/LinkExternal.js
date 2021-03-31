@@ -30,9 +30,8 @@ const query = graphql`
       }
     }
   }
-  ogpImages: allFile(filter: {fields: {ogpImage: {eq: "true"}}}) {
+  ogpImages: allFile(filter: {fields: {ogpImage: {eq: true}}}) {
     nodes {
-			url
       id
       childImageSharp {
         fluid {
