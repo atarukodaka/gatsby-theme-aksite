@@ -30,7 +30,7 @@ export const PostCard = ({ node, ...props }) => (
                     <Date>{node.frontmatter.date}</Date>
                     <DirectoryBox directory={node.fields.directory}/>
                     <Title>{node.fields.postTitle}</Title>
-                    {node.frontmatter.description || node.excerpt}
+                    <div>{node.frontmatter.description || node.excerpt}</div>
                     <ClearImage />
                 </Box>
     </NavigateCard>

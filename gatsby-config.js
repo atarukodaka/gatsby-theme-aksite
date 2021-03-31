@@ -160,7 +160,13 @@ module.exports = (themeOptions) => {
           respectDNT: true,
         },
       },
-
+      `gatsby-transformer-yaml`,
+      {
+        resolve: `gatsby-source-filesystem`,
+        options: {
+          path: `src/data/`,
+        },
+      },
       `gatsby-plugin-react-helmet`,
       `gatsby-plugin-sitemap`,
       `gatsby-plugin-material-ui`,

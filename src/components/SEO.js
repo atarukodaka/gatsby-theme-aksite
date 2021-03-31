@@ -18,7 +18,7 @@ const SEO = ( { title, description, cover, lang  } ) => {
     const ogType = ( pathname === '/') ? 'website' : 'article'
 
     const fullTitle = (ogType === 'website') ? title : `${title} | ${siteTitle}`
-    const fullDescription = (ogType == 'website') ? siteDescription : description || siteDescription
+    const fullDescription = (ogType === 'website') ? siteDescription : description || siteDescription
     const imageUrl = siteUrl + coverImage
     const defaultLang = "ja" // TODO: shd be 'en' or customialbe??
     

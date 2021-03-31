@@ -2,27 +2,28 @@ const fs = require(`fs`)
 const path = require(`path`)
 const mkdirp = require(`mkdirp`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
+const { createRemoteFileNode } = require(`gatsby-source-filesystem`);
 const { paginate } = require('gatsby-awesome-pagination');
 const { urlResolve, createContentDigest } = require(`gatsby-core-utils`)
 const axios = require('axios')
-const cheerio = require('cheerio'); 
+const cheerio = require('cheerio');
 
 const withDefaults = require('./src/utils/default_options')
 const templateDir = "./src/templates"
 
-exports.onPreBootstrap = ({store}, themeOptions) => {
-    const { contentPath, assetPath } = withDefaults(themeOptions) 
+exports.onPreBootstrap = ({ store }, themeOptions) => {
+    const { contentPath, assetPath } = withDefaults(themeOptions)
     const { program } = store.getState()
 
-    const dirs = [path.join(program.directory, contentPath), 
-        path.join(program.directory, assetPath)]
-  
+    const dirs = [path.join(program.directory, contentPath),
+    path.join(program.directory, assetPath)]
+
     dirs.forEach((dir) => {
-      if (!fs.existsSync(dir)) {
-        console.log(`Initializing ${dir} directory`)
-        mkdirp.sync(dir)
-      }
-    })    
+        if (!fs.existsSync(dir)) {
+            console.log(`Initializing ${dir} directory`)
+            mkdirp.sync(dir)
+        }
+    })
 }
 
 exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
@@ -65,13 +66,18 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             assetPath: String!
             listPath: String!
             itemsPerPage: Int!
-            
+        }
+        type AksRichLink implements Node {
+            url: String!
+            title: String!
+            description: String!
+            image: String!
         }
  
     `);
 };
 
-exports.sourceNodes = ( { actions: { createNode } }, themeOptions) => {
+exports.sourceNodes = ({ actions: { createNode } }, themeOptions) => {
     const options = withDefaults(themeOptions)
 
     const aksConfig = {
@@ -96,7 +102,7 @@ exports.sourceNodes = ( { actions: { createNode } }, themeOptions) => {
 
 const getDirectoryLabel = (directory, labels = []) => {
     const last = directory.split('/').pop()
-    const item = labels.find(v=> directory === v.directory)
+    const item = labels.find(v => directory === v.directory)
     return item?.label || last
     //return (item) ? item.label : "LAST"
     //return (labels) ? labels['/' + directory] || last : last
@@ -108,59 +114,13 @@ const getDirectoryFullLabel = (directory, labels = []) => {
     return parts.map(part => {
         i = i + 1
         //return labels[`/${parts.slice(0, i).join('/')}`] || v
-        return labels.find(v=>v.directory === `${parts.slice(0, i).join('/')}`)?.label || part
+        return labels.find(v => v.directory === `${parts.slice(0, i).join('/')}`)?.label || part
     }).join('/')
 }
 
-const getOgp = async (url) => {
-    const data = {
-        //url: url,
-        //domain: url.parse(node.url).hostname,
-        title: '',
-        description: '',
-        image: '',
-      }
-    
-    const res = await axios.get(url)
-    const $ = cheerio.load(res.data)
-     // url
-     if ($("meta[property='og:url']").attr('content'))
-     data.url = $("meta[property='og:url']").attr('content')
-   else if (res.request.res.responseUrl) {
-     data.url = res.request.res.responseUrl
-   }
-   // domain
-   //data.domain = url.parse(data.url).hostname
-   // title
-   if ($("meta[property='og:title']").attr('content}'))
-     data.title = $("meta[property='og:title']").attr('content}')
-   else if ($('title').text()) {
-     data.title = $('title').text()
-   }
-   // description
-   if ($("meta[property='og:description']").attr('content'))
-     data.description = $("meta[property='og:description']").attr('content')
-   else if ($("meta[name='description']").attr('content')) {
-     data.description = $("meta[name='description']").attr('content')
-   }
-   // image
-   if ($("meta[property='og:image']").attr('content'))
-     data.image = $("meta[property='og:image']").attr('content')
-   else if ($("meta[name='image']").attr('content')) {
-     data.image = $("meta[name='image']").attr('content')
-   }
-    console.log(data)
-
-    return data
-}
-
-exports.onCreateNode = async ({ node, getNode, actions }, themeOptions) => {
+exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, themeOptions) => {
     const { createNodeField } = actions
     const options = withDefaults(themeOptions)
-
-    const url = "http://atarukodaka.github.io"
-    getOgp(url)
-    
     if (node.internal.type === `Mdx`) {
         const slug = createFilePath({ node, getNode })
         const directory = slug.split("/").slice(1, -2).join("/")
@@ -190,16 +150,63 @@ exports.onCreateNode = async ({ node, getNode, actions }, themeOptions) => {
             name: 'postTitle',
             value: postTitle
         })
+    } else if (node.internal.type === 'LinksYaml'){
+        const data = await getOgp(node.url)
+        createNodeField({
+            node,
+            name: 'url',
+            value: node.url
+        })
+        createNodeField({
+            node,
+            name: 'title',
+            value: data.title || '(NO TITLE)'
+        })
+        createNodeField({
+            node,
+            name: 'description',
+            value: data.description || '(NO DESCRIPTION)'
+        })
+        createNodeField({
+            node,
+            name: 'image',
+            value: data.image
+        })
+        // create remote node
+        if (data.image){
+            console.log("remote image", data.image, createNodeId)
+            const imageNode = await createRemoteFileNode({
+                url: data.image,
+                cache: cache,
+                createNode: actions.createNode,
+                createNodeId: createNodeId,
+                //name: 'OgpImage',
+                parentNodeId: node.id,
+                //sourceInstanceName: "ogpImage"
+            })
+            await actions.createNodeField({
+                node: imageNode,
+                name: 'ogpImage',
+                value: "true"
+            })
+            await actions.createNodeField({
+                node: imageNode,
+                name: 'link',
+                value: node.url
+            })
+
+        }
     }
 }
 ////////////////////////////////////////////////////////////////
 // markdown pages
-const createMdxPages = ({ nodes, actions }, options) => {
+const createMdxPages = async ({ nodes, actions }, options) => {
     console.log("** all markdown pages")
-    const { createPage } = actions
+    const { createPage, createNode } = actions
     const template = `${templateDir}/post-template.js`
 
     nodes.forEach(node => {
+
         //console.log("fields", node.fields)
         createPage({
             path: node.fields.path,
@@ -212,9 +219,9 @@ const createMdxPages = ({ nodes, actions }, options) => {
 }
 ////////////////
 // top page
-const createTopPage = ( {nodes, actions }, options) => {
-    const node = (nodes) ? nodes[0] : null    
-    if (node == null){ return }
+const createTopPage = ({ nodes, actions }, options) => {
+    const node = (nodes) ? nodes[0] : null
+    if (node == null) { return }
 
     console.log("** top page", node.fields.slug, node.frontmatter.draft)
     const { createPage } = actions
@@ -252,7 +259,7 @@ const createDirectoryArchives = ({ nodes, actions }, options) => {
     console.log("** creating directory index")
     const { createPage, createNode } = actions
     const directories = [...new Set(nodes.map(node => node.fields.directory))]
-    directories.filter(v=>!!v).forEach(directory => {
+    directories.filter(v => !!v).forEach(directory => {
         const re = new RegExp(`^${directory}`)
         const items = nodes.filter(node => re.test(node.fields.directory))
         const template = `${templateDir}/directory_archive-template.js`
@@ -273,7 +280,8 @@ const createDirectoryArchives = ({ nodes, actions }, options) => {
             }
         })
 
-        const item = { name: directory,
+        const item = {
+            name: directory,
             label: getDirectoryLabel(directory, options.directoryLabels),
             fullLabel: getDirectoryFullLabel(directory, options.directoryLabels),
             pagePath: pagePath,
@@ -288,7 +296,7 @@ const createDirectoryArchives = ({ nodes, actions }, options) => {
                 type: `AksDirectory`,
                 contentDigest: createContentDigest(item),
                 content: JSON.stringify(item),
-              },                    
+            },
         })
     })
 }
@@ -336,7 +344,7 @@ const createMonthlyArchives = ({ nodes, actions }, options) => {
             const dt = new Date(v.frontmatter.date); return fromDate <= dt && dt < toDate
         })
 
-        const pagePath = urlResolve(options.basePath, `archives/${year}${month.toString().padStart(2,0)}`)
+        const pagePath = urlResolve(options.basePath, `archives/${year}${month.toString().padStart(2, 0)}`)
 
         paginate({
             createPage,
@@ -352,12 +360,12 @@ const createMonthlyArchives = ({ nodes, actions }, options) => {
                 toDate: toDate.toISOString(),
             }
         })
-       
-        const item = { 
+
+        const item = {
             year: year, month: month, yearMonth: yearMonth,
             pagePath: pagePath,
             numberOfPosts: items.length
-         }
+        }
         createNode({
             id: `gatsby-theme-aksite-monthly-${item.yearMonth}`,
             parent: null,
@@ -367,10 +375,11 @@ const createMonthlyArchives = ({ nodes, actions }, options) => {
                 type: `AksMonthly`,
                 contentDigest: createContentDigest(item),
                 content: JSON.stringify(item),
-              },                    
+            },
         })
     })
 }
+
 ////////////////
 exports.createPages = async ({ graphql, actions }, themeOptions) => {
     const { data: { mdxPages } } = await graphql(`
@@ -395,14 +404,59 @@ exports.createPages = async ({ graphql, actions }, themeOptions) => {
 
     // create pages
     const options = withDefaults(themeOptions)
-
-    createMdxPages({ nodes: mdxPages.nodes, actions: actions}, options)
-    createTopPage( { nodes: mdxPages.nodes, actions: actions }, options)
+ 
+    createMdxPages({ nodes: mdxPages.nodes, actions: actions }, options)
+    createTopPage({ nodes: mdxPages.nodes, actions: actions }, options)
     //createIndexPagination({ nodes: mdxPages.nodes, actions: actions})
-    createListArchives({ nodes: mdxPages.nodes, actions: actions}, options)
-    createDirectoryArchives({ nodes: mdxPages.nodes, actions: actions}, options)
+    createListArchives({ nodes: mdxPages.nodes, actions: actions }, options)
+    createDirectoryArchives({ nodes: mdxPages.nodes, actions: actions }, options)
     //createTagArchives({ nodes: mdxPages.nodes, actions: actions, tags: tags}, options)
-    createMonthlyArchives({ nodes: mdxPages.nodes, actions: actions}, options)
-       
-
+    createMonthlyArchives({ nodes: mdxPages.nodes, actions: actions }, options)
 }
+
+
+////////////////
+
+const getOgp = async (url) => {
+    const data = {
+        url: url,
+        //domain: url.parse(node.url).hostname,
+        title: '',
+        description: '',
+        image: '',
+    }
+
+    const res = await axios.get(url)
+    //console.log("getOgp", res.data)
+    const $ = cheerio.load(res.data)
+    // url
+    if ($("meta[property='og:url']").attr('content'))
+        data.url = $("meta[property='og:url']").attr('content')
+    else if (res.request.res.responseUrl) {
+        data.url = res.request.res.responseUrl
+    }
+    // domain
+    //data.domain = url.parse(data.url).hostname
+    // title
+    if ($("meta[property='og:title']").attr('content}'))
+        data.title = $("meta[property='og:title']").attr('content}')
+    else if ($('title').text()) {
+        data.title = $('title').text()
+    }
+    // description
+    if ($("meta[property='og:description']").attr('content'))
+        data.description = $("meta[property='og:description']").attr('content')
+    else if ($("meta[name='description']").attr('content')) {
+        data.description = $("meta[name='description']").attr('content')
+    }
+    // image
+    if ($("meta[property='og:image']").attr('content'))
+        data.image = $("meta[property='og:image']").attr('content')
+    else if ($("meta[name='image']").attr('content')) {
+        data.image = $("meta[name='image']").attr('content')
+    }
+    console.log("ogpdata:", data)
+
+    return data
+}
+
