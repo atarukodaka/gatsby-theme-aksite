@@ -15,12 +15,15 @@ const SEO = ( { title, description, cover, lang  } ) => {
     const url = [siteUrl, pathname].join('')
     
     //title ||= siteTitle
-    const fullTitle = `${title} | ${siteTitle}`
-    const fullDescription = description || siteDescription
+    const ogType = ( pathname === '/') ? 'website' : 'article'
+
+    const fullTitle = (ogType === 'website') ? title : `${title} | ${siteTitle}`
+    const fullDescription = (ogType == 'website') ? siteDescription : description || siteDescription
     const imageUrl = siteUrl + coverImage
     const defaultLang = "ja" // TODO: shd be 'en' or customialbe??
+    
         
-    console.log("seo image url", cover, imageUrl)
+    //console.log("seo image url", cover, imageUrl)
     return (
         <Helmet
             htmlAttributes={{ lang: lang || defaultLang}}
@@ -29,7 +32,10 @@ const SEO = ( { title, description, cover, lang  } ) => {
                 { name: 'description', content: fullDescription },
                 { name: 'image', content: imageUrl },
                 { property: 'og:url', content: url },
+                { property: 'og:type', content: ogType },
+                { property: 'og:title', content: fullTitle },
                 { property: 'og:description', content: fullDescription },
+                { property: 'og:site_name', content: siteTitle },
                 { property: 'og:image', content: imageUrl },
                 { name: 'twitter:card', content: 'summary'},
                 { name: 'twitter:creator', content: twitter },

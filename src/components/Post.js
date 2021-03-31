@@ -60,7 +60,7 @@ const Tags = ({node}) => {
 const Post = ({ node }) => {
     const { pathname } = useLocation()
     const { siteUrl } = useSiteMetadata()
-    console.log("path: ", node.fields.path)
+    //console.log("path: ", node.fields.path)
 
     return (
         <div css={cssPost}>

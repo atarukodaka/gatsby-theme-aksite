@@ -4,6 +4,8 @@ const mkdirp = require(`mkdirp`)
 const { createFilePath } = require(`gatsby-source-filesystem`)
 const { paginate } = require('gatsby-awesome-pagination');
 const { urlResolve, createContentDigest } = require(`gatsby-core-utils`)
+const axios = require('axios')
+const cheerio = require('cheerio'); 
 
 const withDefaults = require('./src/utils/default_options')
 const templateDir = "./src/templates"
@@ -90,10 +92,6 @@ exports.sourceNodes = ( { actions: { createNode } }, themeOptions) => {
             description: `Aks Config`,
         },
     })
-
-
-    // == directory node ===
-   
 }
 
 const getDirectoryLabel = (directory, labels = []) => {
@@ -114,10 +112,55 @@ const getDirectoryFullLabel = (directory, labels = []) => {
     }).join('/')
 }
 
-exports.onCreateNode = ({ node, getNode, actions }, themeOptions) => {
+const getOgp = async (url) => {
+    const data = {
+        //url: url,
+        //domain: url.parse(node.url).hostname,
+        title: '',
+        description: '',
+        image: '',
+      }
+    
+    const res = await axios.get(url)
+    const $ = cheerio.load(res.data)
+     // url
+     if ($("meta[property='og:url']").attr('content'))
+     data.url = $("meta[property='og:url']").attr('content')
+   else if (res.request.res.responseUrl) {
+     data.url = res.request.res.responseUrl
+   }
+   // domain
+   //data.domain = url.parse(data.url).hostname
+   // title
+   if ($("meta[property='og:title']").attr('content}'))
+     data.title = $("meta[property='og:title']").attr('content}')
+   else if ($('title').text()) {
+     data.title = $('title').text()
+   }
+   // description
+   if ($("meta[property='og:description']").attr('content'))
+     data.description = $("meta[property='og:description']").attr('content')
+   else if ($("meta[name='description']").attr('content')) {
+     data.description = $("meta[name='description']").attr('content')
+   }
+   // image
+   if ($("meta[property='og:image']").attr('content'))
+     data.image = $("meta[property='og:image']").attr('content')
+   else if ($("meta[name='image']").attr('content')) {
+     data.image = $("meta[name='image']").attr('content')
+   }
+    console.log(data)
+
+    return data
+}
+
+exports.onCreateNode = async ({ node, getNode, actions }, themeOptions) => {
     const { createNodeField } = actions
     const options = withDefaults(themeOptions)
 
+    const url = "http://atarukodaka.github.io"
+    getOgp(url)
+    
     if (node.internal.type === `Mdx`) {
         const slug = createFilePath({ node, getNode })
         const directory = slug.split("/").slice(1, -2).join("/")
