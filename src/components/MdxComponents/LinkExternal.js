@@ -19,37 +19,28 @@ import HoverBox from '../HoverBox'
 
 const query = graphql`
 {
-  allLinksYaml {
+  allAksRichLink {
     nodes {
+      id
+      image
+      imageId
+      title
       url
-      fields {
-        title
-        url
-        image
-        description
-      }
+      description
     }
   }
-  ogpImages: allFile(filter: {fields: {ogpImage: {eq: true}}}) {
+  ogpImages: allFile ( filter: { fields: { ogpImage: {eq: true }}}){
     nodes {
       id
       childImageSharp {
         fluid {
           ...GatsbyImageSharpFluid
-        } 
+        }        
       }
-
-
-      fields {
-        link
-        ogpImage
-      }
-   
     }
   }
 }
 `
-
 const size = "100px"
 
 const cssImageWrapper = css`
@@ -81,20 +72,13 @@ const ClearImage = styled.div`
 
 const LinkExternal = ({ to, children }) => {
   const data = useStaticQuery(query)
-  const node = data.allLinksYaml.nodes.find(v => v.url === to)
-  //console.log(node)
-  //const { title, description, image } = (node) ? node.fields : { title: "", description: "", image: ""}
 
-  let title, description, image
-
-  if (node){
-    title = node.fields.title
-    description = node.fields.description
-    image = node.fields.image
-  } else {
-    title = children
-  }
-  const imgNode = data.ogpImages.nodes.find(v=>v.fields.link === to)
+  const node = data.allAksRichLink.nodes.find(v=>v.url === to)
+  if (!node) return <></>
+  const { title, description, image, imageId } = node
+  
+  const imgNode = data.ogpImages.nodes.find(v=>v.id === imageId)
+  
 
   return (
     <HoverBox>

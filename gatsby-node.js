@@ -72,12 +72,13 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             title: String!
             description: String!
             image: String!
+            imageId: ID!
         }
         type File implements Node {
             fields: FileFields
         }
         type FileFields {
-            link: String!
+            url: String!
             ogpImage: Boolean!
         }
     `);
@@ -159,18 +160,20 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
         })
         /////
         if (node.frontmatter.links) {
-            node.frontmatter.links.forEach(async link => {
-                console.log("formmatter links", link)
-                const data = await getOgp(link)
+            node.frontmatter.links.forEach(async url => {
+                console.log("frontmatter links", url)
+                const data = await getOgp(url)
+
                 const imageNode = await createRemoteFileNode({
                     url: data.image,
                     cache: cache,
                     createNode: actions.createNode,
                     createNodeId: createNodeId,
                     //name: 'OgpImage',
-                    parentNodeId: node.id,
+                    //parentNodeId: node.id,
                     //sourceInstanceName: "ogpImage"
                 })
+                
                 await actions.createNodeField({
                     node: imageNode,
                     name: 'ogpImage',
@@ -178,9 +181,22 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
                 })
                 await actions.createNodeField({
                     node: imageNode,
-                    name: 'link',
-                    value: link
+                    name: 'url',
+                    value: url
                 })
+             
+                const richLinkNode = actions.createNode({
+                    ...data,
+                    id: `gatsby-theme-aksite-links-${url}`,
+                    imageId: imageNode.id,
+                    parent: null,
+                    internal: {
+                        type: `aksRichLink`,
+                        contentDigest: createContentDigest(data),
+                        content: JSON.stringify(data),
+                    },
+                })
+                
             })
         }
     } else if (node.internal.type === 'LinksYaml') {
@@ -488,7 +504,7 @@ const getOgp = async (url) => {
     else if ($("meta[name='image']").attr('content')) {
         data.image = $("meta[name='image']").attr('content')
     }
-    console.log("ogpdata:", data)
+    //console.log("ogpdata:", data)
 
     return data
 }
