@@ -83,7 +83,7 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
     `);
 };
 
-exports.sourceNodes = async ({ actions: { createNode, createNodeField } , cache}, themeOptions) => {
+exports.sourceNodes = async ({ actions: { createNode, createNodeField }, cache }, themeOptions) => {
     console.log("Source Nodes")
     const options = withDefaults(themeOptions)
 
@@ -203,15 +203,12 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
         /////
         //console.log("nodefrontmatterlinks", node.frontmatter.links)
         if (node.frontmatter.links) {
-            const externalLinks = node.frontmatter.links.map(async url => {
-                const data = await getOgp(url)
-            })
 
             node.frontmatter.links.forEach(async url => {
                 //console.log("***************** frontmatter links", url)
                 const data = await getOgp(url)
 
-                const richLinkNode = await actions.createNode({
+                await actions.createNode({
                     ...data,
                     id: `gatsby-theme-aksite-links-${url}`,
                     //imageId: imageNode.id,
@@ -222,10 +219,7 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
                         content: JSON.stringify(data),
                     },
                 })
-                //console.log("***rln done", richLinkNode)
-
-
-                if (data.image) {
+                if (data.image) {   // TODO: gif must be omited
                     const imageNode = await createRemoteFileNode({
                         url: data.image,
                         cache: cache,

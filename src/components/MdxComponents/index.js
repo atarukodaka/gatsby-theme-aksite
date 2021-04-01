@@ -71,7 +71,7 @@ const Heading4 = ( { children, ...props}) =>
 
 
 const MdxComponents = () => {
-    return { Alert, Baloon, Box, Link, LinkPost, LinkExternal, Series, Grid, Spoiler,
+    return { Alert, Baloon, Box, LinkPost, LinkExternal, Series, Grid, Spoiler,
         Callout, Asc256,
         h2: Heading2,
         h3: Heading3,

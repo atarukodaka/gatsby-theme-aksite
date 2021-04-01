@@ -29,6 +29,7 @@ const query = graphql`
     }
   }
   ogpImages: allFile ( filter: { fields: { ogpImage: {eq: true }}}){
+  
     nodes {
       id
       fields { url }
@@ -41,12 +42,13 @@ const query = graphql`
   }
 }
 `
-const size = "100px"
+const size = "120px"
 
 const cssImageWrapper = css`
   width: ${size};
   height: ${size};
   float: left;
+  padding: 0px;
   
   overflow: hidden;
   position: relative;
@@ -62,39 +64,49 @@ const cssImageWrapper = css`
 `
 
 const Title = styled.div`
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin: 0em;
+  font-size: 1rem;
+  font-weight: bold;
+  
+  `
+const Description = styled.div`
+  font-size: 0.8rem;
+  padding-top: 1rem;
+  
 `
 const ClearImage = styled.div`
     clear: both;
 `
 
-const LinkExternal = ({ to, children }) => {
+const LinkExternal = ({ url, children }) => {
   const data = useStaticQuery(query)
 
-  const node = data.allAksRichLink.nodes.find(v=>v.url === to)
-  if (!node) return (<div>{to}</div>)
-  const { title, description, image, imageId } = node
+  const node = data.allAksRichLink.nodes.find(v=>v.url === url)
+  if (!node) return (<a href={url}>{children || url}</a>)
+  const { title, description, image } = node
   
-  const imgNode = data.ogpImages.nodes.find(v=>v.fields.url === to)
+  const imgNode = data.ogpImages.nodes.find(v=>v.fields.url === url)  
   
+
+  console.log("url", url, imgNode)
+  console.log(data.ogpImages.nodes)
+  console.log("total count: ", data.ogpImages.totalCount)
 
   return (
     <HoverBox>
-      <a href={to} target="_blank" rel="noreferrer">
-        <Card>
+      <a href={url} target="_blank" rel="noreferrer">
+        <Box boxShadow={2}>
           <div css={cssImageWrapper}>
-            { (imgNode) ? <Img fluid={imgNode.childImageSharp.fluid} /> :
+            { (!!imgNode?.childImageSharp ) ? <Img fluid={imgNode.childImageSharp.fluid} /> :
             <img src={image}/>
             }
           </div>
-          <Box ml={14}>
+          <Box ml={16} py={2} px={2}>
             <Title>{title || children}</Title>
-            <div>{description}</div>
+            <Description>{description?.substr(0,100)}</Description>
+            <div>{}</div>
             <ClearImage />
           </Box>
-        </Card>
+        </Box>
       </a>
     </HoverBox>
 
