@@ -72,7 +72,6 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             title: String!
             description: String!
             image: String!
-            imageId: ID!
         }
         type File implements Node {
             fields: FileFields
@@ -84,7 +83,8 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
     `);
 };
 
-exports.sourceNodes = ({ actions: { createNode } }, themeOptions) => {
+exports.sourceNodes = async ({ actions: { createNode, createNodeField } , cache}, themeOptions) => {
+    console.log("Source Nodes")
     const options = withDefaults(themeOptions)
 
     const aksConfig = {
@@ -105,6 +105,48 @@ exports.sourceNodes = ({ actions: { createNode } }, themeOptions) => {
             description: `Aks Config`,
         },
     })
+    ////////////////////////////////////////////////////////////////
+
+    /*
+    const url = "http://atarukodaka.github.io"
+    const data = await getOgp(url)
+    console.log("ogp data: ", data)
+    
+    const richLinkNode = await createNode({
+        ...data,
+        id: `gatsby-theme-aksite-links-${url}`,
+        //imageId: imageNode.id,
+        parent: null,
+        internal: {
+            type: `aksRichLink`,
+            contentDigest: createContentDigest(data),
+            content: JSON.stringify(data),
+        },
+    })
+    if (data.image) {
+        const imageNode = await createRemoteFileNode({
+            url: data.image,
+            cache: cache,
+            createNode: createNode,
+            createNodeId: createNodeId,
+            //name: 'OgpImage',
+            //parentNodeId: node.id,
+            //sourceInstanceName: "ogpImage"
+        })
+
+        await createNodeField({
+            node: imageNode,
+            name: 'ogpImage',
+            value: true
+        })
+        await createNodeField({
+            node: imageNode,
+            name: 'url',
+            value: url
+        })
+    }
+    */
+
 }
 
 const getDirectoryLabel = (directory, labels = []) => {
@@ -159,17 +201,20 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
             value: postTitle
         })
         /////
-        console.log("nodefrontmatterlinks", node.frontmatter.links)
+        //console.log("nodefrontmatterlinks", node.frontmatter.links)
         if (node.frontmatter.links) {
+            const externalLinks = node.frontmatter.links.map(async url => {
+                const data = await getOgp(url)
+            })
+
             node.frontmatter.links.forEach(async url => {
-                console.log("***************** frontmatter links", url)
+                //console.log("***************** frontmatter links", url)
                 const data = await getOgp(url)
 
                 const richLinkNode = await actions.createNode({
                     ...data,
                     id: `gatsby-theme-aksite-links-${url}`,
                     //imageId: imageNode.id,
-                    imageId: 0,
                     parent: null,
                     internal: {
                         type: `aksRichLink`,
@@ -177,30 +222,31 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
                         content: JSON.stringify(data),
                     },
                 })
-                console.log("***rln done", richLinkNode)
+                //console.log("***rln done", richLinkNode)
 
-                
-                const imageNode = await createRemoteFileNode({
-                    url: data.image,
-                    cache: cache,
-                    createNode: actions.createNode,
-                    createNodeId: createNodeId,
-                    //name: 'OgpImage',
-                    //parentNodeId: node.id,
-                    //sourceInstanceName: "ogpImage"
-                })
-                
-                await actions.createNodeField({
-                    node: imageNode,
-                    name: 'ogpImage',
-                    value: true
-                })
-                await actions.createNodeField({
-                    node: imageNode,
-                    name: 'url',
-                    value: url
-                })
-                
+
+                if (data.image) {
+                    const imageNode = await createRemoteFileNode({
+                        url: data.image,
+                        cache: cache,
+                        createNode: actions.createNode,
+                        createNodeId: createNodeId,
+                        //name: 'OgpImage',
+                        //parentNodeId: node.id,
+                        //sourceInstanceName: "ogpImage"
+                    })
+
+                    await actions.createNodeField({
+                        node: imageNode,
+                        name: 'ogpImage',
+                        value: true
+                    })
+                    await actions.createNodeField({
+                        node: imageNode,
+                        name: 'url',
+                        value: url
+                    })
+                }
 
             })
         }

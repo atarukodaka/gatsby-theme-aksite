@@ -74,7 +74,7 @@ const LinkExternal = ({ to, children }) => {
   const data = useStaticQuery(query)
 
   const node = data.allAksRichLink.nodes.find(v=>v.url === to)
-  if (!node) return <></>
+  if (!node) return (<div>{to}</div>)
   const { title, description, image, imageId } = node
   
   const imgNode = data.ogpImages.nodes.find(v=>v.fields.url === to)
