@@ -23,7 +23,6 @@ const query = graphql`
     nodes {
       id
       image
-      imageId
       title
       url
       description
@@ -32,6 +31,7 @@ const query = graphql`
   ogpImages: allFile ( filter: { fields: { ogpImage: {eq: true }}}){
     nodes {
       id
+      fields { url }
       childImageSharp {
         fluid {
           ...GatsbyImageSharpFluid
@@ -51,7 +51,7 @@ const cssImageWrapper = css`
   overflow: hidden;
   position: relative;
 
-  img {
+  .gatsby-image-wrapper {
     width: 100%;
     height: ${size};
     top: 0px;
@@ -77,7 +77,7 @@ const LinkExternal = ({ to, children }) => {
   if (!node) return <></>
   const { title, description, image, imageId } = node
   
-  const imgNode = data.ogpImages.nodes.find(v=>v.id === imageId)
+  const imgNode = data.ogpImages.nodes.find(v=>v.fields.url === to)
   
 
   return (
