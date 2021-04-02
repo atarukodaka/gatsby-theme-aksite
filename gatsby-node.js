@@ -7,6 +7,7 @@ const { paginate } = require('gatsby-awesome-pagination');
 const { urlResolve, createContentDigest } = require(`gatsby-core-utils`)
 const axios = require('axios')
 const cheerio = require('cheerio');
+//const url = require('url')
 
 const withDefaults = require('./src/utils/default_options')
 const templateDir = "./src/templates"
@@ -57,8 +58,7 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             month: Int
             yearMonth: String
             pagePath: String
-            numberOfPosts: Int
-            
+            numberOfPosts: Int            
         }
         type AksConfig implements Node {
             basePath: String!
@@ -69,6 +69,7 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
         }
         type AksRichLink implements Node {
             url: String!
+            domain: String!
             title: String!
             description: String!
             image: String!
@@ -105,56 +106,12 @@ exports.sourceNodes = async ({ actions: { createNode, createNodeField }, cache }
             description: `Aks Config`,
         },
     })
-    ////////////////////////////////////////////////////////////////
-
-    /*
-    const url = "http://atarukodaka.github.io"
-    const data = await getOgp(url)
-    console.log("ogp data: ", data)
-    
-    const richLinkNode = await createNode({
-        ...data,
-        id: `gatsby-theme-aksite-links-${url}`,
-        //imageId: imageNode.id,
-        parent: null,
-        internal: {
-            type: `aksRichLink`,
-            contentDigest: createContentDigest(data),
-            content: JSON.stringify(data),
-        },
-    })
-    if (data.image) {
-        const imageNode = await createRemoteFileNode({
-            url: data.image,
-            cache: cache,
-            createNode: createNode,
-            createNodeId: createNodeId,
-            //name: 'OgpImage',
-            //parentNodeId: node.id,
-            //sourceInstanceName: "ogpImage"
-        })
-
-        await createNodeField({
-            node: imageNode,
-            name: 'ogpImage',
-            value: true
-        })
-        await createNodeField({
-            node: imageNode,
-            name: 'url',
-            value: url
-        })
-    }
-    */
-
 }
 
 const getDirectoryLabel = (directory, labels = []) => {
     const last = directory.split('/').pop()
     const item = labels.find(v => directory === v.directory)
     return item?.label || last
-    //return (item) ? item.label : "LAST"
-    //return (labels) ? labels['/' + directory] || last : last
 }
 const getDirectoryFullLabel = (directory, labels = []) => {
     let i = 0
@@ -162,7 +119,6 @@ const getDirectoryFullLabel = (directory, labels = []) => {
     const parts = directory.split('/')
     return parts.map(part => {
         i = i + 1
-        //return labels[`/${parts.slice(0, i).join('/')}`] || v
         return labels.find(v => v.directory === `${parts.slice(0, i).join('/')}`)?.label || part
     }).join('/')
 }
@@ -206,6 +162,12 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
 
             node.frontmatter.links.forEach(async url => {
                 //console.log("***************** frontmatter links", url)
+                // TODO: cache
+                /*
+                const cacheDir = "./cache/links"
+                const cache = readLinkCache(url)
+                const data = cache || await getOgp(url)
+                */
                 const data = await getOgp(url)
 
                 await actions.createNode({
@@ -468,7 +430,7 @@ exports.createPages = async ({ graphql, actions }, themeOptions) => {
 const getOgp = async (url) => {
     const data = {
         url: url,
-        //domain: url.parse(node.url).hostname,
+        domain: new URL(url).hostname,
         title: '',
         description: '',
         image: '',
@@ -484,7 +446,7 @@ const getOgp = async (url) => {
         data.url = res.request.res.responseUrl
     }
     // domain
-    //data.domain = url.parse(data.url).hostname
+    data.domain = new URL(data.url).hostname
     // title
     if ($("meta[property='og:title']").attr('content}'))
         data.title = $("meta[property='og:title']").attr('content}')
