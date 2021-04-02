@@ -2,20 +2,12 @@ import React from 'react'
 import { useStaticQuery, graphql } from 'gatsby'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
-//import LaunchIcon from '@material-ui/icons/Launch';
 import Box from '@material-ui/core/Box'
 import Img from 'gatsby-image'
 
-//import { grey_hover } from './link_hover'
-//import Card from '../Card'
-//import HoverBox from '../HoverBox'
-import Card from '../Card'
 import HoverBox from '../HoverBox'
 
-//const fetch = require('node-fetch');
-//global.fetch = require('node-fetch');
-//const cheerio = require('cheerio'); 
-//const axios = require('axios')
+
 
 const query = graphql`
 {

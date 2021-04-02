@@ -6,6 +6,8 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 
 import HoverBox from './HoverBox'
+import LinkPost from './LinkPost'
+
 import useAllPosts from '../hooks/useAllPosts'
 import useAksConfig from '../hooks/useAksConfig'
 
@@ -28,14 +30,7 @@ const RecentPosts = () => {
         <List>
             {recentPosts.slice(0, numPosts).map(node => (
                 <ListItem key={node.id} css={cssItem}>
-                    <HoverBox>
-                        <Link to={node.fields.path}>
-                            <Typography>
-                                {node.fields.postTitle}
-                            </Typography>
-                        </Link>
-
-                    </HoverBox>
+                    <LinkPost node={node} display="title"/>                    
                 </ListItem>
             ))}
             
