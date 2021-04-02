@@ -4,10 +4,10 @@ import useAllPosts from '../hooks/useAllPosts'
 import LinkPost from './LinkPost'
 
 const OlderPost = ( {node} ) => {
-    return (node) ? <LinkPost node={node} display="box" postfix="》" style={{ textAlign: "right" }}/> : ''
+    return (node) ? <LinkPost node={node} label={node.fields.postTitle + '》'} display="box" style={{ textAlign: "right" }}/> : ''
 }
 const NewerPost = ( {node} ) => {
-    return (node) ? <LinkPost node={node} display="box" prefix="《" /> : ''
+    return (node) ? <LinkPost node={node} label={'《'+node.fields.postTitle} display="box" /> : ''
 }
 
 const PrevNextPost = ({ node }) => {

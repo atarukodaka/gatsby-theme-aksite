@@ -8,7 +8,7 @@ import CoverImage from './CoverImage'
 import HoverBox from './HoverBox'
 import Card from './Card'
 
-const LinkPost = ({ node, display, prefix, postfix, ...props }) => {
+const LinkPost = ({ node, display, label, ...props }) => {
     if (display === 'card') {
         const Title = styled.div`
             font-size: 1rem;
@@ -26,8 +26,8 @@ const LinkPost = ({ node, display, prefix, postfix, ...props }) => {
         `
         return (
             <HoverBox {...props}>
-                <Card>
-                    <Link to={node.fields.path}>
+                <Link to={node.fields.path}>
+                    <Card>
                         <CoverImage node={node} size="small" />
                         <Box ml={12}>
                             <Date>{node.frontmatter.date}</Date>
@@ -36,25 +36,25 @@ const LinkPost = ({ node, display, prefix, postfix, ...props }) => {
                             <Description>{node.frontmatter.description || node.excerpt}</Description>
                             <ClearImage />
                         </Box>
-                    </Link>
-                </Card>
+                    </Card>
+                </Link>
             </HoverBox>)
 
     } else {
         const title = node.fields.postTitle || node.frontmatter.title
-        const linkComponent = (<Link to={node.fields.path}>{prefix}{title}{postfix}</Link>)
+        //const linkComponent = (<Link to={node.fields.path}>{prefix}{title}{postfix}</Link>)
 
         switch (display) {
             case 'box':
-                return <HoverBox {...props}><Card>{linkComponent}</Card></HoverBox>
+                return <HoverBox {...props}><Link to={node.fields.path}><Card>{label || title}</Card></Link></HoverBox>
             case 'title':
-                return <HoverBox {...props}>{linkComponent}</HoverBox>
+                return <HoverBox {...props}><Link to={node.fields.path}>{label || title}</Link></HoverBox>
             default:
-                return <span {...props}>{linkComponent}</span>
+                return <Link to={node.fields.path} {...props}>{label || title}</Link>
 
         }
     }
-  
+
 }
 
 export default LinkPost

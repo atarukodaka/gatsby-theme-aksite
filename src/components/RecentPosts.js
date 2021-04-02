@@ -36,7 +36,8 @@ const RecentPosts = () => {
             
         </List>
         <HoverBox style={{marginLeft: "2rem", opacity: "0.8"}}>
-            <Link to={listPath}><Typography>...and other older posts</Typography>
+            <Link to={listPath}>
+                <Typography>...and other older posts</Typography>
             </Link>
         </HoverBox>
         </>
