@@ -160,7 +160,6 @@ module.exports = (themeOptions) => {
           respectDNT: true,
         },
       },
-
       `gatsby-plugin-react-helmet`,
       `gatsby-plugin-sitemap`,
       `gatsby-plugin-material-ui`,

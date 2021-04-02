@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import PostCard from '../PostCard'
+import LinkPost from '../LinkPost'
 import useAllPosts from '../../hooks/useAllPosts'
 
 const Series = ( {title, current, display="card"} ) => {
@@ -21,7 +21,7 @@ const Series = ( {title, current, display="card"} ) => {
     default:
         return (<nav>
             {nodes.map(node=>
-                (<PostCard node={node} key={node.id} />))
+                (<LinkPost node={node} display='card' key={node.id} />))
             }   
             </nav>)
     }

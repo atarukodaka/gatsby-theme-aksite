@@ -5,16 +5,18 @@ import Box from '@material-ui/core/Box'
 import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import { css } from '@emotion/react'
+//import LinkPost from '../LinkPost'
 
 import theme from '../../styles/theme'
 
 import LinkExternal from './LinkExternal'
-import LinkPost from './LinkPost'
 import Series from './Series'
 import Baloon from './Baloon'
 import Spoiler from './Spoiler'
 import Callout from './Callout'
 import Asc256 from './Asc256'
+
+
 
 const numberingColor = theme.palette.text.secondary
 const borderColor = theme.palette.action.active
@@ -71,8 +73,8 @@ const Heading4 = ( { children, ...props}) =>
 
 
 const MdxComponents = () => {
-    return { Alert, Baloon, Box, Link, LinkPost, LinkExternal, Series, Grid, Spoiler,
-        Callout, Asc256,
+    return { Alert, Baloon, Box, Link, LinkExternal, Series, Grid, Spoiler,
+        Callout, Asc256, 
         h2: Heading2,
         h3: Heading3,
         h4: Heading4,

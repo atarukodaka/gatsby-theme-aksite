@@ -1,11 +1,7 @@
 import React from 'react'
-//import { Link } from 'gatsby'
 import Box from '@material-ui/core/Box'
 import { Pagination } from '@material-ui/lab'
-//import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-//import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-
-import { PostCard } from "../components/PostCard"
+import LinkPost from '../components/LinkPost'
 import Layout from "../components/Layout"
 import SEO from '../components/SEO'
 import Breadcrumb from '../components/Breadcrumb'
@@ -18,7 +14,7 @@ const ArchiveTemplate = ( {title, nodes, crumbs, pagination_parameters} ) => (
       <PageTitle>{title}</PageTitle>
       {
         nodes.map(node => (
-          <PostCard node={node} key={node.id} />
+          <LinkPost node={node} key={node.id} display='card'/>
         ))
       }
 

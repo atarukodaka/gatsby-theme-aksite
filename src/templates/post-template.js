@@ -23,13 +23,13 @@ export default function PostTemplate({ data, pageContext, location }) {
   console.log(`create/template: ${data.mdx.fields.slug}`)
   const node = data.mdx
   const { isRoot, breadcrumb: { crumbs } } = pageContext
-  console.log("crumb", crumbs)
+  //console.log("crumb", crumbs)
   const title = node.fields.postTitle || node.frontmatter.title
   const description = node.frontmatter.description || node.excerpt
   const cover = node.frontmatter.cover?.publicURL
   const crumbLabel = (isRoot) ? null : node.fields.postTitle
 
-  console.log("cover url", node.frontmatter.cover)
+  //console.log("cover url", node.frontmatter.cover)
 
   return (
     <Layout tableOfContents={node.tableOfContents} >
