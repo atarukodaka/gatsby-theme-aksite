@@ -7,21 +7,20 @@ import Img from 'gatsby-image'
 
 import HoverBox from '../HoverBox'
 
-
-
 const query = graphql`
 {
   allAksRichLink {
     nodes {
       id
+      domain
       image
       title
       url
       description
     }
   }
-  ogpImages: allFile ( filter: { fields: { ogpImage: {eq: true }}}){
-  
+  ogpImages: allFile ( filter: { fields: { ogpImage: {eq: true }}}){  
+    totalCount
     nodes {
       id
       fields { url }
@@ -58,12 +57,18 @@ const cssImageWrapper = css`
 const Title = styled.div`
   font-size: 1rem;
   font-weight: bold;
-  
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   `
 const Description = styled.div`
   font-size: 0.8rem;
   padding-top: 1rem;
   
+`
+const Domain = styled.div`
+  color: gray;
+  margin-top: 0.5rem;
 `
 const ClearImage = styled.div`
     clear: both;
@@ -74,17 +79,15 @@ const LinkExternal = ({ url, children }) => {
 
   const node = data.allAksRichLink.nodes.find(v=>v.url === url)
   if (!node) return (<a href={url}>{children || url}</a>)
-  const { title, description, image } = node
+  const { title, domain, description, image } = node
   
   const imgNode = data.ogpImages.nodes.find(v=>v.fields.url === url)  
-  
-
   console.log("url", url, imgNode)
   console.log(data.ogpImages.nodes)
   console.log("total count: ", data.ogpImages.totalCount)
 
   return (
-    <HoverBox>
+    <HoverBox styles={{borderBottom: "1rem"}}> 
       <a href={url} target="_blank" rel="noreferrer">
         <Box boxShadow={2}>
           <div css={cssImageWrapper}>
@@ -95,7 +98,7 @@ const LinkExternal = ({ url, children }) => {
           <Box ml={16} py={2} px={2}>
             <Title>{title || children}</Title>
             <Description>{description?.substr(0,100)}</Description>
-            <div>{}</div>
+            <Domain>{domain}</Domain>
             <ClearImage />
           </Box>
         </Box>
