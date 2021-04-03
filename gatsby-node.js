@@ -106,6 +106,7 @@ exports.sourceNodes = async ({ actions: { createNode, createNodeField }, cache }
             description: `Aks Config`,
         },
     })
+    ////////////////
 }
 
 const getDirectoryLabel = (directory, labels = []) => {
@@ -122,7 +123,6 @@ const getDirectoryFullLabel = (directory, labels = []) => {
         return labels.find(v => v.directory === `${parts.slice(0, i).join('/')}`)?.label || part
     }).join('/')
 }
-
 
 exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, themeOptions) => {
     const { createNodeField } = actions
@@ -158,16 +158,13 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
         })
         /////
         //console.log("nodefrontmatterlinks", node.frontmatter.links)
+        /*
         if (node.frontmatter.links) {
 
             node.frontmatter.links.forEach(async url => {
                 //console.log("***************** frontmatter links", url)
                 // TODO: cache
-                /*
-                const cacheDir = "./cache/links"
-                const cache = readLinkCache(url)
-                const data = cache || await getOgp(url)
-                */
+  
                 const data = await getOgp(url)
 
                 await actions.createNode({
@@ -204,6 +201,38 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
                     })
                 }
 
+            })
+        }
+        */
+    } else if (node.internal.type === 'LinksYaml'){
+        const data = await getOgp(node.url)
+
+        createNodeField({ name: 'url', node, value: data.url })
+        createNodeField({ name: 'domain', node, value: data.domain })
+        createNodeField({ name: 'title', node, value: data.title })
+        createNodeField({ name: 'description', node, value: data.description })
+        createNodeField({ name: 'image', node, value: data.image })
+
+        if (data.image) {   // TODO: gif must be omited
+            const imageNode = await createRemoteFileNode({
+                url: data.image,
+                cache: cache,
+                createNode: actions.createNode,
+                createNodeId: createNodeId,
+                //name: 'OgpImage',
+                //parentNodeId: node.id,
+                //sourceInstanceName: "ogpImage"
+            })
+
+            await actions.createNodeField({
+                node: imageNode,
+                name: 'ogpImage',
+                value: true
+            })
+            await actions.createNodeField({
+                node: imageNode,
+                name: 'url',
+                value: node.url
             })
         }
     }

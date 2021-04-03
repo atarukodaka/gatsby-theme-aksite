@@ -9,14 +9,17 @@ import HoverBox from '../HoverBox'
 
 const query = graphql`
 {
-  allAksRichLink {
+  allLinksYaml {
     nodes {
       id
-      domain
-      image
-      title
       url
-      description
+      fields {
+        domain
+        image
+        title
+        url
+        description
+      }
     }
   }
   ogpImages: allFile ( filter: { fields: { ogpImage: {eq: true }}}){  
@@ -73,21 +76,9 @@ const Domain = styled.div`
 const ClearImage = styled.div`
     clear: both;
 `
-
-const LinkExternal = ({ url, children }) => {
-  const data = useStaticQuery(query)
-
-  const node = data.allAksRichLink.nodes.find(v=>v.url === url)
-  if (!node) return (<a href={url}>{children || url}</a>)
-  const { title, domain, description, image } = node
-  
-  const imgNode = data.ogpImages.nodes.find(v=>v.fields.url === url)  
-  console.log("url", url, imgNode)
-  console.log(data.ogpImages.nodes)
-  console.log("total count: ", data.ogpImages.totalCount)
-
+const LinkRichForm = ( {url, title, domain, description, imgNode, image}) => {
   return (
-    <HoverBox styles={{borderBottom: "1rem"}}> 
+    <HoverBox style={{marginBottom: "1rem"}}> 
       <a href={url} target="_blank" rel="noreferrer">
         <Box boxShadow={2}>
           <div css={cssImageWrapper}>
@@ -96,7 +87,7 @@ const LinkExternal = ({ url, children }) => {
             }
           </div>
           <Box ml={16} py={2} px={2}>
-            <Title>{title || children}</Title>
+            <Title>{title }</Title>
             <Description>{description?.substr(0,100)}</Description>
             <Domain>{domain}</Domain>
             <ClearImage />
@@ -106,6 +97,26 @@ const LinkExternal = ({ url, children }) => {
     </HoverBox>
 
   )
+}
+const LinkExternal = ({ url }) => {
+  const data = useStaticQuery(query)
+
+  const node = data.allLinksYaml.nodes.find(v=>v.url === url)
+  //if (!node) return (<a href={url}>{children || url}</a>)
+  if (!node) {
+    console.log(`LinkExternal: no such url. registere it i src/data/links.yaml:
+- url: ${url}`)
+    return LinkRichForm( { title: url, url, domain: new URL(url).hostname })
+  }
+
+  const { title, domain, description, image } = node.fields
+  
+  const imgNode = data.ogpImages.nodes.find(v=>v.fields.url === url)  
+  //console.log("url", url, imgNode)
+  //console.log(data.ogpImages.nodes)
+  //console.log("total count: ", data.ogpImages.totalCount)
+
+  return LinkRichForm( { title, domain, description, imgNode, image, url})
 }
 
 export default LinkExternal

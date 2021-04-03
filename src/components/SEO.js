@@ -4,6 +4,7 @@ import React from "react"
 import { Helmet } from 'react-helmet'
 import { useLocation } from "@reach/router"
 import useSiteMetadata from '../hooks/useSiteMetadata'
+import useAksConfig from '../hooks/useAksConfig'
 //import useAksCOnfig from '../hooks/useAksConfig'
 
 const SEO = ( { title, description, cover, lang  } ) => {
@@ -22,8 +23,8 @@ const SEO = ( { title, description, cover, lang  } ) => {
     const fullTitle = (isRoot) ? siteTitle : `${title} | ${siteTitle}`
     const fullDescription = (isRoot) ? siteDescription : description || siteDescription
     const imageUrl = siteUrl + coverImage
-    const defaultLang = "ja" // TODO: shd be 'en' or customialbe??
-    
+    const aksConfig = useAksConfig()
+    const defaultLang = aksConfig.defaultLang    
         
     //console.log("seo image url", cover, imageUrl)
     return (
