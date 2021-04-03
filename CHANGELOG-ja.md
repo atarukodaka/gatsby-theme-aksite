@@ -10,7 +10,7 @@
 - basePath 対応
 - config options: defaultLang
 - Asc256 追加（昔のASCII256本のアレ）
-- LinkExternal: frontmatter に links に使用url配列をいれとく
+- LinkExternal: src/data/links.yaml に参照リンクを羅列しておく
 
 ## [1.0.1] - 2021-03-16
 ### Fixed
