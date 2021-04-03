@@ -9,14 +9,17 @@ import HoverBox from '../HoverBox'
 
 const query = graphql`
 {
-  allAksRichLink {
+  allLinksYaml {
     nodes {
       id
-      domain
-      image
-      title
       url
-      description
+      fields {
+        domain
+        image
+        title
+        url
+        description
+      }
     }
   }
   ogpImages: allFile ( filter: { fields: { ogpImage: {eq: true }}}){  
@@ -77,9 +80,9 @@ const ClearImage = styled.div`
 const LinkExternal = ({ url, children }) => {
   const data = useStaticQuery(query)
 
-  const node = data.allAksRichLink.nodes.find(v=>v.url === url)
+  const node = data.allLinksYaml.nodes.find(v=>v.url === url)
   if (!node) return (<a href={url}>{children || url}</a>)
-  const { title, domain, description, image } = node
+  const { title, domain, description, image } = node.fields
   
   const imgNode = data.ogpImages.nodes.find(v=>v.fields.url === url)  
   console.log("url", url, imgNode)
