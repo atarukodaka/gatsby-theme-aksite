@@ -3,7 +3,8 @@ import { useStaticQuery, graphql } from 'gatsby'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Box from '@material-ui/core/Box'
-import Img from 'gatsby-image'
+//import Img from 'gatsby-image'
+import GatsbyImage from 'gatsby-plugin-image'
 
 import HoverBox from '../HoverBox'
 
@@ -28,9 +29,7 @@ const query = graphql`
       id
       fields { url }
       childImageSharp {
-        fluid {
-          ...GatsbyImageSharpFluid
-        }        
+        gatsbyImageData
       }
     }
   }
@@ -82,7 +81,7 @@ const LinkRichForm = ( {url, title, domain, description, imgNode, image}) => {
       <a href={url} target="_blank" rel="noreferrer">
         <Box boxShadow={2}>
           <div css={cssImageWrapper}>
-            { (!!imgNode?.childImageSharp ) ? <Img fluid={imgNode.childImageSharp.fluid} /> :
+            { (!!imgNode?.childImageSharp ) ? <GatsbyImage image={imgNode.childImageSharp.gatsbyImageData} /> :
             <img src={image}/>
             }
           </div>
