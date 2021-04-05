@@ -12,9 +12,7 @@ fragment postFields on Mdx {
     cover {
       publicURL
       childImageSharp {
-        fluid {
-          ...GatsbyImageSharpFluid
-        }        
+        gatsbyImageData
       }
     }
     series {

@@ -7,7 +7,7 @@ import useSiteMetadata from '../hooks/useSiteMetadata'
 import useAksConfig from '../hooks/useAksConfig'
 //import useAksCOnfig from '../hooks/useAksConfig'
 
-const SEO = ( { title, description, cover, lang  } ) => {
+const SEO = ( { title, description, cover, lang, isRoot  } ) => {
     const { pathname } = useLocation()
 
     const { title: siteTitle, description: siteDescription, siteUrl, 
@@ -17,7 +17,7 @@ const SEO = ( { title, description, cover, lang  } ) => {
     const url = [siteUrl, pathname].join('')
     
     //title ||= siteTitle
-    const isRoot = ( pathname === '/')
+    //const isRoot = ( pathname === '/')
     const ogType = isRoot ? 'website' : 'article'
 
     const fullTitle = (isRoot) ? siteTitle : `${title} | ${siteTitle}`

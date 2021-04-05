@@ -40,6 +40,7 @@ module.exports = (themeOptions) => {
     },
     plugins: [
       `gatsby-transformer-sharp`,
+      `gatsby-plugin-image`,
       `gatsby-plugin-sharp`,
       `gatsby-remark-images`,
       {
