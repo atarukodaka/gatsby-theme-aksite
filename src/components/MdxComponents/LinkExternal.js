@@ -3,8 +3,8 @@ import { useStaticQuery, graphql } from 'gatsby'
 import { css } from '@emotion/react'
 import styled from '@emotion/styled'
 import Box from '@material-ui/core/Box'
-import Img from 'gatsby-image'
-import GatsyImage from 'gatsby-plugin-image'
+//import Img from 'gatsby-image'
+import GatsbyImage from 'gatsby-plugin-image'
 
 import HoverBox from '../HoverBox'
 
