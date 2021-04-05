@@ -10,6 +10,7 @@ fragment postFields on Mdx {
     date(formatString: "YYYY-MM-DD"), title, description, tags
     draft
     cover {
+      publicURL
       childImageSharp {
         fluid {
           ...GatsbyImageSharpFluid
@@ -22,7 +23,7 @@ fragment postFields on Mdx {
     }
   }        
   fields { 
-    slug, directory, postTitle
+    slug, directory, postTitle, path
   }
   tableOfContents
 }

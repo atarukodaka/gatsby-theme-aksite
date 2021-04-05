@@ -6,10 +6,13 @@ import Profile from './Profile'
 import DirectoryTree from './DirectoryTree'
 import RecentPosts from './RecentPosts'
 import MonthlyArchives from './MonthlyArchives'
+import GoogleSearch from './GoogleSearch'
 //import TagList from './TagList'
 
 
 const Sidebar = () => {
+    const gcse_cx = process.env.GCSE_CX
+
     return (
         <div>
             <Card>
@@ -38,6 +41,11 @@ const Sidebar = () => {
                 <TagList />
             </Card>
             */}
+            <Card>
+                <Typography variant="h3">Search</Typography>
+                <GoogleSearch cx={gcse_cx} />
+            </Card>
+            
         </div>
     )
 }

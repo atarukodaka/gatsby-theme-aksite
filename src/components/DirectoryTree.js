@@ -70,7 +70,7 @@ const DirectoryTree = () => {
         defaultExpanded={allNodeIds}
         >
         {
-         tree.map(item=> (<Tree item={item}/>))   
+         tree.map(item=> (<Tree item={item} key={item.id}/>))   
         }
         
     </TreeView>)
@@ -80,9 +80,10 @@ const DirectoryTree = () => {
 const Tree = ({item}) =>  {
     return(
     <TreeItem label={<>{item.label} ({item.numberOfPosts})</>} nodeId={item.name} 
+        key={item.name}
         onClick={() => {}} 
         onLabelClick={(e) => {e.preventDefault(); navigate(item.pagePath)}}>
-        { item.child && ( item.child.map(v => (<Tree item={v} key={v.name}/>)) ) }
+        { item.child && ( item.child.map(v => (<Tree item={v} key={v.id}/>)) ) }
     </TreeItem>
 )
 }

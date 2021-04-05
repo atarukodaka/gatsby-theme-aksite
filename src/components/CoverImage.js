@@ -3,7 +3,7 @@ import Img from 'gatsby-image'
 //import { GatsbyImage } from 'gatsby-plugin-image'
 import { css } from '@emotion/react'
 
-const CoverImage = ({ node, size = "regular", imageSize="80px", ...props }) => {
+const CoverImage = ({ node, size = "regular", imageSize = "80px", ...props }) => {
 
     const cssWrapperSmall = css`
         width: ${imageSize};
@@ -20,21 +20,20 @@ const CoverImage = ({ node, size = "regular", imageSize="80px", ...props }) => {
             width: 100%;
             height: 100%;
         }
-`
+    `
 
-const cssWrapperWide = css`
-    .gatsby-image-wrapper {
-        width: 100%;
-        height: 200px;
-}
-`
-
+    const cssWrapperWide = css`
+        .gatsby-image-wrapper {
+            width: 100%;
+            height: 200px;
+        }
+    `
 
     const cssWrapper = (size === "small") ? cssWrapperSmall : cssWrapperWide
     return (
         <div css={cssWrapper} {...props}>
             {node.frontmatter.cover &&
-                (<Img fluid={node.frontmatter.cover.childImageSharp.fluid} />)    
+                (<Img fluid={node.frontmatter.cover.childImageSharp.fluid} />)
             }
         </div>
     )

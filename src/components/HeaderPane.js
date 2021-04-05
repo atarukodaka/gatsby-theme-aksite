@@ -18,18 +18,28 @@ import GoogleSearch from './GoogleSearch'
 import theme from '../styles/theme'
 import useSiteMetadata from '../hooks/useSiteMetadata'
 
+const light = theme.palette.primary.light
+const dark = theme.palette.primary.dark
+
 const cssSiteTitle = css`
     border-bottom: 2px solid #111; 
+    
+    background: linear-gradient(to bottom,  ${light} 0%, ${dark} 100%); 
 
     h1 { 
-        padding-top: 40px;
-        padding-bottom: 40px;
+        padding-top: 2rem;
+        padding-bottom: 0.2rem;
     
-        font-size: 3rem; 
+        font-size: 2.5rem; 
     }
+    h4 {
+        margin-left: 2rem;
+        font-style: italic;
+    }
+
     a { 
         text-decoration: none;
-        color: ${theme.palette.primary.main};
+        color: white;
     }
 `
 const HeaderPane = () => {
@@ -46,16 +56,18 @@ const HeaderPane = () => {
 
     return (
         <header>
+            <Hidden mdUp>
             <AppBar position="relative">
                 <Toolbar>
-                    <IconButton onClick={handleDrawerOpen} color="inherit">
-                        <MenuIcon />
+                    <IconButton onClick={handleDrawerOpen} color="inherit" aria-label="menu">
+                        <MenuIcon/>
                     </IconButton>
 
                     <Button color="inherit" component={Link} to="/">{title}</Button>
                     <Button color="inherit" component={Link} to="/about">About</Button>
                 </Toolbar>
             </AppBar>
+            </Hidden>
 
             <Drawer open={open}>
                 <div style={{ marginLeft: "1rem", marginRight: "1rem" }}>
@@ -65,7 +77,6 @@ const HeaderPane = () => {
                     <Divider />
 
                     <nav>
-                        <GoogleSearch cx={gcse_cx} />
                         <h3>Profile</h3>
                         <Profile/>
                         <Divider/>
@@ -73,7 +84,10 @@ const HeaderPane = () => {
                         <DirectoryTree />
                         <Divider />
                         <h3>Monthly</h3>
-                        <MonthlyArchives />{/*
+                        <MonthlyArchives />
+                        <GoogleSearch cx={gcse_cx} />
+
+                        {/*
                         <h3>Tags</h3>
                         <TagList/>
                         */}
@@ -86,7 +100,7 @@ const HeaderPane = () => {
                 <Container>
                     <Link to="/">
                         <Typography variant="h1">{title}</Typography>
-                        <Typography variant="h4">{description}</Typography>
+                        { /* <Typography variant="h4">{description}</Typography> */ }
                     </Link>
                 </Container>
                 </Hidden>

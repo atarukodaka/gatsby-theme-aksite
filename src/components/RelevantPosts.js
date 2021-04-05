@@ -1,7 +1,8 @@
 import React from 'react'
 
 import useAllPosts from '../hooks/useAllPosts'
-import PostCard from './PostCard'
+//import PostCard from './PostCard'
+import LinkPost from './LinkPost'
 
 const RelevantPosts = ( {node} ) => {
     const { nodes } = useAllPosts()
@@ -9,7 +10,7 @@ const RelevantPosts = ( {node} ) => {
     
     return (<div style={{marginBottom: "2rem"}}>
             {siblings.slice(0, 5).map(v=>
-                (<PostCard node={v} />))
+                (<LinkPost node={v} display='card' key={v.id} />))
             }
           
           </div>)
