@@ -5,16 +5,18 @@ import { Helmet } from 'react-helmet'
 import { useLocation } from "@reach/router"
 import useSiteMetadata from '../hooks/useSiteMetadata'
 import useAksConfig from '../hooks/useAksConfig'
+const urljoin = require('url-join')
 //import useAksCOnfig from '../hooks/useAksConfig'
 
-const SEO = ( { title, description, cover, lang, isRoot  } ) => {
+const SEO = ( { title, description, image, lang, isRoot  } ) => {
     const { pathname } = useLocation()
 
     const { title: siteTitle, description: siteDescription, siteUrl, 
         coverImage: siteCoverImage, social: { twitter} } = useSiteMetadata()
     
-    const coverImage = cover || siteCoverImage
-    const url = [siteUrl, pathname].join('')
+    //const coverImage = cover || siteCoverImage
+    //const url = [siteUrl, pathname].join('')
+    const url = urljoin(siteUrl, pathname)
     
     //title ||= siteTitle
     //const isRoot = ( pathname === '/')
@@ -22,7 +24,8 @@ const SEO = ( { title, description, cover, lang, isRoot  } ) => {
 
     const fullTitle = (isRoot) ? siteTitle : `${title} | ${siteTitle}`
     const fullDescription = (isRoot) ? siteDescription : description || siteDescription
-    const imageUrl = siteUrl + coverImage
+    //const imageUrl = siteUrl + coverImage
+    const imageUrl = urljoin(siteUrl, image || siteCoverImage)
     const aksConfig = useAksConfig()
     const defaultLang = aksConfig.defaultLang    
         
