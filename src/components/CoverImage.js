@@ -29,6 +29,7 @@ const CoverImage = ({ node, size = "regular", imageSize = "80px", ...props }) =>
         }
     `
 
+    //(<Img fluid={node.frontmatter.cover.childImageSharp.fluid} />)
     const cssWrapper = (size === "small") ? cssWrapperSmall : cssWrapperWide
     return (
         <div css={cssWrapper} {...props}>
