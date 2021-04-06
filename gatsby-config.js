@@ -42,6 +42,7 @@ module.exports = (themeOptions) => {
       `gatsby-transformer-sharp`,
       `gatsby-plugin-sharp`,
       `gatsby-remark-images`,
+      `gatsby-plugin-image`,
       {
         resolve: `gatsby-source-filesystem`,
         options: {
