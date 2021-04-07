@@ -25,7 +25,8 @@ const SEO = ( { title, description, image, lang, isRoot  } ) => {
     const fullTitle = (isRoot) ? siteTitle : `${title} | ${siteTitle}`
     const fullDescription = (isRoot) ? siteDescription : description || siteDescription
     //const imageUrl = siteUrl + coverImage
-    const imageUrl = urljoin(siteUrl, image || siteCoverImage)
+    const siteImage = `og-pages/site/cover.png`
+    const imageUrl = urljoin(siteUrl, image || siteImage)
     const aksConfig = useAksConfig()
     const defaultLang = aksConfig.defaultLang    
         
@@ -43,7 +44,7 @@ const SEO = ( { title, description, image, lang, isRoot  } ) => {
                 { property: 'og:description', content: fullDescription },
                 { property: 'og:site_name', content: siteTitle },
                 { property: 'og:image', content: imageUrl },
-                { name: 'twitter:card', content: 'summary'},
+                { name: 'twitter:card', content: 'summary_large_image'},
                 { name: 'twitter:creator', content: twitter },
                 { name: 'twitter:title', content: fullTitle},
                 { name: 'twitter:description', content: fullDescription },

@@ -263,10 +263,12 @@ const createTopPage = ({ nodes, actions }, options) => {
     if (node == null) { return }
 
     console.log("** top page", node.fields.slug, node.frontmatter.draft)
+    const template = require.resolve(`${templateDir}/post-template.js`)
+    console.log("template: ", template)
     const { createPage } = actions
     createPage({
         path: options.basePath,
-        component: require.resolve(`${templateDir}/post-template.js`),
+        component: template,
         context: {
             slug: node.fields.slug,
             isRoot: true,

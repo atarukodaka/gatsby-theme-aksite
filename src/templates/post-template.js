@@ -33,7 +33,7 @@ export default function PostTemplate({ data, pageContext, location }) {
   const crumbLabel = (isRoot) ? null : node.fields.postTitle
 
   //console
-  const image = node.frontmatter.cover?.publicURL || `og-pages/${node.id}/cover.png`
+  const image = node.frontmatter.cover?.publicURL || (isRoot) ? null : `og-pages/${node.id}/cover.png`
   //const image = node.frontmatter.cover?.publicURL || ogImage(node.id)
   return (
     <Layout tableOfContents={node.tableOfContents} >
