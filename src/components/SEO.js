@@ -6,30 +6,29 @@ import { useLocation } from "@reach/router"
 import useSiteMetadata from '../hooks/useSiteMetadata'
 import useAksConfig from '../hooks/useAksConfig'
 const urljoin = require('url-join')
-//import useAksCOnfig from '../hooks/useAksConfig'
+import { ogSiteImagePath } from 'gatsby-plugin-aksite-og-images'
 
 const SEO = ( { title, description, image, lang, isRoot  } ) => {
     const { pathname } = useLocation()
 
     const { title: siteTitle, description: siteDescription, siteUrl, 
-        coverImage: siteCoverImage, social: { twitter} } = useSiteMetadata()
+        social: { twitter} } = useSiteMetadata()
     
-    //const coverImage = cover || siteCoverImage
-    //const url = [siteUrl, pathname].join('')
     const url = urljoin(siteUrl, pathname)
     
-    //title ||= siteTitle
-    //const isRoot = ( pathname === '/')
     const ogType = isRoot ? 'website' : 'article'
 
     const fullTitle = (isRoot) ? siteTitle : `${title} | ${siteTitle}`
     const fullDescription = (isRoot) ? siteDescription : description || siteDescription
     //const imageUrl = siteUrl + coverImage
-    const siteImage = `og-pages/site/cover.png`
-    const imageUrl = urljoin(siteUrl, image || siteImage)
+    //const siteImage = `og-pages/site/cover.png`
+    const imageUrl = urljoin(siteUrl, image || ogSiteImagePath())
     const aksConfig = useAksConfig()
-    const defaultLang = aksConfig.defaultLang    
+    const defaultLang = aksConfig.defaultLang
         
+    console.log("image: ", image)
+    console.log("site image", ogSiteImagePath())
+    console.log("imageUrl", imageUrl)
     //console.log("seo image url", cover, imageUrl)
     return (
         <Helmet

@@ -4,6 +4,8 @@ import { graphql } from "gatsby"
 //const ogImage = require('gatsby-plugin-aksite-og-images')
 //import { ogImage } from 'gatsby-plugin-aksite-og-images'
 
+import { ogImagePath } from 'gatsby-plugin-aksite-og-images'
+
 import Breadcrumb from '../components/Breadcrumb'
 import Layout from "../components/Layout"
 import Post from "../components/Post"
@@ -33,7 +35,9 @@ export default function PostTemplate({ data, pageContext, location }) {
   const crumbLabel = (isRoot) ? null : node.fields.postTitle
 
   //console
-  const image = node.frontmatter.cover?.publicURL || (isRoot) ? null : `og-pages/${node.id}/cover.png`
+  //const image = node.frontmatter.cover?.publicURL || (isRoot) ? null : `og-pages/${node.id}/cover.png`
+  const image = node.frontmatter.cover?.publicURL  || ((isRoot) ? null : ogImagePath(node.id))
+  console.log("cover image", node.frontmatter.cover)
   //const image = node.frontmatter.cover?.publicURL || ogImage(node.id)
   return (
     <Layout tableOfContents={node.tableOfContents} >
