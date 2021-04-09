@@ -8,8 +8,12 @@ const { urlResolve, createContentDigest } = require(`gatsby-core-utils`)
 const axios = require('axios')
 const cheerio = require('cheerio');
 //const url = require('url')
+//const { createOgPage } = require('gatsby-plugin-aksite-og-images')
 
-const withDefaults = require('./src/utils/default_options')
+const withDefaults = require('./src/utils/default_options');
+//const { createOgPages } = require('../gatsby-plugin-aksite-og-images/gatsby-node');
+//const { createOgPages, createOgSitePage } = require('gatsby-plugin-aksite-og-images');
+const { createOgPage, createOgSitePage } = require('../gatsby-plugin-aksite-og-images');
 const templateDir = "./src/templates"
 
 exports.onPreBootstrap = ({ store }, themeOptions) => {
@@ -204,7 +208,7 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
             })
         }
         */
-    } else if (node.internal.type === 'LinksYaml'){
+    } else if (node.internal.type === 'LinksYaml') {
         const data = await getOgp(node.url)
 
         createNodeField({ name: 'url', node, value: data.url })
@@ -239,13 +243,12 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
 }
 ////////////////////////////////////////////////////////////////
 // markdown pages
-const createMdxPages = async ({ nodes, actions }, options) => {
+const createMdxPages = ({ nodes, actions }, options) => {
     console.log("** all markdown pages")
     const { createPage, createNode } = actions
     const template = `${templateDir}/post-template.js`
 
     nodes.forEach(node => {
-
         //console.log("fields", node.fields)
         createPage({
             path: node.fields.path,
@@ -255,7 +258,43 @@ const createMdxPages = async ({ nodes, actions }, options) => {
             },
         })
     })
+
 }
+////////////////
+// og pages
+
+const createOgPages = ({ nodes, actions }) => {
+    
+    nodes.forEach(node => {
+        createOgPage({
+            id: node.id,
+            //component: require.resolve(`${templateDir}/og-template.js`),
+            actions,
+        })
+        /*
+        createPage({
+            path: `/og-pages/${node.id}`,
+            component: require.resolve(`${templateDir}/og-post-template.js`),
+            context: {
+                id: node.id,
+                ogPage: true,
+            },
+        })
+*/
+    })
+    createOgSitePage( { actions } )
+    /*
+    createPage({
+        path: `/og-pages/site`,
+        component: require.resolve(`${templateDir}/og-site-template.js`),
+        context: {
+            id: 'site',
+            ogPage: true,
+        },
+    })
+    */
+}
+
 ////////////////
 // top page
 const createTopPage = ({ nodes, actions }, options) => {
@@ -447,6 +486,7 @@ exports.createPages = async ({ graphql, actions }, themeOptions) => {
     const options = withDefaults(themeOptions)
 
     createMdxPages({ nodes: mdxPages.nodes, actions: actions }, options)
+    createOgPages({ nodes: mdxPages.nodes, actions: actions }, options)
     createTopPage({ nodes: mdxPages.nodes, actions: actions }, options)
     //createIndexPagination({ nodes: mdxPages.nodes, actions: actions})
     createListArchives({ nodes: mdxPages.nodes, actions: actions }, options)

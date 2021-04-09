@@ -37,7 +37,7 @@ export default function PostTemplate({ data, pageContext, location }) {
   //console
   //const image = node.frontmatter.cover?.publicURL || (isRoot) ? null : `og-pages/${node.id}/cover.png`
   const image = node.frontmatter.cover?.publicURL  || ((isRoot) ? null : ogImagePath(node.id))
-  console.log("cover image", node.frontmatter.cover)
+  //console.log("cover image", node.frontmatter.cover)
   //const image = node.frontmatter.cover?.publicURL || ogImage(node.id)
   return (
     <Layout tableOfContents={node.tableOfContents} >

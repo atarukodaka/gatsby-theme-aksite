@@ -26,9 +26,9 @@ const SEO = ( { title, description, image, lang, isRoot  } ) => {
     const aksConfig = useAksConfig()
     const defaultLang = aksConfig.defaultLang
         
-    console.log("image: ", image)
-    console.log("site image", ogSiteImagePath())
-    console.log("imageUrl", imageUrl)
+    //console.log("image: ", image)
+    //console.log("site image", ogSiteImagePath())
+    //console.log("imageUrl", imageUrl)
     //console.log("seo image url", cover, imageUrl)
     return (
         <Helmet
