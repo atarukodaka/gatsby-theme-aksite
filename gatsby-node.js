@@ -160,55 +160,10 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
             name: 'postTitle',
             value: postTitle
         })
-        /////
-        //console.log("nodefrontmatterlinks", node.frontmatter.links)
-        /*
-        if (node.frontmatter.links) {
-
-            node.frontmatter.links.forEach(async url => {
-                //console.log("***************** frontmatter links", url)
-                // TODO: cache
-  
-                const data = await getOgp(url)
-
-                await actions.createNode({
-                    ...data,
-                    id: `gatsby-theme-aksite-links-${url}`,
-                    //imageId: imageNode.id,
-                    parent: null,
-                    internal: {
-                        type: `aksRichLink`,
-                        contentDigest: createContentDigest(data),
-                        content: JSON.stringify(data),
-                    },
-                })
-                if (data.image) {   // TODO: gif must be omited
-                    const imageNode = await createRemoteFileNode({
-                        url: data.image,
-                        cache: cache,
-                        createNode: actions.createNode,
-                        createNodeId: createNodeId,
-                        //name: 'OgpImage',
-                        //parentNodeId: node.id,
-                        //sourceInstanceName: "ogpImage"
-                    })
-
-                    await actions.createNodeField({
-                        node: imageNode,
-                        name: 'ogpImage',
-                        value: true
-                    })
-                    await actions.createNodeField({
-                        node: imageNode,
-                        name: 'url',
-                        value: url
-                    })
-                }
-
-            })
-        }
-        */
+     
     } else if (node.internal.type === 'LinksYaml') {
+        console.log("links entry", node.url)
+
         const data = await getOgp(node.url)
 
         createNodeField({ name: 'url', node, value: data.url })
@@ -262,7 +217,7 @@ const createMdxPages = ({ nodes, actions }, options) => {
 }
 ////////////////
 // og pages
-
+/*
 const createOgPages = ({ nodes, actions }) => {
     
     nodes.forEach(node => {
@@ -271,29 +226,12 @@ const createOgPages = ({ nodes, actions }) => {
             //component: require.resolve(`${templateDir}/og-template.js`),
             actions,
         })
-        /*
-        createPage({
-            path: `/og-pages/${node.id}`,
-            component: require.resolve(`${templateDir}/og-post-template.js`),
-            context: {
-                id: node.id,
-                ogPage: true,
-            },
-        })
-*/
+     
     })
     createOgSitePage( { actions } )
-    /*
-    createPage({
-        path: `/og-pages/site`,
-        component: require.resolve(`${templateDir}/og-site-template.js`),
-        context: {
-            id: 'site',
-            ogPage: true,
-        },
-    })
-    */
+
 }
+*/
 
 ////////////////
 // top page
@@ -486,7 +424,7 @@ exports.createPages = async ({ graphql, actions }, themeOptions) => {
     const options = withDefaults(themeOptions)
 
     createMdxPages({ nodes: mdxPages.nodes, actions: actions }, options)
-    createOgPages({ nodes: mdxPages.nodes, actions: actions }, options)
+    //createOgPages({ nodes: mdxPages.nodes, actions: actions }, options)
     createTopPage({ nodes: mdxPages.nodes, actions: actions }, options)
     //createIndexPagination({ nodes: mdxPages.nodes, actions: actions})
     createListArchives({ nodes: mdxPages.nodes, actions: actions }, options)
@@ -507,37 +445,44 @@ const getOgp = async (url) => {
         image: '',
     }
 
-    const res = await axios.get(url)
-    //console.log("getOgp", res.data)
-    const $ = cheerio.load(res.data)
-    // url
-    if ($("meta[property='og:url']").attr('content'))
-        data.url = $("meta[property='og:url']").attr('content')
-    else if (res.request.res.responseUrl) {
-        data.url = res.request.res.responseUrl
-    }
-    // domain
-    data.domain = new URL(data.url).hostname
-    // title
-    if ($("meta[property='og:title']").attr('content}'))
-        data.title = $("meta[property='og:title']").attr('content}')
-    else if ($('title').text()) {
-        data.title = $('title').text()
-    }
-    // description
-    if ($("meta[property='og:description']").attr('content'))
-        data.description = $("meta[property='og:description']").attr('content')
-    else if ($("meta[name='description']").attr('content')) {
-        data.description = $("meta[name='description']").attr('content')
-    }
-    // image
-    if ($("meta[property='og:image']").attr('content'))
-        data.image = $("meta[property='og:image']").attr('content')
-    else if ($("meta[name='image']").attr('content')) {
-        data.image = $("meta[name='image']").attr('content')
-    }
-    //console.log("ogpdata:", data)
-
+    axios.get(url).then(res => {
+        //console.log("getOgp", res.data)
+        const $ = cheerio.load(res.data)
+        // url
+        if ($("meta[property='og:url']").attr('content'))
+            data.url = $("meta[property='og:url']").attr('content')
+        else if (res.request.res.responseUrl) {
+            data.url = res.request.res.responseUrl
+        }
+        
+        // domain
+        //data.domain = new URL(data.url).hostname
+        // title
+        if ($("meta[property='og:title']").attr('content}'))
+            data.title = $("meta[property='og:title']").attr('content}')
+        else if ($('title').text()) {
+            data.title = $('title').text()
+        }
+        // description
+        if ($("meta[property='og:description']").attr('content'))
+            data.description = $("meta[property='og:description']").attr('content')
+        else if ($("meta[name='description']").attr('content')) {
+            data.description = $("meta[name='description']").attr('content')
+        }
+        // image
+        if ($("meta[property='og:image']").attr('content'))
+            data.image = $("meta[property='og:image']").attr('content')
+        else if ($("meta[name='image']").attr('content')) {
+            data.image = $("meta[name='image']").attr('content')
+        }
+        
+    }).catch (error => {
+        const {
+            status,
+            statusText
+        } = error.response;
+        console.log(`Error! HTTP Status: ${status} ${statusText}`);
+    })
     return data
 }
 

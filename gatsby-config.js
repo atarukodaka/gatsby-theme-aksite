@@ -172,7 +172,7 @@ module.exports = (themeOptions) => {
       `gatsby-plugin-sitemap`,
       `gatsby-plugin-material-ui`,
       `gatsby-plugin-emotion`,
-      `gatsby-plugin-aksite-og-images`
+      //`gatsby-plugin-aksite-og-images`
     ],
   }
 }
