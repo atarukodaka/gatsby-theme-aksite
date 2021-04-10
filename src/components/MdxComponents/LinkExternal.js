@@ -5,25 +5,29 @@ import styled from '@emotion/styled'
 import Box from '@material-ui/core/Box'
 //import Img from 'gatsby-image'
 import { GatsbyImage } from 'gatsby-plugin-image'
+//const url = require('url')
 
 import HoverBox from '../HoverBox'
 
-const query = graphql`
-{
-  allLinksYaml {
-    nodes {
-      id
-      url
-      fields {
+/*
+ fields {
         domain
         image
         title
         url
         description
       }
+      */
+const query = graphql`
+{
+
+  allAksOgLink {
+    nodes {
+      id
+      title, domain, description, imageUrl, url
     }
   }
-  ogpImages: allFile ( filter: { fields: { ogpImage: {eq: true }}}){  
+  ogImages: allFile ( filter: { fields: { ogImage: {eq: true }}}){  
     totalCount
     nodes {
       id
@@ -75,14 +79,14 @@ const Domain = styled.div`
 const ClearImage = styled.div`
     clear: both;
 `
-const LinkRichForm = ( {url, title, domain, description, imgNode, image}) => {
+const LinkRichForm = ( {url, title, domain, description, imgNode, imageUrl}) => {
   return (
     <HoverBox style={{marginBottom: "1rem"}}> 
       <a href={url} target="_blank" rel="noreferrer">
         <Box boxShadow={2}>
           <div css={cssImageWrapper}>
             { (!!imgNode?.childImageSharp ) ? <GatsbyImage image={imgNode.childImageSharp.gatsbyImageData} /> :
-            <img src={image}/>
+            <img src={imageUrl}/>
             }
           </div>
           <Box ml={16} py={2} px={2}>
@@ -100,7 +104,8 @@ const LinkRichForm = ( {url, title, domain, description, imgNode, image}) => {
 const LinkExternal = ({ url }) => {
   const data = useStaticQuery(query)
 
-  const node = data.allLinksYaml.nodes.find(v=>v.url === url)
+  //const node = data.allLinksYaml.nodes.find(v=>v.url === url)
+  const node = data.allAksOgLink.nodes.find(v=>v.url === url)
   //if (!node) return (<a href={url}>{children || url}</a>)
   if (!node) {
     console.log(`LinkExternal: no such url. registere it i src/data/links.yaml:
@@ -108,14 +113,11 @@ const LinkExternal = ({ url }) => {
     return LinkRichForm( { title: url, url, domain: new URL(url).hostname })
   }
 
-  const { title, domain, description, image } = node.fields
+  const { title, domain, description, imageUrl } = node // .fields
   
-  const imgNode = data.ogpImages.nodes.find(v=>v.fields.url === url)  
-  //console.log("url", url, imgNode)
-  //console.log(data.ogpImages.nodes)
-  //console.log("total count: ", data.ogpImages.totalCount)
+  const imgNode = data.ogImages.nodes.find(v=>v.fields.url === url)  
 
-  return LinkRichForm( { title, domain, description, imgNode, image, url})
+  return LinkRichForm( { title, domain, description, imgNode, imageUrl, url})
 }
 
 export default LinkExternal
