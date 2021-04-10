@@ -1,5 +1,10 @@
 import React from "react"
+//const path = require('path')
 import { graphql } from "gatsby"
+//const ogImage = require('gatsby-plugin-aksite-og-images')
+//import { ogImage } from 'gatsby-plugin-aksite-og-images'
+
+import { ogImagePath } from 'gatsby-plugin-aksite-og-images'
 
 import Breadcrumb from '../components/Breadcrumb'
 import Layout from "../components/Layout"
@@ -26,15 +31,18 @@ export default function PostTemplate({ data, pageContext, location }) {
   //console.log("crumb", crumbs)
   const title = node.fields.postTitle || node.frontmatter.title
   const description = node.frontmatter.description || node.excerpt
-  const cover = node.frontmatter.cover?.publicURL
+  //const cover = node.frontmatter.cover?.publicURL
   const crumbLabel = (isRoot) ? null : node.fields.postTitle
 
-  //console.log("cover url", node.frontmatter.cover)
-
+  //console
+  //const image = node.frontmatter.cover?.publicURL || (isRoot) ? null : `og-pages/${node.id}/cover.png`
+  const image = node.frontmatter.cover?.publicURL  || ((isRoot) ? null : ogImagePath(node.id))
+  //console.log("cover image", node.frontmatter.cover)
+  //const image = node.frontmatter.cover?.publicURL || ogImage(node.id)
   return (
     <Layout tableOfContents={node.tableOfContents} >
       
-      <SEO title={title} description={description} cover={cover} isRoot={isRoot}/>
+      <SEO title={title} description={description} image={image} isRoot={isRoot}/>
       <Breadcrumb crumbs={crumbs} crumbLabel={crumbLabel}/>
 
       <Post node={node}/>      

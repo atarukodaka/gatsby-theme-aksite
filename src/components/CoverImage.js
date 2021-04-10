@@ -1,5 +1,5 @@
 import React from 'react'
-import Img from 'gatsby-image'
+//import Img from 'gatsby-image'
 import { GatsbyImage } from 'gatsby-plugin-image'
 import { css } from '@emotion/react'
 
@@ -34,7 +34,7 @@ const CoverImage = ({ node, size = "regular", imageSize = "80px", ...props }) =>
     return (
         <div css={cssWrapper} {...props}>
             {node.frontmatter.cover &&
-                (<GatsbyImage image={node.frontmatter.cover.childImageSharp.gatsbyImageData} />)
+                (<GatsbyImage image={node.frontmatter.cover.childImageSharp.gatsbyImageData} alt="cover image"/>)
             }
         </div>
     )
