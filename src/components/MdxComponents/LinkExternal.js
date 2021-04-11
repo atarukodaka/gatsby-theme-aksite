@@ -8,6 +8,7 @@ import { GatsbyImage } from 'gatsby-plugin-image'
 //const url = require('url')
 
 import HoverBox from '../HoverBox'
+import LinkOpenGraph from 'gatsby-plugin-aks-og-link'
 
 /*
  fields {
@@ -52,7 +53,6 @@ const cssImageWrapper = css`
     position: absolute;
     object-fit: cover;
   }
-
 `
 
 const Title = styled.div`
@@ -96,7 +96,9 @@ const LinkRichForm = ( {url, title, domain, description, image, imageUrl}) => {
 
   )
 }
-const LinkExternal = ({ url }) => {
+
+
+const LinkExternalOrig = ({ url }) => {
   const data = useStaticQuery(query)
 
   //const node = data.allLinksYaml.nodes.find(v=>v.url === url)
@@ -114,6 +116,13 @@ const LinkExternal = ({ url }) => {
 
   return LinkRichForm( { title, domain, description, image, imageUrl, url})
 }
+
+
+
+const LinkExternal = ( {url, ...props} ) => {
+  return <LinkOpenGraph url={url} formatter={LinkRichForm} {...props}/>
+}
+
 
 export default LinkExternal
 

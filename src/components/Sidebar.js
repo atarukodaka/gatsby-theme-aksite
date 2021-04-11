@@ -12,7 +12,7 @@ import GoogleSearch from './GoogleSearch'
 
 const cssSidebar = css`
     div {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
     }
 `
 

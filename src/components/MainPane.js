@@ -18,9 +18,8 @@ const cssTableOfContents = css`
     opacity: 0.8;
     
     li {
-        /* font-size: 0.8rem; */
         p {
-            font-size: 0.8rem;
+            font-size: 0.9rem;
         }
         a { 
             text-decoration: none; 
