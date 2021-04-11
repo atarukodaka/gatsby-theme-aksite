@@ -24,6 +24,7 @@ const borderColor = theme.palette.action.active
 const cssH2 = css`
     padding-bottom: 0.5rem;
     border-bottom: 1px solid ${borderColor};
+    margin-top: 2rem;
 
     counter-increment: h2;
     counter-reset: h3;
@@ -39,6 +40,7 @@ const cssH2 = css`
 const cssH3 = css`
     padding-bottom: 0.5rem;
     border-bottom: 1px solid ${borderColor};
+    margin-top: 2rem;
 
     counter-increment: h3;
     counter-reset: h4;
@@ -53,7 +55,8 @@ const cssH3 = css`
 const cssH4 = css`
     padding-bottom: 0.5rem;
     border-bottom: 1px solid ${borderColor};
-
+    margin-top: 2rem;
+    
     counter-increment: h4;
     counter-reset: h5;
 
