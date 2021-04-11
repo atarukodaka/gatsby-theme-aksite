@@ -24,16 +24,11 @@ const query = graphql`
   allAksOgLink {
     nodes {
       id
-      title, domain, description, imageUrl, url
-    }
-  }
-  ogImages: allFile ( filter: { fields: { ogImage: {eq: true }}}){  
-    totalCount
-    nodes {
-      id
-      fields { url }
-      childImageSharp {
-        gatsbyImageData
+      title, domain, description, imageUrl, url, 
+      image {
+        childImageSharp {
+          gatsbyImageData
+        }
       }
     }
   }
@@ -79,14 +74,14 @@ const Domain = styled.div`
 const ClearImage = styled.div`
     clear: both;
 `
-const LinkRichForm = ( {url, title, domain, description, imgNode, imageUrl}) => {
+const LinkRichForm = ( {url, title, domain, description, image, imageUrl}) => {
   return (
     <HoverBox style={{marginBottom: "1rem"}}> 
       <a href={url} target="_blank" rel="noreferrer">
         <Box boxShadow={2}>
           <div css={cssImageWrapper}>
-            { (!!imgNode?.childImageSharp ) ? <GatsbyImage image={imgNode.childImageSharp.gatsbyImageData} /> :
-            <img src={imageUrl}/>
+            { (!!image?.childImageSharp ) ? <GatsbyImage image={image.childImageSharp.gatsbyImageData} /> :
+            <img src={imageUrl} alt='cover image' />
             }
           </div>
           <Box ml={16} py={2} px={2}>
@@ -113,11 +108,11 @@ const LinkExternal = ({ url }) => {
     return LinkRichForm( { title: url, url, domain: new URL(url).hostname })
   }
 
-  const { title, domain, description, imageUrl } = node // .fields
+  const { title, domain, description, imageUrl, image } = node // .fields
   
-  const imgNode = data.ogImages.nodes.find(v=>v.fields.url === url)  
+  //const imgNode = data.ogImages.nodes.find(v=>v.fields.url === url)  
 
-  return LinkRichForm( { title, domain, description, imgNode, imageUrl, url})
+  return LinkRichForm( { title, domain, description, image, imageUrl, url})
 }
 
 export default LinkExternal
