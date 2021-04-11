@@ -16,8 +16,12 @@ const cssTableOfContents = css`
     position: sticky;
     top: 0;
     opacity: 0.8;
+    
     li {
         /* font-size: 0.8rem; */
+        p {
+            font-size: 0.8rem;
+        }
         a { 
             text-decoration: none; 
             color: ${theme.palette.text.primary};
@@ -66,16 +70,18 @@ const MainPane = ({ children, tableOfContents }) => (
                     </Grid>
                 </Hidden>
 
-                <Grid item md={6} xs={12}>
+                <Grid item md={7} xs={12}>
                     {children}
                 </Grid>
 
+                
                 <Hidden smDown>
-                    <Grid item md={3} xs={12}>
+                    <Grid item md={2} xs={12}>
                         {tableOfContents &&
                           (<TableOfContents items={tableOfContents.items} />)}
                     </Grid>
                 </Hidden>
+                        
             </Grid>
         </Container>
     </div>

@@ -1,5 +1,6 @@
 import React from "react"
 import Typography from '@material-ui/core/Typography'
+import { css } from '@emotion/react'
 
 import Card from './Card'
 import Profile from './Profile'
@@ -9,12 +10,17 @@ import MonthlyArchives from './MonthlyArchives'
 import GoogleSearch from './GoogleSearch'
 //import TagList from './TagList'
 
+const cssSidebar = css`
+    div {
+        font-size: 0.8rem;
+    }
+`
 
 const Sidebar = () => {
     const gcse_cx = process.env.GCSE_CX
 
     return (
-        <div>
+        <div css={cssSidebar}>
             <Card>
                 <Typography variant="h3">Profile</Typography>
                 <Profile/>
