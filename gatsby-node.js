@@ -65,6 +65,7 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             listPath: String!
             itemsPerPage: Int!
         }
+
     `);
 };
 

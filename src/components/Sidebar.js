@@ -14,6 +14,7 @@ const cssSidebar = css`
     div {
         font-size: 0.9rem;
     }
+    
 `
 
 const Sidebar = () => {

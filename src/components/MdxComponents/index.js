@@ -9,14 +9,13 @@ import { css } from '@emotion/react'
 
 import theme from '../../styles/theme'
 
-import LinkExternal from './LinkExternal'
+import LinkOpenGraph from 'gatsby-plugin-aks-og-link'
+//import LinkExternal from './LinkExternal'
 import Series from './Series'
 import Baloon from './Baloon'
 import Spoiler from './Spoiler'
 import Callout from './Callout'
 import Asc256 from './Asc256'
-
-
 
 const numberingColor = theme.palette.text.secondary
 const borderColor = theme.palette.action.active
@@ -24,7 +23,7 @@ const borderColor = theme.palette.action.active
 const cssH2 = css`
     padding-bottom: 0.5rem;
     border-bottom: 1px solid ${borderColor};
-    margin-top: 2rem;
+    margin-top: 3rem;
 
     counter-increment: h2;
     counter-reset: h3;
@@ -40,7 +39,7 @@ const cssH2 = css`
 const cssH3 = css`
     padding-bottom: 0.5rem;
     border-bottom: 1px solid ${borderColor};
-    margin-top: 2rem;
+    margin-top: 3rem;
 
     counter-increment: h3;
     counter-reset: h4;
@@ -76,7 +75,7 @@ const Heading4 = ( { children, ...props}) =>
 
 
 const MdxComponents = () => {
-    return { Alert, Baloon, Box, Link, LinkExternal, Series, Grid, Spoiler,
+    return { Alert, Baloon, Box, Link, LinkOpenGraph, Series, Grid, Spoiler,
         Callout, Asc256, 
         h2: Heading2,
         h3: Heading3,

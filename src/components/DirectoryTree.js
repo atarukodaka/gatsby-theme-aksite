@@ -39,27 +39,6 @@ const DirectoryTree = () => {
             pagePath: node.pagePath,
             numberOfPosts: node.numberOfPosts}
     })
-    //console.log("directory list", list)
-
-    /*
-    data.mdxPages.nodes.filter(v => v.fields.directory !== "").forEach(node => {
-        const directory = node.fields.directory
-        const item = list.find(v => v.name === directory)
-        if (item === undefined) {
-            const parts = directory.split('/')
-            const label = node.fields.directoryLabel || node.fields.directory.toString().split('/').pop()
-            parts.pop()
-
-            const parent_dir = parts.join('/')
-            const parent = list.find(v => v.name === parent_dir)
-            const parent_id = (parent) ? parent.id : 0
-            const re = new RegExp(`^${directory}`)
-
-            list.push({ id: directory, parent: parent_id, name: directory, label: label, 
-                totalCount: data.mdxPages.nodes.filter(v => re.test(v.fields.directory)).length })
-        }
-    })
-    */
 
     const allNodeIds = list.map(v=> v.name)
     const tree = new ListToTree(list).GetTree() || []

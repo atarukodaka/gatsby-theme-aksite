@@ -47,3 +47,15 @@ body {
 .gsc-input table {
     margin-bottom: 0em;
 }   
+
+/* image */
+img.gatsby-resp-image-image {
+    border: solid 1px #ccc;
+    border-radius: 5px;
+
+}
+
+.embedVideo-container {
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+}
