@@ -1,18 +1,44 @@
 import React from 'react'
 import { Link } from 'gatsby'
 import styled from '@emotion/styled'
-import Box from '@material-ui/core/Box'
 import { css } from '@emotion/react'
-import { RichLink } from 'gatsby-plugin-aks-og-link'
+import { LinkOpenGraphRichForm } from 'gatsby-plugin-aks-og-link'
+//import useMediaQuery from '@material-ui/core/useMediaQuery';
+
+import { isMobile } from '../styles/theme'
 
 import DirectoryBox from './DirectoryBox'
 import CoverImage from './CoverImage'
 import HoverBox from './HoverBox'
 import Card from './Card'
+import theme from '../styles/theme'
+
+const cssLinkPost = css`
+    a{
+    text-decoration: none;
+    color: ${theme.palette.text.primary};
+    }
+    
+`
 
 const LinkPost = ({ node, display, label, ...props }) => {
     if (display === 'card') {
-        const imgSize = "9.1rem"
+
+        return (<div css={cssLinkPost}><Link to={node.fields.path} >
+            <LinkOpenGraphRichForm title={node.fields.postTitle}
+            domain={node.frontmatter.date + " [" + node.fields.directoryFullLabel + "]"} description={node.frontmatter.description || node.excerpt }
+            image={node.frontmatter.cover} imageUrl={node.frontmatter.cover?.publicURL}
+            />
+            </Link></div>
+        )
+       
+        //const imgSize = "9.1rem"
+
+        //console.log("linkpost", node.fields.slug, theme)
+        //const isMobile = useMediaQuery(theme => theme.breakpoints.down('md'))
+        //const isMobile = useMediaQuery(theme.breakpoints.down('mobile'))
+        const imgSize = (isMobile()) ? "6rem" : "9.1rem"
+
         const cssBox = css`
             max-width: 800px;
             border-radius: 10px;
@@ -28,11 +54,11 @@ const LinkPost = ({ node, display, label, ...props }) => {
             margin-left: ${imgSize};
             padding: 0.75rem;
         `
-        const imageSize = "9.1rem"
 
+        
         const cssCoverImage = css`
-            width: ${imageSize};
-            height: ${imageSize};
+            width: ${imgSize};
+            height: ${imgSize};
             float: left;
             background-color: #f2f2f2;
 
@@ -44,8 +70,11 @@ const LinkPost = ({ node, display, label, ...props }) => {
         const Title = styled.div`
             font-size: 1rem;
             line-height: 1.3rem;
+            max-height: 1.3rem;
             font-weight: bold;
             margin-top: 0.75rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
         `
 
         const Description = styled.div`
@@ -56,10 +85,15 @@ const LinkPost = ({ node, display, label, ...props }) => {
             text-overflow: ellipsis;
             margin-top: 0.75rem;
         `
+        const cssLink = css`
+            text-decoration: none;
+            color: ${theme.palette.text.primary};
+        `
 
         return (
+            <Link to={node.fields.path} css={cssLink}>
             <HoverBox {...props} css={cssBox}>
-                <Link to={node.fields.path}>
+                
                     <CoverImage node={node} css={cssCoverImage}/>
                     <div css={cssContent}>
                         <div style={{fontSiize: "0.9rem", lineHeight: "1.2rem"}}>
@@ -67,10 +101,13 @@ const LinkPost = ({ node, display, label, ...props }) => {
                             <DirectoryBox directory={node.fields.directory} />
                         </div>
                         <Title>{node.fields.postTitle}</Title>
-                        <Description>{node.frontmatter.description || node.excerpt}</Description>
+                        { (isMobile()) ? null : 
+                        <Description>{node.frontmatter.description || node.excerpt}</Description>}
                     </div>
-                </Link>
-            </HoverBox>)
+                
+            </HoverBox>
+            </Link>
+        )
 
     } else {
         const title = node.fields.postTitle || node.frontmatter.title

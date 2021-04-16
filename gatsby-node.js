@@ -115,6 +115,8 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
     if (node.internal.type === `Mdx`) {
         const slug = createFilePath({ node, getNode })
         const directory = slug.split("/").slice(1, -2).join("/")
+        const directoryLabel = getDirectoryLabel(directory, options.directoryLabels)
+        const directoryFullLabel = getDirectoryFullLabel(directory, options.directoryLabels)
         const path = urlResolve(options.basePath, slug)
 
         createNodeField({
@@ -131,6 +133,16 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
             node,
             name: 'directory',
             value: directory
+        })
+        createNodeField({
+            node,
+            name: 'directoryLabel',
+            value: directoryLabel
+        })        
+        createNodeField({
+            node,
+            name: 'directoryFullLabel',
+            value: directoryFullLabel
         })
         const postTitle = (node.frontmatter.series) ?
             `${node.frontmatter.series.title}[${node.frontmatter.series.number}] ${node.frontmatter.title}` :
