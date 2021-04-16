@@ -39,6 +39,4 @@ export default function DirectoryArchiveTemplate({ data, pageContext }) {
   }
   return (<ArchiveTemplate title={title} nodes={data.allMdx.nodes} crumbs={crumbs}
     pagination_parameters={pagination_parameters} />)
-
-
 }

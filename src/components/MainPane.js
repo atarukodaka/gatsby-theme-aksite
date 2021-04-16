@@ -10,7 +10,9 @@ import Sidebar from './Sidebar'
 import theme from '../styles/theme'
 
 const cssMainPane = css`
-    margin-top: 2rem;
+    /* margin-top: 2rem; */
+    
+    background-color: #f5f5f5;
 `
 const cssTableOfContents = css`
     position: sticky;
@@ -69,7 +71,7 @@ const MainPane = ({ children, tableOfContents }) => (
                     </Grid>
                 </Hidden>
 
-                <Grid item md={7} xs={12}>
+                <Grid item md={7} xs={12} style={{backgroundColor: "#fafafa"}}>
                     {children}
                 </Grid>
 

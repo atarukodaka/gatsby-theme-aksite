@@ -7,6 +7,7 @@ import MenuIcon from '@material-ui/icons/Menu'
 import { Drawer, IconButton, Divider } from '@material-ui/core'
 import { css } from '@emotion/react'
 import Container from '@material-ui/core/Container'
+import Grid from '@material-ui/core/Grid'
 import Typography from '@material-ui/core/Typography'
 import Hidden from '@material-ui/core/Hidden'
 
@@ -57,16 +58,16 @@ const HeaderPane = () => {
     return (
         <header>
             <Hidden mdUp>
-            <AppBar position="relative">
-                <Toolbar>
-                    <IconButton onClick={handleDrawerOpen} color="inherit" aria-label="menu">
-                        <MenuIcon/>
-                    </IconButton>
+                <AppBar position="relative">
+                    <Toolbar>
+                        <IconButton onClick={handleDrawerOpen} color="inherit" aria-label="menu">
+                            <MenuIcon />
+                        </IconButton>
 
-                    <Button color="inherit" component={Link} to="/">{title}</Button>
-                    <Button color="inherit" component={Link} to="/about">About</Button>
-                </Toolbar>
-            </AppBar>
+                        <Button color="inherit" component={Link} to="/">{title}</Button>
+                        <Button color="inherit" component={Link} to="/about">About</Button>
+                    </Toolbar>
+                </AppBar>
             </Hidden>
 
             <Drawer open={open}>
@@ -78,8 +79,8 @@ const HeaderPane = () => {
 
                     <nav>
                         <h3>Profile</h3>
-                        <Profile/>
-                        <Divider/>
+                        <Profile />
+                        <Divider />
                         <h3>Directories</h3>
                         <DirectoryTree />
                         <Divider />
@@ -97,12 +98,17 @@ const HeaderPane = () => {
 
             <div css={cssSiteTitle}>
                 <Hidden smDown>
-                <Container>
-                    <Link to="/">
-                        <Typography variant="h1">{title}</Typography>
-                        { /* <Typography variant="h4">{description}</Typography> */ }
-                    </Link>
-                </Container>
+                    <Container>
+                        <Grid container spacing={3}>
+                            <Grid item md={3}/>
+                            <Grid item md={7}>
+                                <Link to="/">
+                                    <Typography variant="h1">{title}</Typography>
+                                    { /* <Typography variant="h4">{description}</Typography> */}
+                                </Link>
+                            </Grid>
+                        </Grid>
+                    </Container>
                 </Hidden>
             </div>
         </header>
