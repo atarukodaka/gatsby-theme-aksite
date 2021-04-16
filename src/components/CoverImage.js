@@ -3,17 +3,13 @@ import React from 'react'
 import { GatsbyImage } from 'gatsby-plugin-image'
 import { css } from '@emotion/react'
 
+/*
 const CoverImage = ({ node, size = "regular", imageSize = "80px", ...props }) => {
 
     const cssWrapperSmall = css`
         width: ${imageSize};
         height: ${imageSize};
         float: left;
-        /* box-shadow: 2px 2px 1px rgb(0 0 0 / 20%); */
-        /*
-        margin-right: 0.5rem;
-        margin-bottom: 0rem;
-        */
         background-color: #f2f2f2;
 
         .gatsby-image-wrapper {
@@ -34,6 +30,17 @@ const CoverImage = ({ node, size = "regular", imageSize = "80px", ...props }) =>
     return (
         <div css={cssWrapper} {...props}>
             {node.frontmatter.cover &&
+                (<GatsbyImage image={node.frontmatter.cover.childImageSharp.gatsbyImageData} alt="cover image"/>)
+            }
+        </div>
+    )
+}
+*/
+
+const CoverImage = ( { node, ...props} ) => {
+    return (
+        <div {...props}>
+             {node.frontmatter.cover &&
                 (<GatsbyImage image={node.frontmatter.cover.childImageSharp.gatsbyImageData} alt="cover image"/>)
             }
         </div>

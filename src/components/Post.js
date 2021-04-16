@@ -34,6 +34,12 @@ const cssPost = css`
     margin-top: 2em;
     margin-bottom: 2em;
 `
+const cssCoverImage = css`
+    .gatsby-image-wrapper {
+        width: 100%;
+        height: 300px;
+    }
+`
 
 const RenderMDX = ({ children }) => {
     return (
@@ -71,7 +77,7 @@ const Post = ({ node }) => {
                 </div>
                 <PageTitle><Link to={node.fields.path}>{node.fields.postTitle}</Link></PageTitle>
                 { /* <Tags node={node}/> */ }
-                <CoverImage node={node} />
+                <CoverImage node={node} css={cssCoverImage}/>
                 <Description>{node.frontmatter.description}</Description>
             </Header>
             <Main>
