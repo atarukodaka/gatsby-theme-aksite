@@ -68,11 +68,12 @@ const Post = ({ node }) => {
     const { siteUrl } = useSiteMetadata()
     //console.log("path: ", node.fields.path)
 
+    //<DirectoryBox directory={node.fields.directory} enableLink={true}/>
     return (
         <div css={cssPost}>
             <Header>
                 <div>
-                    {node.frontmatter.date}
+                    <span>{node.frontmatter.date}</span>
                     <DirectoryBox directory={node.fields.directory} enableLink={true}/>
                 </div>
                 <PageTitle><Link to={node.fields.path}>{node.fields.postTitle}</Link></PageTitle>
