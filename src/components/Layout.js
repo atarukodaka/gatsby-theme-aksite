@@ -35,6 +35,10 @@ const cssSidebar = css`
     width: 240px;
     padding-left: 2rem;
     padding-right: 2rem;
+
+    height: 100%;
+    overflow-y: auto;
+    position: fixed;
 `
 const cssMain = css`
     max-width: 960px;
