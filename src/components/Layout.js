@@ -9,14 +9,20 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Divider from '@material-ui/core/Divider'
 
 import Sidebar from './Sidebar'
 import TableOfContents from './TableOfContents'
-//import theme from '../styles/theme'
+import theme from '../styles/theme'
 import useSiteMetadata from '../hooks/useSiteMetadata'
-import { Tab } from '@material-ui/core';
+//import { Tab } from '@material-ui/core';
+
+/*
+  almost incorporated from https://material-ui.com/components/drawers/
+ */
 
 const drawerWidth = 240;
+const tocWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -49,10 +55,10 @@ const useStyles = makeStyles((theme) => ({
     content: {
         flexGrow: 1,
         padding: theme.spacing(3),
-        width: `calc(100% - ${drawerWidth}px - 175px)`,
+        width: `calc(100% - ${drawerWidth}px  ${tocWidth}px)`,
     },
     tableOfContents: {
-        width: "175px",
+        width: `${tocWidth}px`,
         top: "10px",
         position: "sticky",
         height: `calc(100vh - 70px)`,
@@ -63,18 +69,11 @@ const Layout = ({ children, tableOfContents, ...props }) => {
     const { title } = useSiteMetadata()
     const { window } = props;
     const classes = useStyles();
-    const theme = useTheme();
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
-
-    const drawer = (
-        <div>
-            <Sidebar />
-        </div>
-    );
 
     const container = window !== undefined ? () => window().document.body : undefined;
 
@@ -113,7 +112,7 @@ const Layout = ({ children, tableOfContents, ...props }) => {
                             keepMounted: true, // Better open performance on mobile.
                         }}
                     >
-                        {drawer}
+                        <Sidebar/>
                     </Drawer>
                 </Hidden>
                 <Hidden smDown implementation="css">
@@ -124,7 +123,9 @@ const Layout = ({ children, tableOfContents, ...props }) => {
                         variant="permanent"
                         open
                     >
-                        {drawer}
+                        <div className={classes.toolbar} />
+                        <Divider/>
+                        <Sidebar/>
                     </Drawer>
                 </Hidden>
             </nav>
@@ -146,7 +147,6 @@ const Layout = ({ children, tableOfContents, ...props }) => {
 }
 
 export default Layout
-
 
 /*
 const StyledButton = styled.button`

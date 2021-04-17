@@ -9,21 +9,30 @@ const cssToc = css`
         color: black;
     }
 
-    ol {
+    ol,ul {
         padding-left: 0;
         margin-left: 1rem;
+        list-style: none;
     }
 
     li {
         font-size: 0.9rem;
-        line-height: 3rem;
+        line-height: 1.5;
+        margin-bottom: 0.5rem;
+        a {
+            color: #777;
+        }
+        a:hover {
+
+            background-color: #eee;
+        }
     }
     
     
 `
 
 const Tree = ({ items }) => (
-    <ol>
+    <ul>
         {
             items.map(v => (
                 <li key={v.url}>
@@ -34,15 +43,15 @@ const Tree = ({ items }) => (
                 </li>
             ))
         }
-    </ol>
+    </ul>
 )
 
 const TableOfContents = ({ contents}) =>(
-    contents?.items && (
+    (contents?.items) ? (
         <div css={cssToc}>
             <Tree items={contents.items || []} />
         </div>
-    )
+    ) : ""
 )
 
 export default TableOfContents

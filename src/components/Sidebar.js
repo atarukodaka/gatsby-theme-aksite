@@ -1,7 +1,7 @@
 import React from "react"
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
-import { css } from '@emotion/react'
+//import { css } from '@emotion/react'
 
 import Card from './Card'
 import Profile from './Profile'
@@ -16,33 +16,24 @@ const Sidebar = (props) => {
 
     return (
         <div props>
-            <Typography variant="h3">Profile</Typography>
+            <Typography variant="h4">Profile</Typography>
             <Profile />
             <Divider />
 
-            <Typography variant="h3">Directories</Typography>
+            <Typography variant="h4">Directories</Typography>
             <DirectoryTree />
             <Divider />
 
-            <Typography variant="h3">Recently Posted</Typography>
+            <Typography variant="h4">Recently Posted</Typography>
             <RecentPosts />
             <Divider />
 
-            <Typography variant="h3">Monthly Archives</Typography>
+            <Typography variant="h4">Monthly Archives</Typography>
             <MonthlyArchives />
             <Divider />
 
-            {/*
-            <Card>
-                <Typography variant="h3">Tags</Typography>
-                <TagList />
-            </Card>
-            */}
-            <Card>
-                <Typography variant="h3">Search</Typography>
-                <GoogleSearch cx={gcse_cx} />
-            </Card>
-
+            <Typography variant="h4">Search</Typography>
+            <GoogleSearch cx={gcse_cx} />
         </div>
     )
 }
