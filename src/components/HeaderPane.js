@@ -56,18 +56,15 @@ const HeaderPane = () => {
 
     return (
         <header>
-            <Hidden mdUp>
             <AppBar position="relative">
                 <Toolbar>
                     <IconButton onClick={handleDrawerOpen} color="inherit" aria-label="menu">
                         <MenuIcon/>
                     </IconButton>
-
                     <Button color="inherit" component={Link} to="/">{title}</Button>
                     <Button color="inherit" component={Link} to="/about">About</Button>
                 </Toolbar>
             </AppBar>
-            </Hidden>
 
             <Drawer open={open}>
                 <div style={{ marginLeft: "1rem", marginRight: "1rem" }}>
@@ -95,16 +92,17 @@ const HeaderPane = () => {
                 </div>
             </Drawer>
 
+{/*
             <div css={cssSiteTitle}>
                 <Hidden smDown>
                 <Container>
                     <Link to="/">
                         <Typography variant="h1">{title}</Typography>
-                        { /* <Typography variant="h4">{description}</Typography> */ }
                     </Link>
                 </Container>
                 </Hidden>
             </div>
+*/}
         </header>
     )
 }
