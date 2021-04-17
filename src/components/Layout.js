@@ -1,20 +1,154 @@
-import React from "react"
 
-import HeaderPane from './HeaderPane'
-import MainPane from './MainPane'
-import FooterPane from './FooterPane'
-import { css } from '@emotion/react'
-import  styled  from '@emotion/styled'
-import theme from '../styles/theme'
-import { Link } from "gatsby"
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Button from '@material-ui/core/Button'
-import MenuIcon from '@material-ui/icons/Menu'
-import { Drawer, IconButton, Divider } from '@material-ui/core'
+import React from 'react';
+import AppBar from '@material-ui/core/AppBar';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Drawer from '@material-ui/core/Drawer';
+import Hidden from '@material-ui/core/Hidden';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+
 import Sidebar from './Sidebar'
+import TableOfContents from './TableOfContents'
+//import theme from '../styles/theme'
 import useSiteMetadata from '../hooks/useSiteMetadata'
-    
+import { Tab } from '@material-ui/core';
+
+const drawerWidth = 240;
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        display: 'flex',
+    },
+    drawer: {
+        [theme.breakpoints.up('md')]: {
+            width: drawerWidth,
+            flexShrink: 0,
+        },
+    },
+    appBar: {
+        [theme.breakpoints.up('md')]: {
+            width: `calc(100% - ${drawerWidth}px)`,
+            marginLeft: drawerWidth,
+        },
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+        [theme.breakpoints.up('md')]: {
+            display: 'none',
+        },
+    },
+    // necessary for content to be below app bar
+    toolbar: theme.mixins.toolbar,
+    drawerPaper: {
+        width: drawerWidth,
+        paddingLeft: "1rem",
+    },
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+        width: `calc(100% - ${drawerWidth}px - 175px)`,
+    },
+    tableOfContents: {
+        width: "175px",
+        top: "10px",
+        position: "sticky",
+        height: `calc(100vh - 70px)`,
+    },
+}));
+
+const Layout = ({ children, tableOfContents, ...props }) => {
+    const { title } = useSiteMetadata()
+    const { window } = props;
+    const classes = useStyles();
+    const theme = useTheme();
+    const [mobileOpen, setMobileOpen] = React.useState(false);
+
+    const handleDrawerToggle = () => {
+        setMobileOpen(!mobileOpen);
+    };
+
+    const drawer = (
+        <div>
+            <Sidebar />
+        </div>
+    );
+
+    const container = window !== undefined ? () => window().document.body : undefined;
+
+    return (
+        <div className={classes.root}>
+            <CssBaseline />
+            <AppBar position="fixed" className={classes.appBar}>
+                <Toolbar>
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        edge="start"
+                        onClick={handleDrawerToggle}
+                        className={classes.menuButton}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant="h6" noWrap>
+                        {title}
+                    </Typography>
+                </Toolbar>
+            </AppBar>
+            <nav className={classes.drawer} aria-label="mailbox folders">
+                {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
+                <Hidden mdUp implementation="css">
+                    <Drawer
+                        container={container}
+                        variant="temporary"
+                        anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+                        open={mobileOpen}
+                        onClose={handleDrawerToggle}
+                        classes={{
+                            paper: classes.drawerPaper,
+                        }}
+                        ModalProps={{
+                            keepMounted: true, // Better open performance on mobile.
+                        }}
+                    >
+                        {drawer}
+                    </Drawer>
+                </Hidden>
+                <Hidden smDown implementation="css">
+                    <Drawer
+                        classes={{
+                            paper: classes.drawerPaper,
+                        }}
+                        variant="permanent"
+                        open
+                    >
+                        {drawer}
+                    </Drawer>
+                </Hidden>
+            </nav>
+            <main className={classes.content}>
+            <div className={classes.toolbar} />
+                <div style={{maxWidth: "960px", marginLeft: "auto", marginRight: "auto"}}>
+                {children}
+                </div>
+            </main>
+
+            <Hidden xsDown>
+            <div className={classes.tableOfContents}>
+                <div className={classes.toolbar} />
+                <TableOfContents contents={tableOfContents}/>
+            </div>
+            </Hidden>
+        </div>
+    );
+}
+
+export default Layout
+
+
+/*
 const StyledButton = styled.button`
 ${ ( { theme } ) => `
     color: red;
@@ -25,70 +159,5 @@ ${ ( { theme } ) => `
 }
 `
 
-const cssRoot = css`
-    display: flex;
-`
-const cssToolbar = css`
-    height: 64px;
-`
-const cssSidebar = css`
-    width: 240px;
-    padding-left: 2rem;
-    padding-right: 2rem;
+*/
 
-    height: 100%;
-    overflow-y: auto;
-    position: fixed;
-`
-const cssMain = css`
-    max-width: 960px;
-    margin-left: auto;
-    margin-right: auto;
-`
-const cssToc = css`
-    width: 175px;
-    top: 1rem;
-    position: sticky;
-    height: calc(100vh - 70px);
-    overflow-y: auto;
-    flex-shrink: 0;
-`
-const drawer = (
-    <nav>
-        <Sidebar/>
-    </nav>
-)
-const Layout = ( {children, ...props} ) => {
-    const { title, description } = useSiteMetadata()
-
-    return (
-        <div css={cssRoot}>
-            <AppBar position="fixed">
-                <Toolbar>
-                    <IconButton color="inherit">
-                        <MenuIcon/>
-                    </IconButton>
-                    <Button color="inherit" component={Link} to="/">{title}</Button>
-                </Toolbar>
-            </AppBar>
-            
-            <div css={cssSidebar}>
-                <div css={cssToolbar}/>
-                {drawer}
-            </div>
-
-            <div css={cssMain}>
-            <div css={cssToolbar}/>
-                {children}
-                <FooterPane/>
-            </div>
-            
-            <div css={cssToc}>
-                <div css={cssToolbar}/>
-                TOC
-            </div>
-            
-        </div>
-    )
-}
-export default Layout
