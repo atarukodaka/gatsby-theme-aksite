@@ -1,7 +1,7 @@
 import React from 'react'
 import Box from '@material-ui/core/Box'
 
-const Callout = ( {variant="info", children} ) => {
+const Callout = ( {variant="shout", children} ) => {
     const variants = {
         info: {
             fontSize: "1.1rem",
@@ -12,8 +12,9 @@ const Callout = ( {variant="info", children} ) => {
             margin: 2,
             borderRadious: 8,
             textAlign: "center",
-            fontSize: "1.5rem",
-            padding: "1rem"
+            fontSize: "1.2rem",
+            padding: "1rem",
+            bgcolor: "#ffffe0",
         }
     }
     

@@ -1,6 +1,6 @@
 import React from 'react'
 import { css } from '@emotion/react'
-import Img from 'gatsby-image'
+
 
 const cssBaloon1 = css`
 
@@ -26,17 +26,14 @@ padding: 1rem;
   }
 `
 
-const Baloon = ( { children, tail="left"} ) => {
-    return (
-        <>
-        
-          <Img src="./haruurara.jpg"/>
-        
-    <div css={cssBaloon1}>
+const Baloon = ({ children, tail = "left" }) => {
+  return (
+    <>
+      <div css={cssBaloon1}>
         {children}
-    </div>
+      </div>
     </>
-    )
+  )
 }
 
 export default Baloon

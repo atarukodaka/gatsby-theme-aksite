@@ -1,4 +1,3 @@
-
 import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -8,15 +7,14 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Divider from '@material-ui/core/Divider'
 
 import Sidebar from './Sidebar'
 import TableOfContents from './TableOfContents'
 import theme from '../styles/theme'
 import useSiteMetadata from '../hooks/useSiteMetadata'
-//import { Tab } from '@material-ui/core';
-
+import FooterPane from './FooterPane'
 /*
   almost incorporated from https://material-ui.com/components/drawers/
  */
@@ -65,9 +63,9 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Layout = ({ children, tableOfContents, ...props }) => {
+const Layout = ({ children, tableOfContents, window, ...props }) => {
     const { title } = useSiteMetadata()
-    const { window } = props;
+    //const { window } = props;
     const classes = useStyles();
     const [mobileOpen, setMobileOpen] = React.useState(false);
 
@@ -132,8 +130,9 @@ const Layout = ({ children, tableOfContents, ...props }) => {
             <main className={classes.content}>
             <div className={classes.toolbar} />
                 <div style={{maxWidth: "960px", marginLeft: "auto", marginRight: "auto"}}>
-                {children}
+                    {children}
                 </div>
+                <FooterPane/>
             </main>
 
             <Hidden xsDown>

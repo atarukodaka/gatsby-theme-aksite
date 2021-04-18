@@ -27,7 +27,6 @@
     "axios": "^0.21.1",
     "gatsby": "^3.2.1",
     "gatsby-awesome-pagination": "^0.3.6",
-    "gatsby-image": "^3.2.0",
     "gatsby-plugin-aks-og-link": "1.0.0",
     "gatsby-plugin-breadcrumb": "^12.1.0",
     "gatsby-plugin-emotion": "^6.2.0",
