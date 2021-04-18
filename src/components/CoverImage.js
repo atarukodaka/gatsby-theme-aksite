@@ -1,5 +1,4 @@
 import React from 'react'
-//import Img from 'gatsby-image'
 import { GatsbyImage } from 'gatsby-plugin-image'
 import { css } from '@emotion/react'
 
