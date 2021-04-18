@@ -57,7 +57,10 @@ img.gatsby-resp-image-image {
 .gatsby-resp-image-wrapper {
     margin-top: 3rem;
 }
-
+.gatsby-resp-image-wrapper {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
 .embedVideo-container {
     margin-top: 3rem;
     margin-bottom: 3rem;

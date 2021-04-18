@@ -4,8 +4,8 @@ import theme from '../styles/theme'
 
 const HoverBox = styled.div`
     &:hover {
-    background-color: ${theme.palette.action.hover};
-    opacity: 0.7;
+        background-color: ${theme.palette.action.hover};
+        opacity: 0.7;
     }
     a {
         text-decoration: none;
