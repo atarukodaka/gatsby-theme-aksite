@@ -3,7 +3,7 @@ import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
 //import { css } from '@emotion/react'
 
-import Card from './Card'
+//import Card from './Card'
 import Profile from './Profile'
 import DirectoryTree from './DirectoryTree'
 import RecentPosts from './RecentPosts'
@@ -35,8 +35,12 @@ const Sidebar = (props) => {
             <MonthlyArchives />
             <Divider />
 
+            <Typography variant="h3">Series</Typography>
+            <SeriesList/>
+            <Divider />
             <Typography variant="h4">Search</Typography>
             <GoogleSearch cx={gcse_cx} />
+
         </div>
     )
 }
