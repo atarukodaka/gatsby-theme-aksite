@@ -3,6 +3,7 @@ body {
     /* background-color: #eee;  */
     counter-reset: h1; counter-reset: h2;   /* for heading numbering */
     font-size: 1rem;
+
 }
 
 .heading-anchor {
@@ -40,9 +41,7 @@ body {
     height: 100%;
 }
 
-/* -----------------------
-    GCSE
-   -----------------------*/
+/* GCSE */
 
 .gsc-input table {
     margin-bottom: 0em;
@@ -52,7 +51,11 @@ body {
 img.gatsby-resp-image-image {
     border: solid 1px #ccc;
     border-radius: 5px;
+    margin-top: 2rem;
+}
 
+.gatsby-resp-image-wrapper {
+    margin-top: 3rem;
 }
 .gatsby-resp-image-wrapper {
     margin-top: 2rem;

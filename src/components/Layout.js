@@ -89,9 +89,11 @@ const Layout = ({ children, tableOfContents, window, ...props }) => {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap>
+                    
+                    <Typography variant="h3" noWrap>
                         {title}
                     </Typography>
+                    
                 </Toolbar>
             </AppBar>
             <nav className={classes.drawer} aria-label="mailbox folders">
@@ -121,7 +123,11 @@ const Layout = ({ children, tableOfContents, window, ...props }) => {
                         variant="permanent"
                         open
                     >
-                        <div className={classes.toolbar} />
+                        {/*
+                        <div className={classes.toolbar}>
+                            <Typography variant="h3">{title}</Typography>
+                        </div>
+                        */}
                         <Divider/>
                         <Sidebar/>
                     </Drawer>

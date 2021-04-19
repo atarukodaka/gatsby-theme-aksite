@@ -307,6 +307,25 @@ const createTagArchives = ({ nodes, actions, tags }, options) => {
     })
 }
 */
+
+const createSeriesArchives = ( { nodes, actions } , options )=> {
+    console.log("** creating series archives")
+    const { createPage } = actions
+
+    const seriesArray = [...new Set(nodes.map(v=> { return v?.frontmatter?.series?.title } ))].filter(v=>!!v)
+    
+    seriesArray.forEach(series => {
+        //console.log(series)
+        const encodedSeries = (process.env.NODE_ENV === 'development') ? series : encodeURIComponent(series) // somehow encode doenst work on development
+        createPage({
+            path: urlResolve(options.basePath, `series/${encodedSeries}`), // TODO: encodeURIComponent()
+            component: require.resolve(`${templateDir}/series-template.js`),
+            context: {
+                series: series,
+            }
+        })
+    })
+}
 ////////////////
 // monthly archive
 const createMonthlyArchives = ({ nodes, actions }, options) => {
@@ -378,7 +397,6 @@ exports.createPages = async ({ graphql, actions }, themeOptions) => {
                 }
             }            
         }
-
     }`)
 
     // create pages
@@ -392,6 +410,7 @@ exports.createPages = async ({ graphql, actions }, themeOptions) => {
     createDirectoryArchives({ nodes: mdxPages.nodes, actions: actions }, options)
     //createTagArchives({ nodes: mdxPages.nodes, actions: actions, tags: tags}, options)
     createMonthlyArchives({ nodes: mdxPages.nodes, actions: actions }, options)
+    createSeriesArchives({ nodes: mdxPages.nodes, actions: actions }, options)
 }
 
 
