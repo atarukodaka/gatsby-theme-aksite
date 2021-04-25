@@ -6,7 +6,7 @@ const puppeteer = require('puppeteer')
 const { createFilePath } = require(`gatsby-source-filesystem`)
 const { paginate } = require('gatsby-awesome-pagination');
 const { urlResolve, createContentDigest } = require(`gatsby-core-utils`)
-const { ogImagePath, ogSiteImagePath } = require('./src/utils/og-images-path')
+const { ogImagesDir } = require('./src/utils/og-images-path')
 const jobs = []
 //const url = require('url')
 
@@ -161,12 +161,59 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
             node,
             name: 'postTitle',
             value: postTitle
-        })
-     
+        })     
     } 
 
 }
 exports.onPostBuild = async () => {
+    await ogTakeScreenshot()
+}
+////////////////////////////////////////////////////////////////
+// Open Graph Images
+
+createOgPage = ( { actions, id, component, context } ) => {
+    const path = `/${ogImagesDir}/${id}`
+    //const path = ogImagePath(id)
+    const defaultTemplate = require.resolve('./src/templates/og-template.js')
+    const { createPage } = actions
+    createPage({
+        path: path,
+        component: component || defaultTemplate,
+        context:  { 
+            id: id,
+            ...context,
+            ogPage: true,
+        }
+    })
+
+}
+createOgSitePage = ( { actions, component, context } ) => {
+    const { createPage } = actions
+    const defaultTemplate = require.resolve('./src/templates/og-site-template.js')
+    createPage({
+        path: `/${ogImagesDir}/site`,
+        //path: ogSiteImagePath(),
+        component: component || defaultTemplate,
+        context: {
+            id: 'site',
+            ...context,
+            ogPage: true,
+        }
+    })
+}
+const createOgPages = ({ nodes, actions }) => {    
+    nodes.forEach(node => {
+        createOgPage({
+            id: node.id,
+            //component: require.resolve(`${templateDir}/og-template.js`),
+            actions,
+        })
+    })
+    createOgSitePage( { actions } )
+
+}
+
+const ogTakeScreenshot = async () => {
     console.log("** plugin og images ** onPostBuild", jobs)
 
     const browser = await puppeteer.launch({headless: true, slowMo: 0})
@@ -192,40 +239,6 @@ exports.onPostBuild = async () => {
     }
     await browser.close()
 }
-////////////////////////////////////////////////////////////////
-// Open Graph Images
-
-createOgPage = ( { actions, id, component, context } ) => {
-    //const path = `/${ogImagesDir}/${id}`
-    const path = ogImagePath(id)
-    const defaultTemplate = require.resolve('./src/templates/og-template.js')
-    const { createPage } = actions
-    createPage({
-        path: path,
-        component: component || defaultTemplate,
-        context:  { 
-            id: id,
-            ...context,
-            ogPage: true,
-        }
-    })
-
-}
-createOgSitePage = ( { actions, component, context } ) => {
-    const { createPage } = actions
-    const defaultTemplate = require.resolve('./src/templates/og-site-template.js')
-    createPage({
-        //path: `/${ogImagesDir}/site`,
-        path: ogSiteImagePath(),
-        component: component || defaultTemplate,
-        context: {
-            id: 'site',
-            ...context,
-            ogPage: true,
-        }
-    })
-}
-
 
 ////////////////////////////////////////////////////////////////
 // markdown pages
@@ -246,22 +259,7 @@ const createMdxPages = ({ nodes, actions }, options) => {
     })
 
 }
-////////////////
-// og pages
 
-const createOgPages = ({ nodes, actions }) => {
-    
-    nodes.forEach(node => {
-        createOgPage({
-            id: node.id,
-            //component: require.resolve(`${templateDir}/og-template.js`),
-            actions,
-        })
-     
-    })
-    createOgSitePage( { actions } )
-
-}
 
 ////////////////
 // top page

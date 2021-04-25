@@ -6,7 +6,8 @@ import { useLocation } from "@reach/router"
 import useSiteMetadata from '../hooks/useSiteMetadata'
 import useAksConfig from '../hooks/useAksConfig'
 const urljoin = require('url-join')
-import { ogSiteImagePath } from 'gatsby-plugin-aks-og-images'
+//import { ogSiteImagePath } from 'gatsby-plugin-aks-og-images'
+import { ogSiteImagePath } from '../utils/og-images-path'
 
 const SEO = ( { title, description, image, lang, isRoot  } ) => {
     const { pathname } = useLocation()

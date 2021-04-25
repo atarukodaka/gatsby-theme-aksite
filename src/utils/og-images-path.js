@@ -1,5 +1,6 @@
 const ogImagesDir = 'og-pages'
 
+exports.ogImagesDir = `og-pages`
 exports.ogImagePath = ( id ) => {
     return `/${ogImagesDir}/${id}/cover.png`
 }

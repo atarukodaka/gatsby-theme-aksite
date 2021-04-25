@@ -2,7 +2,8 @@ import React from "react"
 //const path = require('path')
 import { graphql } from "gatsby"
 
-import { ogImagePath, ogSiteImagePath } from 'gatsby-plugin-aks-og-images'
+//import { ogImagePath, ogSiteImagePath } from 'gatsby-plugin-aks-og-images'
+import { ogImagePath, ogSiteImagePath } from '../utils/og-images-path'
 
 import Breadcrumb from '../components/Breadcrumb'
 import Layout from "../components/Layout"
