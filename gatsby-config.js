@@ -166,7 +166,7 @@ module.exports = (themeOptions) => {
       `gatsby-plugin-sitemap`,
       `gatsby-plugin-material-ui`,
       `gatsby-plugin-emotion`,
-      `gatsby-plugin-aks-og-link`
+      `gatsby-plugin-aks-og-link`,
     ],
   }
 }

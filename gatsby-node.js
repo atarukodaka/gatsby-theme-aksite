@@ -1,13 +1,17 @@
 const fs = require(`fs`)
 const path = require(`path`)
 const mkdirp = require(`mkdirp`)
+const fileUrl = require('file-url')
+const puppeteer = require('puppeteer')
 const { createFilePath } = require(`gatsby-source-filesystem`)
 const { paginate } = require('gatsby-awesome-pagination');
 const { urlResolve, createContentDigest } = require(`gatsby-core-utils`)
-
+const { ogImagePath, ogSiteImagePath } = require('./src/utils/og-images-path')
+const jobs = []
 //const url = require('url')
 
 const withDefaults = require('./src/utils/default_options');
+//const { ogSiteImagePath } = require('../gatsby-plugin-aks-og-images')
 const templateDir = "./src/templates"
 
 exports.onPreBootstrap = ({ store }, themeOptions) => {
@@ -94,6 +98,11 @@ exports.sourceNodes = async ({ actions: { createNode, createNodeField }, cache }
     ////////////////
 }
 
+exports.onCreatePage = ( { page } ) => {
+    if (!page.context.ogPage) return
+
+    jobs.push({id: page.context.id})
+}
 const getDirectoryLabel = (directory, labels = []) => {
     const last = directory.split('/').pop()
     const item = labels.find(v => directory === v.directory)
@@ -157,6 +166,67 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
     } 
 
 }
+exports.onPostBuild = async () => {
+    console.log("** plugin og images ** onPostBuild", jobs)
+
+    const browser = await puppeteer.launch({headless: true, slowMo: 0})
+    const page = await browser.newPage()
+    
+    const width = 600
+    const height = 330
+    await page.setViewport({
+        width: width,
+        height: height,
+      })
+      
+    for (const job of jobs){
+        const { id } = job
+        const ogPageFileUrl = fileUrl(path.join('public', 'og-pages', id, 'index.html'))
+        console.log("taking s/s of:", ogPageFileUrl)
+
+        await page.goto(ogPageFileUrl,  { 'waitUntil' : 'networkidle2' })
+        await page.screenshot({
+            path: path.resolve(path.join('public', 'og-pages', id, 'cover.png')),
+            deviceScaleFactor: 2
+          })
+    }
+    await browser.close()
+}
+////////////////////////////////////////////////////////////////
+// Open Graph Images
+
+createOgPage = ( { actions, id, component, context } ) => {
+    //const path = `/${ogImagesDir}/${id}`
+    const path = ogImagePath(id)
+    const defaultTemplate = require.resolve('./src/templates/og-template.js')
+    const { createPage } = actions
+    createPage({
+        path: path,
+        component: component || defaultTemplate,
+        context:  { 
+            id: id,
+            ...context,
+            ogPage: true,
+        }
+    })
+
+}
+createOgSitePage = ( { actions, component, context } ) => {
+    const { createPage } = actions
+    const defaultTemplate = require.resolve('./src/templates/og-site-template.js')
+    createPage({
+        //path: `/${ogImagesDir}/site`,
+        path: ogSiteImagePath(),
+        component: component || defaultTemplate,
+        context: {
+            id: 'site',
+            ...context,
+            ogPage: true,
+        }
+    })
+}
+
+
 ////////////////////////////////////////////////////////////////
 // markdown pages
 const createMdxPages = ({ nodes, actions }, options) => {
@@ -178,7 +248,7 @@ const createMdxPages = ({ nodes, actions }, options) => {
 }
 ////////////////
 // og pages
-/*
+
 const createOgPages = ({ nodes, actions }) => {
     
     nodes.forEach(node => {
@@ -192,7 +262,6 @@ const createOgPages = ({ nodes, actions }) => {
     createOgSitePage( { actions } )
 
 }
-*/
 
 ////////////////
 // top page
@@ -403,7 +472,7 @@ exports.createPages = async ({ graphql, actions }, themeOptions) => {
     const options = withDefaults(themeOptions)
 
     createMdxPages({ nodes: mdxPages.nodes, actions: actions }, options)
-    //createOgPages({ nodes: mdxPages.nodes, actions: actions }, options)
+    createOgPages({ nodes: mdxPages.nodes, actions: actions }, options)
     createTopPage({ nodes: mdxPages.nodes, actions: actions }, options)
     //createIndexPagination({ nodes: mdxPages.nodes, actions: actions})
     createListArchives({ nodes: mdxPages.nodes, actions: actions }, options)
