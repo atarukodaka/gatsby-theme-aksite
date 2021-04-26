@@ -2,7 +2,7 @@ import React from "react"
 //const path = require('path')
 import { graphql } from "gatsby"
 
-import { ogImagePath, ogSiteImagePath } from 'gatsby-plugin-aks-og-images'
+import { ogImageFile, ogSiteImageFile } from '../utils/og-images-path'
 
 import Breadcrumb from '../components/Breadcrumb'
 import Layout from "../components/Layout"
@@ -32,10 +32,9 @@ export default function PostTemplate({ data, pageContext, location }) {
   //const cover = node.frontmatter.cover?.publicURL
   const crumbLabel = (isRoot) ? null : node.fields.postTitle
 
-  //console
   //const image = node.frontmatter.cover?.publicURL || (isRoot) ? null : `og-pages/${node.id}/cover.png`
   //const image = node.frontmatter.cover?.publicURL  || ((isRoot) ? null : ogImagePath(node.id))
-  const image = (isRoot) ? ogSiteImagePath() : (node.frontmatter.cover?.publicURL || ogImagePath(node.id))
+  const image = (isRoot) ? ogSiteImageFile() : (node.frontmatter.cover?.publicURL || ogImageFile(node.id))
   //console.log("cover image", node.frontmatter.cover)
   //const image = node.frontmatter.cover?.publicURL || ogImage(node.id)
   return (

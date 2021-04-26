@@ -6,7 +6,7 @@ import { useLocation } from "@reach/router"
 import useSiteMetadata from '../hooks/useSiteMetadata'
 import useAksConfig from '../hooks/useAksConfig'
 const urljoin = require('url-join')
-import { ogSiteImagePath } from 'gatsby-plugin-aks-og-images'
+import { ogSiteImageFile } from '../utils/og-images-path'
 
 const SEO = ( { title, description, image, lang, isRoot  } ) => {
     const { pathname } = useLocation()
@@ -22,7 +22,7 @@ const SEO = ( { title, description, image, lang, isRoot  } ) => {
     const fullDescription = (isRoot) ? siteDescription : description || siteDescription
     //const imageUrl = siteUrl + coverImage
     //const siteImage = `og-pages/site/cover.png`
-    const imageUrl = urljoin(siteUrl, image || ogSiteImagePath())
+    const imageUrl = urljoin(siteUrl, image || ogSiteImageFile())
     const aksConfig = useAksConfig()
     const defaultLang = aksConfig.defaultLang
         

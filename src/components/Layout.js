@@ -89,11 +89,11 @@ const Layout = ({ children, tableOfContents, window, ...props }) => {
                     >
                         <MenuIcon />
                     </IconButton>
-                    
+
                     <Typography variant="h3" noWrap>
                         {title}
                     </Typography>
-                    
+
                 </Toolbar>
             </AppBar>
             <nav className={classes.drawer} aria-label="mailbox folders">
@@ -112,7 +112,7 @@ const Layout = ({ children, tableOfContents, window, ...props }) => {
                             keepMounted: true, // Better open performance on mobile.
                         }}
                     >
-                        <Sidebar/>
+                        <Sidebar />
                     </Drawer>
                 </Hidden>
                 <Hidden smDown implementation="css">
@@ -128,24 +128,24 @@ const Layout = ({ children, tableOfContents, window, ...props }) => {
                             <Typography variant="h3">{title}</Typography>
                         </div>
                         */}
-                        <Divider/>
-                        <Sidebar/>
+                        <Divider />
+                        <Sidebar />
                     </Drawer>
                 </Hidden>
             </nav>
             <main className={classes.content}>
-            <div className={classes.toolbar} />
-                <div style={{maxWidth: "960px", marginLeft: "auto", marginRight: "auto"}}>
+                <div className={classes.toolbar} />
+                <div style={{ maxWidth: "960px", marginLeft: "auto", marginRight: "auto" }}>
                     {children}
                 </div>
-                <FooterPane/>
+                <FooterPane />
             </main>
 
             <Hidden xsDown>
-            <div className={classes.tableOfContents}>
-                <div className={classes.toolbar} />
-                <TableOfContents contents={tableOfContents}/>
-            </div>
+                <div className={classes.tableOfContents}>
+                    <div className={classes.toolbar} />
+                    <TableOfContents contents={tableOfContents} />
+                </div>
             </Hidden>
         </div>
     );
