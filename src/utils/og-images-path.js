@@ -1,11 +1,17 @@
 const ogImagesDir = 'og-pages'
 
-exports.ogImagesDir = `og-pages`
-exports.ogImagePath = ( id ) => {
-    return `/${ogImagesDir}/${id}/cover.png`
+const ogImagePath = ( id ) => {
+    return `/${ogImagesDir}/${id}`
 }
 
-exports.ogSiteImagePath = () => {
+exports.ogImageFile = (id) => {
+    return `${ogImagePath()}/cover.png`
+}
+const ogSiteImagePath = () => {
     //console.log("og pages dir", config.getConfig())
-    return `/${ogImagesDir}/site/cover.png`
+    return `/${ogImagesDir}/site`
+}
+
+exports.ogSiteImageFile = () => {
+    return `/${ogSiteImagePath()}/cover.png`
 }
