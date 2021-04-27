@@ -1,7 +1,8 @@
 const fs = require(`fs`)
 const path = require(`path`)
 const mkdirp = require(`mkdirp`)
-const fileUrl = require('file-url')
+//const fileUrl = require(`file-url`)
+const fileUrl = require('./src/utils/file-url')
 const puppeteer = require('puppeteer')
 const { createFilePath } = require(`gatsby-source-filesystem`)
 const { paginate } = require('gatsby-awesome-pagination');
@@ -228,7 +229,8 @@ const ogTakeScreenshot = async () => {
       
     for (const job of jobs){
         const { id } = job
-        const ogPageFileUrl = fileUrl(path.join('public', 'og-pages', id, 'index.html'))
+        //const ogPageFileUrl = fileUrl(path.join('public', 'og-pages', id, 'index.html'))
+        const ogPageFileUrl = "file:///" + path.join('public', 'og-pages', id, 'index.html')
         console.log("taking s/s of:", ogPageFileUrl)
 
         await page.goto(ogPageFileUrl,  { 'waitUntil' : 'networkidle2' })

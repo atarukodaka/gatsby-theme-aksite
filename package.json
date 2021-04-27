@@ -1,6 +1,5 @@
 {
   "name": "gatsby-theme-aksite",
-  "private": true,
   "description": "A simplified bare-bones starter for Gatsby",
   "version": "1.0.2",
   "main": "gatsby-config.js",
@@ -52,6 +51,7 @@
     "list-to-tree": "^2.2.4",
     "prismjs": "^1.23.0",
     "prop-types": "^15.7.2",
+    "puppeteer": "^9.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
