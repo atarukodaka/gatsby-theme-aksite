@@ -26,28 +26,23 @@ export default function PostTemplate({ data, pageContext, location }) {
   console.log(`create/template: ${data.mdx.fields.slug}`)
   const node = data.mdx
   const { isRoot, breadcrumb: { crumbs } } = pageContext
-  //console.log("crumb", crumbs)
   const title = node.fields.postTitle || node.frontmatter.title
   const description = node.frontmatter.description || node.excerpt
-  //const cover = node.frontmatter.cover?.publicURL
   const crumbLabel = (isRoot) ? null : node.fields.postTitle
 
-  //const image = node.frontmatter.cover?.publicURL || (isRoot) ? null : `og-pages/${node.id}/cover.png`
-  //const image = node.frontmatter.cover?.publicURL  || ((isRoot) ? null : ogImagePath(node.id))
   const image = (isRoot) ? ogSiteImageFile() : (node.frontmatter.cover?.publicURL || ogImageFile(node.id))
-  //console.log("cover image", node.frontmatter.cover)
-  //const image = node.frontmatter.cover?.publicURL || ogImage(node.id)
+
   return (
     <Layout tableOfContents={node.tableOfContents} >
-      
-      <SEO title={title} description={description} image={image} isRoot={isRoot}/>
-      <Breadcrumb crumbs={crumbs} crumbLabel={crumbLabel}/>
 
-      <Post node={node}/>      
-      <nav>        
-        <PrevNextPost node={node}/>
+      <SEO title={title} description={description} image={image} isRoot={isRoot} />
+      <Breadcrumb crumbs={crumbs} crumbLabel={crumbLabel} />
+
+      <Post node={node} />
+      <nav>
+        <PrevNextPost node={node} />
         <h3>Relevant Posts</h3>
-        <RelevantPosts node={node}/>
+        <RelevantPosts node={node} />
       </nav>
     </Layout>
   )

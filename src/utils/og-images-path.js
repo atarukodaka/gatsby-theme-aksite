@@ -4,14 +4,20 @@ const ogImagePath = ( id ) => {
     return `/${ogImagesDir}/${id}`
 }
 
-exports.ogImageFile = (id) => {
-    return `${ogImagePath()}/cover.png`
+const ogImageFile = (id) => {
+    return `${ogImagePath(id)}/cover.png`
 }
 const ogSiteImagePath = () => {
     //console.log("og pages dir", config.getConfig())
     return `/${ogImagesDir}/site`
 }
 
-exports.ogSiteImageFile = () => {
+const ogSiteImageFile = () => {
     return `/${ogSiteImagePath()}/cover.png`
 }
+
+exports.ogImagesDir = ogImagesDir
+exports.ogImageFile = ogImageFile
+exports.ogImagePath = ogImagePath
+exports.ogSiteImageFile = ogSiteImageFile
+exports.ogSiteImagePath = ogSiteImagePath

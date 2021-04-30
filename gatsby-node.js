@@ -2,17 +2,16 @@ const fs = require(`fs`)
 const path = require(`path`)
 const mkdirp = require(`mkdirp`)
 //const fileUrl = require(`file-url`)
-const fileUrl = require('./src/utils/file-url')
+const { fileUrl } = require('./src/utils/file-url')
 const puppeteer = require('puppeteer')
 const { createFilePath } = require(`gatsby-source-filesystem`)
 const { paginate } = require('gatsby-awesome-pagination');
 const { urlResolve, createContentDigest } = require(`gatsby-core-utils`)
-const { ogImagesDir } = require('./src/utils/og-images-path')
+const { ogImagePath, ogSiteImagePath } = require('./src/utils/og-images-path')
 const jobs = []
 //const url = require('url')
 
 const withDefaults = require('./src/utils/default_options');
-//const { ogSiteImagePath } = require('../gatsby-plugin-aks-og-images')
 const templateDir = "./src/templates"
 
 exports.onPreBootstrap = ({ store }, themeOptions) => {
@@ -173,10 +172,11 @@ exports.onPostBuild = async () => {
 // Open Graph Images
 
 createOgPage = ( { actions, id, component, context } ) => {
-    const path = `/${ogImagesDir}/${id}`
-    //const path = ogImagePath(id)
+    //const path = `/${ogImagesDir}/${id}`
+    const path = ogImagePath(id)
     const defaultTemplate = require.resolve('./src/templates/og-template.js')
     const { createPage } = actions
+    //console.log("create og page", id, path)
     createPage({
         path: path,
         component: component || defaultTemplate,
@@ -192,8 +192,8 @@ createOgSitePage = ( { actions, component, context } ) => {
     const { createPage } = actions
     const defaultTemplate = require.resolve('./src/templates/og-site-template.js')
     createPage({
-        path: `/${ogImagesDir}/site`,
-        //path: ogSiteImagePath(),
+        //path: `/${ogImagesDir}/site`,
+        path: ogSiteImagePath(),
         component: component || defaultTemplate,
         context: {
             id: 'site',
@@ -204,6 +204,7 @@ createOgSitePage = ( { actions, component, context } ) => {
 }
 const createOgPages = ({ nodes, actions }) => {    
     nodes.forEach(node => {
+        
         createOgPage({
             id: node.id,
             //component: require.resolve(`${templateDir}/og-template.js`),
@@ -229,8 +230,8 @@ const ogTakeScreenshot = async () => {
       
     for (const job of jobs){
         const { id } = job
-        //const ogPageFileUrl = fileUrl(path.join('public', 'og-pages', id, 'index.html'))
-        const ogPageFileUrl = "file:///" + path.join('public', 'og-pages', id, 'index.html')
+        const ogPageFileUrl = fileUrl(path.join('public', 'og-pages', id, 'index.html'))
+        //const ogPageFileUrl = "file:///" + path.join('public', 'og-pages', id, 'index.html')
         console.log("taking s/s of:", ogPageFileUrl)
 
         await page.goto(ogPageFileUrl,  { 'waitUntil' : 'networkidle2' })
