@@ -20,7 +20,8 @@ import FooterPane from './FooterPane'
  */
 
 const drawerWidth = 240;
-const tocWidth = 240;
+const tocWidth = 240; //240;
+const mainMaxWidth = 660;
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -52,8 +53,24 @@ const useStyles = makeStyles((theme) => ({
     },
     content: {
         flexGrow: 1,
-        padding: theme.spacing(3),
-        width: `calc(100% - ${drawerWidth}px  ${tocWidth}px)`,
+        //padding: theme.spacing(3),
+        padding: '0.5rem',
+        
+        [theme.breakpoints.up('md')]: {
+            width: `calc(100% - ${drawerWidth}px - ${tocWidth}px)`,
+        },
+        [theme.breakpoints.down('sm')]: {
+            width: "100%"
+        },
+        
+    },
+    container: {
+        [theme.breakpoints.up('md')]: {
+            maxWidth: mainMaxWidth,
+            width: '100%',
+            marginLeft: 'auto',
+            marginRight: 'auto'
+        }
     },
     tableOfContents: {
         width: `${tocWidth}px`,
@@ -123,11 +140,11 @@ const Layout = ({ children, tableOfContents, window, ...props }) => {
                         variant="permanent"
                         open
                     >
-                        {/*
+
                         <div className={classes.toolbar}>
-                            <Typography variant="h3">{title}</Typography>
+                            { /* <Typography variant="h3">{title}</Typography> */}
                         </div>
-                        */}
+
                         <Divider />
                         <Sidebar />
                     </Drawer>
@@ -135,18 +152,20 @@ const Layout = ({ children, tableOfContents, window, ...props }) => {
             </nav>
             <main className={classes.content}>
                 <div className={classes.toolbar} />
-                <div style={{ maxWidth: "960px", marginLeft: "auto", marginRight: "auto" }}>
+                <div className={classes.container}>
                     {children}
                 </div>
                 <FooterPane />
             </main>
 
-            <Hidden xsDown>
+            
+            <Hidden smDown>
                 <div className={classes.tableOfContents}>
                     <div className={classes.toolbar} />
                     <TableOfContents contents={tableOfContents} />
                 </div>
             </Hidden>
+            
         </div>
     );
 }
