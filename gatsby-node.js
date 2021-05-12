@@ -8,6 +8,7 @@ const { createFilePath } = require(`gatsby-source-filesystem`)
 const { paginate } = require('gatsby-awesome-pagination');
 const { urlResolve, createContentDigest } = require(`gatsby-core-utils`)
 const { ogImagePath, ogSiteImagePath } = require('./src/utils/og-images-path')
+const { createOgLinkNode, createOgImageFileNode } = require('./src/utils/og-link-node')
 const jobs = []
 //const url = require('url')
 
@@ -70,6 +71,14 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             itemsPerPage: Int!
         }
 
+        type AksOgLink implements Node {
+            url: String
+            domain: String
+            title: String
+            description: String
+            imageUrl: String
+            image: File @link
+        }
     `);
 };
 
@@ -121,6 +130,8 @@ const getDirectoryFullLabel = (directory, labels = []) => {
 exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, themeOptions) => {
     const { createNodeField } = actions
     const options = withDefaults(themeOptions)
+    const linksNodeType = themeOptions.linksNodeType || 'LinksYaml'
+
     if (node.internal.type === `Mdx`) {
         const slug = createFilePath({ node, getNode })
         const directory = slug.split("/").slice(1, -2).join("/")
@@ -162,7 +173,12 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
             name: 'postTitle',
             value: postTitle
         })     
-    } 
+    } else if (node.internal.type === linksNodeType) {
+        await createOgLinkNode({ node, actions, createNodeId, cache })
+    } else if (node.internal.type === 'AksOgLink' && !!node.imageUrl) {
+        //console.log("AksOgLINK")
+        await createOgImageFileNode( { node, actions, createNodeId, cache } )
+    }
 
 }
 exports.onPostBuild = async () => {

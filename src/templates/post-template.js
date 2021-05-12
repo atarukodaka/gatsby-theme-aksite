@@ -42,7 +42,8 @@ export default function PostTemplate({ data, pageContext, location }) {
       <nav>
         <PrevNextPost node={node} />
         <h3>Relevant Posts</h3>
-        <RelevantPosts node={node} />
+         <RelevantPosts node={node} />
+
       </nav>
     </Layout>
   )

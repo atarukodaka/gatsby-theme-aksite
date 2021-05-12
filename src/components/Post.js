@@ -24,7 +24,7 @@ const Header = styled.header`
 const Main = styled.main`
     margin-top: 1rem;
     padding-bottom: 1rem;
-    padding-right: 1rem; 
+    
 `
 const Footer = styled.footer`
     border-top: solid 1px;
