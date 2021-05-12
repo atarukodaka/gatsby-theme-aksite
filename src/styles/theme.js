@@ -1,4 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
 
 const theme = createMuiTheme({
     palette: {
@@ -15,6 +16,24 @@ const theme = createMuiTheme({
             contrastText: '#ffffff',
         }*/
     },
+    breakpoints: {
+        values: {
+    
+            xs: 0,
+            sm: 600,
+            md: 960,
+            lg: 1280,
+            xl: 1920,
+   
+            /*
+            mobile: 0,
+            tablet: 640,
+            laptop: 1024,
+            desktop: 1280,
+            */
+        },
+    },
+    
     typography: {
         body2: {
             fontSize: "1rem"
@@ -51,8 +70,13 @@ const theme = createMuiTheme({
             marginTop: "1rem",
             marginBottom: "1rem",
         },
-        
+
 
     }
 })
+export const isMobile = () => {
+
+    
+    return useMediaQuery(theme.breakpoints.down('sm'))
+}
 export default theme

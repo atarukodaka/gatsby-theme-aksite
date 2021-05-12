@@ -9,28 +9,32 @@ import { css } from '@emotion/react'
 
 import theme from '../../styles/theme'
 
-import LinkExternal from './LinkExternal'
+//import LinkOpenGraph from 'gatsby-plugin-aks-og-link'
+//import LinkExternal from './LinkExternal'
 import Series from './Series'
 import Baloon from './Baloon'
 import Spoiler from './Spoiler'
 import Callout from './Callout'
 import Asc256 from './Asc256'
-
-
+import LinkOpenGraph from '../LinkOpenGraph'
 
 const numberingColor = theme.palette.text.secondary
 const borderColor = theme.palette.action.active
 
 const cssH2 = css`
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid ${borderColor};
+    /* border-bottom: 1px solid ${borderColor}; */
+    background-color: #eee;
+    padding: 1.1rem;
+    padding-left: 1rem;
+    margin-top: 5rem;
 
     counter-increment: h2;
     counter-reset: h3;
 
     &:before {
         color: ${numberingColor};
-        font-size: large; 
+        font-size: 1.6rem; 
         content: counter(h2) ". "; 
     }
 )
@@ -39,13 +43,15 @@ const cssH2 = css`
 const cssH3 = css`
     padding-bottom: 0.5rem;
     border-bottom: 1px solid ${borderColor};
+    margin-top: 4rem;
+    padding-left: 1rem;
 
     counter-increment: h3;
     counter-reset: h4;
 
     &:before {
         color: ${numberingColor};
-        font-size: large; 
+        font-size: 1.45rem;
         content: counter(h2) "." counter(h3) ". "; 
     }
 )
@@ -53,6 +59,8 @@ const cssH3 = css`
 const cssH4 = css`
     padding-bottom: 0.5rem;
     border-bottom: 1px solid ${borderColor};
+    margin-top: 2rem;
+    padding-left: 1rem;
 
     counter-increment: h4;
     counter-reset: h5;
@@ -73,7 +81,7 @@ const Heading4 = ( { children, ...props}) =>
 
 
 const MdxComponents = () => {
-    return { Alert, Baloon, Box, Link, LinkExternal, Series, Grid, Spoiler,
+    return { Alert, Baloon, Box, Link, LinkOpenGraph, Series, Grid, Spoiler,
         Callout, Asc256, 
         h2: Heading2,
         h3: Heading3,

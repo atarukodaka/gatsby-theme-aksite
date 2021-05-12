@@ -65,13 +65,7 @@ module.exports = (themeOptions) => {
           path: `src/pages`,
         },
       },*/
-      `gatsby-transformer-yaml`,
-      {
-        resolve: `gatsby-source-filesystem`,
-        options: {
-          path: `src/data/`,
-        },
-      },
+     
       {
         resolve: `gatsby-plugin-mdx`,
         options: {

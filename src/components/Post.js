@@ -24,7 +24,7 @@ const Header = styled.header`
 const Main = styled.main`
     margin-top: 1rem;
     padding-bottom: 1rem;
-    padding-right: 1rem; 
+    
 `
 const Footer = styled.footer`
     border-top: solid 1px;
@@ -33,6 +33,12 @@ const Footer = styled.footer`
 const cssPost = css`
     margin-top: 2em;
     margin-bottom: 2em;
+`
+const cssCoverImage = css`
+    .gatsby-image-wrapper {
+        width: 100%;
+        height: 300px;
+    }
 `
 
 const RenderMDX = ({ children }) => {
@@ -62,16 +68,17 @@ const Post = ({ node }) => {
     const { siteUrl } = useSiteMetadata()
     //console.log("path: ", node.fields.path)
 
+    //<DirectoryBox directory={node.fields.directory} enableLink={true}/>
     return (
         <div css={cssPost}>
             <Header>
                 <div>
-                    {node.frontmatter.date}
+                    <span>{node.frontmatter.date}</span>
                     <DirectoryBox directory={node.fields.directory} enableLink={true}/>
                 </div>
                 <PageTitle><Link to={node.fields.path}>{node.fields.postTitle}</Link></PageTitle>
                 { /* <Tags node={node}/> */ }
-                <CoverImage node={node} />
+                <CoverImage node={node} css={cssCoverImage}/>
                 <Description>{node.frontmatter.description}</Description>
             </Header>
             <Main>

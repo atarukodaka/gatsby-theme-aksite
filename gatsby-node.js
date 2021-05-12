@@ -1,15 +1,18 @@
 const fs = require(`fs`)
 const path = require(`path`)
 const mkdirp = require(`mkdirp`)
+//const fileUrl = require(`file-url`)
+const { fileUrl } = require('./src/utils/file-url')
+const puppeteer = require('puppeteer')
 const { createFilePath } = require(`gatsby-source-filesystem`)
-const { createRemoteFileNode } = require(`gatsby-source-filesystem`);
 const { paginate } = require('gatsby-awesome-pagination');
 const { urlResolve, createContentDigest } = require(`gatsby-core-utils`)
-const axios = require('axios')
-const cheerio = require('cheerio');
+const { ogImagePath, ogSiteImagePath } = require('./src/utils/og-images-path')
+const { createOgLinkNode, createOgImageFileNode } = require('./src/utils/og-link-node')
+const jobs = []
 //const url = require('url')
 
-const withDefaults = require('./src/utils/default_options')
+const withDefaults = require('./src/utils/default_options');
 const templateDir = "./src/templates"
 
 exports.onPreBootstrap = ({ store }, themeOptions) => {
@@ -67,19 +70,14 @@ exports.createSchemaCustomization = ({ actions: { createTypes } }) => {
             listPath: String!
             itemsPerPage: Int!
         }
-        type AksRichLink implements Node {
-            url: String!
-            domain: String!
-            title: String!
-            description: String!
-            image: String!
-        }
-        type File implements Node {
-            fields: FileFields
-        }
-        type FileFields {
-            url: String!
-            ogpImage: Boolean!
+
+        type AksOgLink implements Node {
+            url: String
+            domain: String
+            title: String
+            description: String
+            imageUrl: String
+            image: File @link
         }
     `);
 };
@@ -109,6 +107,11 @@ exports.sourceNodes = async ({ actions: { createNode, createNodeField }, cache }
     ////////////////
 }
 
+exports.onCreatePage = ( { page } ) => {
+    if (!page.context.ogPage) return
+
+    jobs.push({id: page.context.id})
+}
 const getDirectoryLabel = (directory, labels = []) => {
     const last = directory.split('/').pop()
     const item = labels.find(v => directory === v.directory)
@@ -127,9 +130,13 @@ const getDirectoryFullLabel = (directory, labels = []) => {
 exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, themeOptions) => {
     const { createNodeField } = actions
     const options = withDefaults(themeOptions)
+    const linksNodeType = themeOptions.linksNodeType || 'LinksYaml'
+
     if (node.internal.type === `Mdx`) {
         const slug = createFilePath({ node, getNode })
         const directory = slug.split("/").slice(1, -2).join("/")
+        const directoryLabel = getDirectoryLabel(directory, options.directoryLabels)
+        const directoryFullLabel = getDirectoryFullLabel(directory, options.directoryLabels)
         const path = urlResolve(options.basePath, slug)
 
         createNodeField({
@@ -147,6 +154,16 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
             name: 'directory',
             value: directory
         })
+        createNodeField({
+            node,
+            name: 'directoryLabel',
+            value: directoryLabel
+        })        
+        createNodeField({
+            node,
+            name: 'directoryFullLabel',
+            value: directoryFullLabel
+        })
         const postTitle = (node.frontmatter.series) ?
             `${node.frontmatter.series.title}[${node.frontmatter.series.number}] ${node.frontmatter.title}` :
             node.frontmatter.title
@@ -155,97 +172,101 @@ exports.onCreateNode = async ({ node, getNode, actions, createNodeId, cache }, t
             node,
             name: 'postTitle',
             value: postTitle
-        })
-        /////
-        //console.log("nodefrontmatterlinks", node.frontmatter.links)
-        /*
-        if (node.frontmatter.links) {
-
-            node.frontmatter.links.forEach(async url => {
-                //console.log("***************** frontmatter links", url)
-                // TODO: cache
-  
-                const data = await getOgp(url)
-
-                await actions.createNode({
-                    ...data,
-                    id: `gatsby-theme-aksite-links-${url}`,
-                    //imageId: imageNode.id,
-                    parent: null,
-                    internal: {
-                        type: `aksRichLink`,
-                        contentDigest: createContentDigest(data),
-                        content: JSON.stringify(data),
-                    },
-                })
-                if (data.image) {   // TODO: gif must be omited
-                    const imageNode = await createRemoteFileNode({
-                        url: data.image,
-                        cache: cache,
-                        createNode: actions.createNode,
-                        createNodeId: createNodeId,
-                        //name: 'OgpImage',
-                        //parentNodeId: node.id,
-                        //sourceInstanceName: "ogpImage"
-                    })
-
-                    await actions.createNodeField({
-                        node: imageNode,
-                        name: 'ogpImage',
-                        value: true
-                    })
-                    await actions.createNodeField({
-                        node: imageNode,
-                        name: 'url',
-                        value: url
-                    })
-                }
-
-            })
-        }
-        */
-    } else if (node.internal.type === 'LinksYaml'){
-        const data = await getOgp(node.url)
-
-        createNodeField({ name: 'url', node, value: data.url })
-        createNodeField({ name: 'domain', node, value: data.domain })
-        createNodeField({ name: 'title', node, value: data.title })
-        createNodeField({ name: 'description', node, value: data.description })
-        createNodeField({ name: 'image', node, value: data.image })
-
-        if (data.image) {   // TODO: gif must be omited
-            const imageNode = await createRemoteFileNode({
-                url: data.image,
-                cache: cache,
-                createNode: actions.createNode,
-                createNodeId: createNodeId,
-                //name: 'OgpImage',
-                //parentNodeId: node.id,
-                //sourceInstanceName: "ogpImage"
-            })
-
-            await actions.createNodeField({
-                node: imageNode,
-                name: 'ogpImage',
-                value: true
-            })
-            await actions.createNodeField({
-                node: imageNode,
-                name: 'url',
-                value: node.url
-            })
-        }
+        })     
+    } else if (node.internal.type === linksNodeType) {
+        await createOgLinkNode({ node, actions, createNodeId, cache })
+    } else if (node.internal.type === 'AksOgLink' && !!node.imageUrl) {
+        //console.log("AksOgLINK")
+        await createOgImageFileNode( { node, actions, createNodeId, cache } )
     }
+
+}
+exports.onPostBuild = async () => {
+    await ogTakeScreenshot()
 }
 ////////////////////////////////////////////////////////////////
+// Open Graph Images
+
+createOgPage = ( { actions, id, component, context } ) => {
+    //const path = `/${ogImagesDir}/${id}`
+    const path = ogImagePath(id)
+    const defaultTemplate = require.resolve('./src/templates/og-template.js')
+    const { createPage } = actions
+    //console.log("create og page", id, path)
+    createPage({
+        path: path,
+        component: component || defaultTemplate,
+        context:  { 
+            id: id,
+            ...context,
+            ogPage: true,
+        }
+    })
+
+}
+createOgSitePage = ( { actions, component, context } ) => {
+    const { createPage } = actions
+    const defaultTemplate = require.resolve('./src/templates/og-site-template.js')
+    createPage({
+        //path: `/${ogImagesDir}/site`,
+        path: ogSiteImagePath(),
+        component: component || defaultTemplate,
+        context: {
+            id: 'site',
+            ...context,
+            ogPage: true,
+        }
+    })
+}
+const createOgPages = ({ nodes, actions }) => {    
+    nodes.forEach(node => {
+        
+        createOgPage({
+            id: node.id,
+            //component: require.resolve(`${templateDir}/og-template.js`),
+            actions,
+        })
+    })
+    createOgSitePage( { actions } )
+
+}
+
+const ogTakeScreenshot = async () => {
+    console.log("** plugin og images ** onPostBuild", jobs)
+
+    const browser = await puppeteer.launch({headless: true, slowMo: 0})
+    const page = await browser.newPage()
+    
+    const width = 600
+    const height = 330
+    await page.setViewport({
+        width: width,
+        height: height,
+      })
+      
+    for (const job of jobs){
+        const { id } = job
+        const ogPageFileUrl = fileUrl(path.join('public', 'og-pages', id, 'index.html'))
+        //const ogPageFileUrl = "file:///" + path.join('public', 'og-pages', id, 'index.html')
+        console.log("taking s/s of:", ogPageFileUrl)
+
+        await page.goto(ogPageFileUrl,  { 'waitUntil' : 'networkidle2' })
+        await page.screenshot({
+            path: path.resolve(path.join('public', 'og-pages', id, 'cover.png')),
+            deviceScaleFactor: 2
+          })
+    }
+    await browser.close()
+}
+
+////////////////////////////////////////////////////////////////
 // markdown pages
-const createMdxPages = async ({ nodes, actions }, options) => {
+const createMdxPages = ({ nodes, actions }, options) => {
     console.log("** all markdown pages")
     const { createPage, createNode } = actions
     const template = `${templateDir}/post-template.js`
 
     nodes.forEach(node => {
-
         //console.log("fields", node.fields)
         createPage({
             path: node.fields.path,
@@ -255,7 +276,10 @@ const createMdxPages = async ({ nodes, actions }, options) => {
             },
         })
     })
+
 }
+
+
 ////////////////
 // top page
 const createTopPage = ({ nodes, actions }, options) => {
@@ -263,10 +287,12 @@ const createTopPage = ({ nodes, actions }, options) => {
     if (node == null) { return }
 
     console.log("** top page", node.fields.slug, node.frontmatter.draft)
+    const template = require.resolve(`${templateDir}/post-template.js`)
+    console.log("template: ", template)
     const { createPage } = actions
     createPage({
         path: options.basePath,
-        component: require.resolve(`${templateDir}/post-template.js`),
+        component: template,
         context: {
             slug: node.fields.slug,
             isRoot: true,
@@ -367,6 +393,25 @@ const createTagArchives = ({ nodes, actions, tags }, options) => {
     })
 }
 */
+
+const createSeriesArchives = ( { nodes, actions } , options )=> {
+    console.log("** creating series archives")
+    const { createPage } = actions
+
+    const seriesArray = [...new Set(nodes.map(v=> { return v?.frontmatter?.series?.title } ))].filter(v=>!!v)
+    
+    seriesArray.forEach(series => {
+        //console.log(series)
+        const encodedSeries = (process.env.NODE_ENV === 'development') ? series : encodeURIComponent(series) // somehow encode doenst work on development
+        createPage({
+            path: urlResolve(options.basePath, `series/${encodedSeries}`), // TODO: encodeURIComponent()
+            component: require.resolve(`${templateDir}/series-template.js`),
+            context: {
+                series: series,
+            }
+        })
+    })
+}
 ////////////////
 // monthly archive
 const createMonthlyArchives = ({ nodes, actions }, options) => {
@@ -438,64 +483,21 @@ exports.createPages = async ({ graphql, actions }, themeOptions) => {
                 }
             }            
         }
-
     }`)
 
     // create pages
     const options = withDefaults(themeOptions)
 
     createMdxPages({ nodes: mdxPages.nodes, actions: actions }, options)
+    createOgPages({ nodes: mdxPages.nodes, actions: actions }, options)
     createTopPage({ nodes: mdxPages.nodes, actions: actions }, options)
     //createIndexPagination({ nodes: mdxPages.nodes, actions: actions})
     createListArchives({ nodes: mdxPages.nodes, actions: actions }, options)
     createDirectoryArchives({ nodes: mdxPages.nodes, actions: actions }, options)
     //createTagArchives({ nodes: mdxPages.nodes, actions: actions, tags: tags}, options)
     createMonthlyArchives({ nodes: mdxPages.nodes, actions: actions }, options)
+    createSeriesArchives({ nodes: mdxPages.nodes, actions: actions }, options)
 }
 
 
 ////////////////
-
-const getOgp = async (url) => {
-    const data = {
-        url: url,
-        domain: new URL(url).hostname,
-        title: '',
-        description: '',
-        image: '',
-    }
-
-    const res = await axios.get(url)
-    //console.log("getOgp", res.data)
-    const $ = cheerio.load(res.data)
-    // url
-    if ($("meta[property='og:url']").attr('content'))
-        data.url = $("meta[property='og:url']").attr('content')
-    else if (res.request.res.responseUrl) {
-        data.url = res.request.res.responseUrl
-    }
-    // domain
-    data.domain = new URL(data.url).hostname
-    // title
-    if ($("meta[property='og:title']").attr('content}'))
-        data.title = $("meta[property='og:title']").attr('content}')
-    else if ($('title').text()) {
-        data.title = $('title').text()
-    }
-    // description
-    if ($("meta[property='og:description']").attr('content'))
-        data.description = $("meta[property='og:description']").attr('content')
-    else if ($("meta[name='description']").attr('content')) {
-        data.description = $("meta[name='description']").attr('content')
-    }
-    // image
-    if ($("meta[property='og:image']").attr('content'))
-        data.image = $("meta[property='og:image']").attr('content')
-    else if ($("meta[name='image']").attr('content')) {
-        data.image = $("meta[name='image']").attr('content')
-    }
-    //console.log("ogpdata:", data)
-
-    return data
-}
-

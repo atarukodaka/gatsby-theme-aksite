@@ -1,5 +1,8 @@
 import React from "react"
+//const path = require('path')
 import { graphql } from "gatsby"
+
+import { ogImageFile, ogSiteImageFile } from '../utils/og-images-path'
 
 import Breadcrumb from '../components/Breadcrumb'
 import Layout from "../components/Layout"
@@ -23,25 +26,24 @@ export default function PostTemplate({ data, pageContext, location }) {
   console.log(`create/template: ${data.mdx.fields.slug}`)
   const node = data.mdx
   const { isRoot, breadcrumb: { crumbs } } = pageContext
-  //console.log("crumb", crumbs)
   const title = node.fields.postTitle || node.frontmatter.title
   const description = node.frontmatter.description || node.excerpt
-  const cover = node.frontmatter.cover?.publicURL
   const crumbLabel = (isRoot) ? null : node.fields.postTitle
 
-  //console.log("cover url", node.frontmatter.cover)
+  const image = (isRoot) ? ogSiteImageFile() : (node.frontmatter.cover?.publicURL || ogImageFile(node.id))
 
   return (
     <Layout tableOfContents={node.tableOfContents} >
-      
-      <SEO title={title} description={description} cover={cover} isRoot={isRoot}/>
-      <Breadcrumb crumbs={crumbs} crumbLabel={crumbLabel}/>
 
-      <Post node={node}/>      
-      <nav>        
-        <PrevNextPost node={node}/>
+      <SEO title={title} description={description} image={image} isRoot={isRoot} />
+      <Breadcrumb crumbs={crumbs} crumbLabel={crumbLabel} />
+
+      <Post node={node} />
+      <nav>
+        <PrevNextPost node={node} />
         <h3>Relevant Posts</h3>
-        <RelevantPosts node={node}/>
+         <RelevantPosts node={node} />
+
       </nav>
     </Layout>
   )
